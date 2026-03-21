@@ -1,6 +1,9 @@
 import { FormEvent, useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { PageShell } from '@/components/layout/PageShell.tsx';
+import { Button, buttonStyles } from '@/components/ui/Button.tsx';
+import { Card } from '@/components/ui/Card.tsx';
+import { Input, Select, Textarea } from '@/components/ui/Input.tsx';
 import { useAppState } from '@/context/app-context.tsx';
 import { isBoostActive } from '@/domain/ranking.ts';
 
@@ -56,10 +59,12 @@ const CreateOverview = () => {
   if (!entity) {
     return (
       <PageShell title="Channel Overview" backTo="/create">
-        <section className="td-card td-stack">
-          <p className="td-muted">Channel or app not found. Add one from Create Hub first.</p>
-          <Link to="/create/register" className="td-link-button td-inline-link">Add Channel / App</Link>
-        </section>
+        <Card>
+          <p className="text-sm text-tg-muted">Channel or app not found. Add one from Create Hub first.</p>
+          <Link to="/create/register" className={buttonStyles({ variant: 'primary', size: 'md', className: 'mt-4' })}>
+            Add Channel / App
+          </Link>
+        </Card>
       </PageShell>
     );
   }
@@ -90,59 +95,61 @@ const CreateOverview = () => {
 
   return (
     <PageShell title="Channel Overview" subtitle="Manage info, boost, and next actions." backTo="/create">
-      <section className="td-card td-stack">
-        <h2>{entity.name}</h2>
-        <p className="td-muted">{entity.shortDescription}</p>
-        <p className="td-muted">Type: {entity.type}</p>
-        <p className="td-muted">Category: {entity.category}</p>
-        <p className="td-muted">Tags: {entity.tags.length > 0 ? entity.tags.join(', ') : 'No tags yet'}</p>
-      </section>
+      <Card className="space-y-2">
+        <h2 className="text-lg font-semibold text-tg-primary">{entity.name}</h2>
+        <p className="text-sm text-tg-muted">{entity.shortDescription}</p>
+        <p className="text-sm text-tg-muted">Type: {entity.type}</p>
+        <p className="text-sm text-tg-muted">Category: {entity.category}</p>
+        <p className="text-sm text-tg-muted">Tags: {entity.tags.length > 0 ? entity.tags.join(', ') : 'No tags yet'}</p>
+      </Card>
 
-      <section className="td-card td-stack">
-        <h2>Boost</h2>
-        <p className="td-muted">
+      <Card className="space-y-2">
+        <h2 className="text-base font-semibold text-tg-primary">Boost</h2>
+        <p className="text-sm text-tg-muted">
           Status: {boostActive ? 'Active' : boostState.status}
         </p>
-        <p className="td-muted">Remaining: {boostActive ? formatRemainingBoost(boostState.expiresAt) : 'No active boost'}</p>
-        <Link to={`/create/boost?entityId=${encodeURIComponent(entity.id)}`} className="td-link-button td-inline-link">
+        <p className="text-sm text-tg-muted">
+          Remaining: {boostActive ? formatRemainingBoost(boostState.expiresAt) : 'No active boost'}
+        </p>
+        <Link to={`/create/boost?entityId=${encodeURIComponent(entity.id)}`} className={buttonStyles({ variant: 'secondary', size: 'md', className: 'mt-2' })}>
           Open Boost Settings
         </Link>
-      </section>
+      </Card>
 
-      <form className="td-card td-form" onSubmit={saveSettings}>
-        <h2>Settings</h2>
-        <label>
-          Name
-          <input value={name} onChange={(event) => setName(event.target.value)} />
+      <Card as="form" className="space-y-4" onSubmit={saveSettings}>
+        <h2 className="text-base font-semibold text-tg-primary">Settings</h2>
+        <label className="block">
+          <span className="block text-sm text-tg-muted mb-2">Name</span>
+          <Input value={name} onChange={(event) => setName(event.target.value)} />
         </label>
-        <label>
-          Category
-          <select value={category} onChange={(event) => setCategory(event.target.value)}>
+        <label className="block">
+          <span className="block text-sm text-tg-muted mb-2">Category</span>
+          <Select value={category} onChange={(event) => setCategory(event.target.value)}>
             {categories.map((item) => (
               <option key={item} value={item}>{item}</option>
             ))}
-          </select>
+          </Select>
         </label>
-        <label>
-          Telegram URL
-          <input value={telegramUrl} onChange={(event) => setTelegramUrl(event.target.value)} />
+        <label className="block">
+          <span className="block text-sm text-tg-muted mb-2">Telegram URL</span>
+          <Input value={telegramUrl} onChange={(event) => setTelegramUrl(event.target.value)} />
         </label>
-        <label>
-          Description
-          <textarea value={shortDescription} onChange={(event) => setShortDescription(event.target.value)} />
+        <label className="block">
+          <span className="block text-sm text-tg-muted mb-2">Description</span>
+          <Textarea value={shortDescription} onChange={(event) => setShortDescription(event.target.value)} />
         </label>
-        <label>
-          Tags (comma separated)
-          <input value={tags} onChange={(event) => setTags(event.target.value)} />
+        <label className="block">
+          <span className="block text-sm text-tg-muted mb-2">Tags (comma separated)</span>
+          <Input value={tags} onChange={(event) => setTags(event.target.value)} />
         </label>
-        {saveMessage && <p className="td-muted">{saveMessage}</p>}
-        <div className="td-button-row">
-          <button type="submit" className="td-primary-button">Save Settings</button>
-          <Link to={`/create/post?entityId=${encodeURIComponent(entity.id)}`} className="td-link-button td-inline-link">
+        {saveMessage && <p className="text-sm text-tg-muted">{saveMessage}</p>}
+        <div className="flex flex-wrap gap-2">
+          <Button type="submit" variant="primary" size="md">Save Settings</Button>
+          <Link to={`/create/post?entityId=${encodeURIComponent(entity.id)}`} className={buttonStyles({ variant: 'secondary', size: 'md' })}>
             Make Post
           </Link>
         </div>
-      </form>
+      </Card>
     </PageShell>
   );
 };

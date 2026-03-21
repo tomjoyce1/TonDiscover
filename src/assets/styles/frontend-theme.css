@@ -1,0 +1,163 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --tg-bg: #17212B;
+  --tg-card: #1C2733;
+  --tg-input: #232E3C;
+  --tg-border: #0E1621;
+  --tg-accent: #2AABEE;
+  --tg-primary: #FFFFFF;
+  --tg-muted: #708499;
+  --tg-dim: #4A6178;
+  --tg-success: #4DCD5E;
+  --tg-boost: #F59E0B;
+
+  /* Legacy TonDiscover tokens migrated from globals.scss helpers. */
+  --td-neutral-0: #FFF;
+  --td-neutral-100: #F9FAFB;
+  --td-neutral-400: #C4CDD5;
+  --td-neutral-500: #919EAB;
+  --td-neutral-600: #637381;
+  --td-neutral-800: #212B36;
+  --td-neutral-900: #161C24;
+  --td-primary-300: #0098EA;
+  --td-primary-500: #168ACD;
+  --td-info-500: #3F56FF;
+  --td-error-500: #FF4635;
+  --td-warning-500: #FFA202;
+  --td-disabled-100: #2A313A;
+  --td-focus-border-shadow: 0 0 0 4px rgba(0, 152, 234, 0.3);
+  --td-card-radius: 1rem;
+  --td-input-radius: 0.75rem;
+  --td-pill-radius: 999px;
+
+  --background: #17212B;
+  --foreground: #FFFFFF;
+  --card: #1C2733;
+  --card-foreground: #FFFFFF;
+  --popover: #1C2733;
+  --popover-foreground: #FFFFFF;
+  --primary: #2AABEE;
+  --primary-foreground: #FFFFFF;
+  --secondary: #232E3C;
+  --secondary-foreground: #FFFFFF;
+  --muted: #232E3C;
+  --muted-foreground: #708499;
+  --accent: #2AABEE;
+  --accent-foreground: #FFFFFF;
+  --destructive: #EF4444;
+  --destructive-foreground: #FFFFFF;
+  --border: #0E1621;
+  --input: #232E3C;
+  --ring: #2AABEE;
+  --radius: 1rem;
+}
+
+@theme inline {
+  --font-sans: system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+
+  --color-tg-bg: var(--tg-bg);
+  --color-tg-card: var(--tg-card);
+  --color-tg-input: var(--tg-input);
+  --color-tg-border: var(--tg-border);
+  --color-tg-accent: var(--tg-accent);
+  --color-tg-primary: var(--tg-primary);
+  --color-tg-muted: var(--tg-muted);
+  --color-tg-dim: var(--tg-dim);
+  --color-tg-success: var(--tg-success);
+  --color-tg-boost: var(--tg-boost);
+  --color-td-neutral-0: var(--td-neutral-0);
+  --color-td-neutral-100: var(--td-neutral-100);
+  --color-td-neutral-400: var(--td-neutral-400);
+  --color-td-neutral-500: var(--td-neutral-500);
+  --color-td-neutral-600: var(--td-neutral-600);
+  --color-td-neutral-800: var(--td-neutral-800);
+  --color-td-neutral-900: var(--td-neutral-900);
+  --color-td-primary-300: var(--td-primary-300);
+  --color-td-primary-500: var(--td-primary-500);
+  --color-td-info-500: var(--td-info-500);
+  --color-td-error-500: var(--td-error-500);
+  --color-td-warning-500: var(--td-warning-500);
+  --color-td-disabled-100: var(--td-disabled-100);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--td-card-radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+@layer base {
+  * {
+    @apply border-tg-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-tg-bg text-tg-primary;
+    font-family: system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  }
+
+  * {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  *::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@layer utilities {
+  .scrollbar-hide {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .safe-area-top {
+    padding-top: env(safe-area-inset-top);
+  }
+
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .line-clamp-1 {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}

@@ -1,3 +1,5 @@
+import { Chip } from '@/components/ui/Chip.tsx';
+
 type BoostBadgeProps = {
   active: boolean;
   source?: 'mock' | 'ton';
@@ -9,8 +11,8 @@ export const BoostBadge = ({ active, source }: BoostBadgeProps) => {
   }
 
   return (
-    <span className="td-boost-badge">
+    <Chip variant="boost" size="sm" className="font-semibold text-[10px]">
       Boosted {source ? `(${source})` : ''}
-    </span>
+    </Chip>
   );
 };

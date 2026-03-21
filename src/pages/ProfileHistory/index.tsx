@@ -14,23 +14,28 @@ const ProfileHistory = () => {
 
   return (
     <PageShell title="History" backTo="/profile">
-      <section className="td-card td-stack">
-        <h2>Recent Opens</h2>
-        {openedEntities.length === 0 && <p className="td-muted">No recently opened entities.</p>}
-        {openedEntities.map((entity) => (
-          <Link key={entity.id} to={`/entity/${entity.id}`} className="td-list-link">
-            {entity.name}
-          </Link>
-        ))}
+      <section className="bg-tg-card border border-tg-border rounded-2xl p-4">
+        <h2 className="text-base font-semibold text-tg-primary mb-3">Recent Opens</h2>
+        {openedEntities.length === 0 && <p className="text-sm text-tg-muted">No recently opened entities.</p>}
+        <div className="space-y-2">
+          {openedEntities.map((entity) => (
+            <Link key={entity.id} to={`/entity/${entity.id}`} className="w-full bg-tg-input rounded-xl p-3 text-sm text-tg-primary block">
+              {entity.name}
+            </Link>
+          ))}
+        </div>
       </section>
-      <section className="td-card td-stack">
-        <h2>Recent Launches</h2>
-        {launchedApps.length === 0 && <p className="td-muted">No launches yet.</p>}
-        {launchedApps.map((entity) => (
-          <Link key={entity.id} to={`/entity/${entity.id}`} className="td-list-link">
-            {entity.name}
-          </Link>
-        ))}
+
+      <section className="bg-tg-card border border-tg-border rounded-2xl p-4">
+        <h2 className="text-base font-semibold text-tg-primary mb-3">Recent Launches</h2>
+        {launchedApps.length === 0 && <p className="text-sm text-tg-muted">No launches yet.</p>}
+        <div className="space-y-2">
+          {launchedApps.map((entity) => (
+            <Link key={entity.id} to={`/entity/${entity.id}`} className="w-full bg-tg-input rounded-xl p-3 text-sm text-tg-primary block">
+              {entity.name}
+            </Link>
+          ))}
+        </div>
       </section>
     </PageShell>
   );

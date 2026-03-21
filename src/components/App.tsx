@@ -1,38 +1,42 @@
-import { useEffect, useMemo } from 'react';
-import { Navigate, Route, Router, Routes } from 'react-router-dom';
-import { initNavigator, useMiniApp, useViewport } from '@telegram-apps/sdk-react';
-import { useIntegration } from '@telegram-apps/react-router-integration';
+import { useEffect } from 'react';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 import { routes } from '@/constants/routes.ts';
 
+type TelegramWindow = Window & {
+    Telegram?: {
+        WebApp?: {
+            setBgColor?: (color: string) => void;
+            setHeaderColor?: (color: string) => void;
+            ready?: () => void;
+            expand?: () => void;
+        };
+    };
+};
+
+function useTelegramWebAppSetup() {
+    useEffect(() => {
+        const webApp = (window as TelegramWindow).Telegram?.WebApp;
+        if (!webApp) {
+            return;
+        }
+
+        webApp.setBgColor?.('#17212B');
+        webApp.setHeaderColor?.('#17212B');
+        webApp.ready?.();
+        webApp.expand?.();
+    }, []);
+}
+
 export function App() {
-    const miniApp = useMiniApp();
-    const viewport = useViewport();
-
-    const navigator = useMemo(() => initNavigator('app-navigation-state'), []);
-    const [location, reactNavigator] = useIntegration(navigator);
-
-    useEffect(() => {
-        navigator.attach();
-        return () => navigator.detach();
-    }, [navigator]);
-
-    useEffect(() => {
-        miniApp.setBgColor('#161C24');
-        miniApp.setHeaderColor('#161C24');
-        miniApp.ready();
-    }, [miniApp]);
-
-    useEffect(() => {
-        viewport && viewport.expand();
-    }, [viewport]);
+    useTelegramWebAppSetup();
 
     return (
-        <Router location={location} navigator={reactNavigator}>
+        <BrowserRouter>
             <Routes>
                 {routes.map((route) => <Route key={route.path} {...route} />)}
                 <Route path="*" element={<Navigate to="/"/>}/>
             </Routes>
-        </Router>
+        </BrowserRouter>
     );
 }

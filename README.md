@@ -33,6 +33,21 @@ TonDiscover is a Telegram Mini App for visual discovery of channels and apps.
 - local seeded data first (no required backend)
 - optional shared feed sync endpoint for cross-user post visibility
 
+## TonConnect in Telegram Mini App
+
+For official Telegram Wallet compatibility:
+
+- Use a root manifest URL (`https://<public-host>/tonconnect-manifest.json`)
+- Set a TMA return URL (`VITE_TWA_RETURN_URL=https://t.me/<your_bot_or_app>`)
+- Avoid free tunnel interstitial pages (they can return warning HTML instead of manifest JSON)
+
+Optional env variables:
+
+```bash
+VITE_TONCONNECT_MANIFEST_URL=https://<public-host>/tonconnect-manifest.json
+VITE_TWA_RETURN_URL=https://t.me/tondiscover
+```
+
 ## Shared post visibility (optional, for multi-user demo)
 
 By default, published featured posts are stored in browser `localStorage`, which means only the current user/device sees them.

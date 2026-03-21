@@ -1,7 +1,10 @@
 import { useMemo, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Check } from 'lucide-react';
 import { useTonConnectModal } from '@tonconnect/ui-react';
 import { PageShell } from '@/components/layout/PageShell.tsx';
+import { Button } from '@/components/ui/Button.tsx';
+import { Card } from '@/components/ui/Card.tsx';
 import { boostOptions } from '@/constants/boost-options.ts';
 import { useAppState } from '@/context/app-context.tsx';
 import { useTonConnect } from '@/hooks/useTonConnect.ts';
@@ -43,17 +46,30 @@ const BoostConfirmation = () => {
   };
 
   return (
-    <PageShell title="Payment Confirmation" backTo="/create/boost/connect">
-      <section className="td-card td-stack">
-        <p><strong>Entity:</strong> {entity?.name ?? 'Unknown'}</p>
-        <p><strong>Option:</strong> {option.label}</p>
-        <p><strong>Receiver:</strong> {BOOST_RECEIVER_RAW}</p>
-        <p className="td-muted">{status || 'Confirm to activate boost and update feed ranking.'}</p>
-        {!entity && <p className="td-muted">Only your own entities/posts can be boosted.</p>}
-        <button type="button" className="td-primary-button" disabled={!entity || submitting} onClick={confirm}>
+    <PageShell title="Confirm Payment" backTo="/create/boost/connect">
+      <Card>
+        <div className="space-y-3 text-sm">
+          <div className="flex justify-between"><span className="text-tg-muted">Entity</span><span className="text-tg-primary">{entity?.name ?? 'Unknown'}</span></div>
+          <div className="flex justify-between"><span className="text-tg-muted">Option</span><span className="text-tg-primary">{option.label}</span></div>
+          <div className="flex justify-between"><span className="text-tg-muted">Receiver</span><span className="text-tg-primary">{BOOST_RECEIVER_RAW}</span></div>
+        </div>
+      </Card>
+
+      <Card className="space-y-3">
+        <p className="text-sm text-tg-muted">{status || 'Confirm to activate boost and update feed ranking.'}</p>
+        {!entity && <p className="text-sm text-tg-muted">Only your own entities/posts can be boosted.</p>}
+        <Button
+          type="button"
+          variant="boost"
+          size="lg"
+          fullWidth
+          disabled={!entity || submitting}
+          onClick={confirm}
+        >
+          <Check className="w-4 h-4" />
           Confirm Payment
-        </button>
-      </section>
+        </Button>
+      </Card>
     </PageShell>
   );
 };

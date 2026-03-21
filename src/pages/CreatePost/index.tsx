@@ -1,6 +1,9 @@
 import { FormEvent, useMemo, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { PageShell } from '@/components/layout/PageShell.tsx';
+import { Button, buttonStyles } from '@/components/ui/Button.tsx';
+import { Card } from '@/components/ui/Card.tsx';
+import { Input, Select, Textarea } from '@/components/ui/Input.tsx';
 import { useAppState } from '@/context/app-context.tsx';
 import type { ContentType } from '@/types/tondiscover.ts';
 
@@ -44,52 +47,52 @@ const CreatePost = () => {
   if (savedEntities.length === 0) {
     return (
       <PageShell title="Create Post" backTo="/create">
-        <section className="td-card td-stack">
-          <p className="td-muted">Add a channel/app first. Posting is available only for your saved channels/apps.</p>
-          <Link to="/create/register" className="td-primary-button td-inline-link">Add Channel / App</Link>
-        </section>
+        <Card>
+          <p className="text-sm text-tg-muted mb-4">Add a channel/app first. Posting is available only for your saved channels/apps.</p>
+          <Link to="/create/register" className={buttonStyles({ variant: 'primary', size: 'md' })}>Add Channel / App</Link>
+        </Card>
       </PageShell>
     );
   }
 
   return (
     <PageShell title="Create Post" backTo="/create">
-      <form className="td-card td-form" onSubmit={submit}>
-        <label>
-          Saved channel / app
-          <select value={entityId} onChange={(event) => setEntityId(event.target.value)}>
+      <Card as="form" className="space-y-4" onSubmit={submit}>
+        <label className="block">
+          <span className="block text-sm text-tg-muted mb-2">Saved channel / app</span>
+          <Select value={entityId} onChange={(event) => setEntityId(event.target.value)}>
             {savedEntities.map((entity) => (
               <option key={entity.id} value={entity.id}>
                 {entity.name} - {entity.type}
               </option>
             ))}
-          </select>
+          </Select>
         </label>
-        <label>
-          Content type
-          <select value={contentType} onChange={(event) => setContentType(event.target.value as ContentType)}>
+        <label className="block">
+          <span className="block text-sm text-tg-muted mb-2">Content type</span>
+          <Select value={contentType} onChange={(event) => setContentType(event.target.value as ContentType)}>
             <option value="text">Text</option>
             <option value="image">Image</option>
             <option value="video">Video</option>
-          </select>
+          </Select>
         </label>
-        <label>
-          Title
-          <input value={title} onChange={(event) => setTitle(event.target.value)} />
+        <label className="block">
+          <span className="block text-sm text-tg-muted mb-2">Title</span>
+          <Input value={title} onChange={(event) => setTitle(event.target.value)} />
         </label>
-        <label>
-          Text
-          <textarea value={text} onChange={(event) => setText(event.target.value)} />
+        <label className="block">
+          <span className="block text-sm text-tg-muted mb-2">Text</span>
+          <Textarea value={text} onChange={(event) => setText(event.target.value)} rows={5} />
         </label>
-        <label>
-          Media URL
-          <input value={mediaUrl} onChange={(event) => setMediaUrl(event.target.value)} />
+        <label className="block">
+          <span className="block text-sm text-tg-muted mb-2">Media URL</span>
+          <Input value={mediaUrl} onChange={(event) => setMediaUrl(event.target.value)} />
         </label>
-        <p className="td-muted">Target: {selectedEntity?.name ?? 'No entity selected'}</p>
-        <button type="submit" className="td-primary-button" disabled={!entityId || !selectedEntity || !title.trim()}>
+        <p className="text-xs text-tg-muted">Target: {selectedEntity?.name ?? 'No entity selected'}</p>
+        <Button type="submit" variant="primary" size="lg" fullWidth disabled={!entityId || !selectedEntity || !title.trim()}>
           Review Post
-        </button>
-      </form>
+        </Button>
+      </Card>
     </PageShell>
   );
 };

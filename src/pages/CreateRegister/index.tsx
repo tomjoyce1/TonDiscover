@@ -1,6 +1,9 @@
 import { FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PageShell } from '@/components/layout/PageShell.tsx';
+import { Button } from '@/components/ui/Button.tsx';
+import { Card } from '@/components/ui/Card.tsx';
+import { Input, Select, Textarea } from '@/components/ui/Input.tsx';
 import { useAppState } from '@/context/app-context.tsx';
 import type { EntityType } from '@/types/tondiscover.ts';
 
@@ -33,41 +36,41 @@ const CreateRegister = () => {
   const isDisabled = !name.trim() || !telegramUrl.trim() || !shortDescription.trim();
 
   return (
-    <PageShell title="Register Channel / App" subtitle="Adding a channel/app only saves it. Posting is a separate step." backTo="/create">
-      <form className="td-card td-form" onSubmit={handleSubmit}>
-        <label>
-          Type
-          <select value={type} onChange={(event) => setType(event.target.value as EntityType)}>
+    <PageShell title="Register Channel / App" subtitle="Save first, then publish post content." backTo="/create">
+      <Card as="form" className="space-y-4" onSubmit={handleSubmit}>
+        <label className="block">
+          <span className="block text-sm text-tg-muted mb-2">Type</span>
+          <Select value={type} onChange={(event) => setType(event.target.value as EntityType)}>
             <option value="channel">Channel</option>
             <option value="app">App</option>
-          </select>
+          </Select>
         </label>
-        <label>
-          Name
-          <input value={name} onChange={(event) => setName(event.target.value)} />
+        <label className="block">
+          <span className="block text-sm text-tg-muted mb-2">Name</span>
+          <Input value={name} onChange={(event) => setName(event.target.value)} />
         </label>
-        <label>
-          Category
-          <select value={category} onChange={(event) => setCategory(event.target.value)}>
+        <label className="block">
+          <span className="block text-sm text-tg-muted mb-2">Category</span>
+          <Select value={category} onChange={(event) => setCategory(event.target.value)}>
             {categories.map((item) => <option key={item} value={item}>{item}</option>)}
-          </select>
+          </Select>
         </label>
-        <label>
-          Telegram URL
-          <input value={telegramUrl} onChange={(event) => setTelegramUrl(event.target.value)} />
+        <label className="block">
+          <span className="block text-sm text-tg-muted mb-2">Telegram URL</span>
+          <Input value={telegramUrl} onChange={(event) => setTelegramUrl(event.target.value)} />
         </label>
-        <label>
-          Short description
-          <textarea value={shortDescription} onChange={(event) => setShortDescription(event.target.value)} />
+        <label className="block">
+          <span className="block text-sm text-tg-muted mb-2">Short description</span>
+          <Textarea value={shortDescription} onChange={(event) => setShortDescription(event.target.value)} rows={4} />
         </label>
-        <label>
-          Tags (comma separated)
-          <input value={tags} onChange={(event) => setTags(event.target.value)} />
+        <label className="block">
+          <span className="block text-sm text-tg-muted mb-2">Tags (comma separated)</span>
+          <Input value={tags} onChange={(event) => setTags(event.target.value)} />
         </label>
-        <button type="submit" className="td-primary-button" disabled={isDisabled}>
+        <Button type="submit" variant="primary" size="lg" fullWidth disabled={isDisabled}>
           Save channel / app
-        </button>
-      </form>
+        </Button>
+      </Card>
     </PageShell>
   );
 };

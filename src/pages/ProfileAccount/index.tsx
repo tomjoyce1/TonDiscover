@@ -44,26 +44,28 @@ const ProfileAccount = () => {
 
   return (
     <PageShell title="Account" backTo="/profile">
-      <form className="td-card td-form" onSubmit={save}>
-        <label>
-          Display name
+      <form className="bg-tg-card border border-tg-border rounded-2xl p-4 space-y-4" onSubmit={save}>
+        <label className="block">
+          <span className="block text-sm text-tg-muted mb-2">Display name</span>
           <input
+            className="w-full h-12 px-4 bg-tg-input text-tg-primary rounded-xl border-none outline-none"
             value={account.displayName}
             onChange={(event) => setAccount((state) => ({ ...state, displayName: event.target.value }))}
           />
         </label>
-        <label>
-          Bio
+        <label className="block">
+          <span className="block text-sm text-tg-muted mb-2">Bio</span>
           <textarea
+            className="w-full p-4 bg-tg-input text-tg-primary rounded-xl border-none outline-none resize-none"
             value={account.bio}
             onChange={(event) => setAccount((state) => ({ ...state, bio: event.target.value }))}
           />
         </label>
-        <p className="td-muted">
+        <p className="text-sm text-tg-muted">
           Wallet linked: {address ? separateTonAddress(address) : 'No wallet linked'}
         </p>
-        <button type="submit" className="td-primary-button">Save profile</button>
-        {savedAt && <p className="td-muted">Saved at {savedAt}</p>}
+        <button type="submit" className="w-full h-12 bg-tg-accent text-white font-semibold rounded-full">Save profile</button>
+        {savedAt && <p className="text-sm text-tg-muted">Saved at {savedAt}</p>}
       </form>
     </PageShell>
   );

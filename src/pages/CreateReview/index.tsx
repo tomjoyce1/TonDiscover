@@ -1,6 +1,9 @@
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Check } from 'lucide-react';
 import { PageShell } from '@/components/layout/PageShell.tsx';
+import { Button } from '@/components/ui/Button.tsx';
+import { Card } from '@/components/ui/Card.tsx';
 import { useAppState } from '@/context/app-context.tsx';
 
 const DRAFT_KEY = 'tondiscover:create-post-draft';
@@ -52,28 +55,48 @@ const CreateReview = () => {
   if (!draft || !entity) {
     return (
       <PageShell title="Review / Confirm" backTo="/create/post">
-        <section className="td-card td-stack">
-          <p className="td-muted">No valid draft found for your saved channels/apps. Create a post first.</p>
-          <button type="button" className="td-primary-button" onClick={() => navigate('/create/post')}>
+        <Card>
+          <p className="text-sm text-tg-muted mb-4">No valid draft found for your saved channels/apps. Create a post first.</p>
+          <Button type="button" variant="primary" size="md" onClick={() => navigate('/create/post')}>
             Go to Make Post
-          </button>
-        </section>
+          </Button>
+        </Card>
       </PageShell>
     );
   }
 
   return (
     <PageShell title="Review / Confirm" backTo="/create/post">
-      <section className="td-card td-stack">
-        <p><strong>Entity:</strong> {entity.name}</p>
-        <p><strong>Type:</strong> {draft.contentType}</p>
-        <p><strong>Title:</strong> {draft.title}</p>
-        {draft.text && <p><strong>Text:</strong> {draft.text}</p>}
-        {draft.mediaUrl && <p><strong>Media:</strong> {draft.mediaUrl}</p>}
-        <button type="button" className="td-primary-button" onClick={publish}>
+      <Card className="space-y-3">
+        <div className="flex items-center justify-between text-sm">
+          <span className="text-tg-muted">Entity</span>
+          <span className="text-tg-primary">{entity.name}</span>
+        </div>
+        <div className="flex items-center justify-between text-sm">
+          <span className="text-tg-muted">Type</span>
+          <span className="text-tg-primary uppercase">{draft.contentType}</span>
+        </div>
+        <div className="pt-2 border-t border-tg-border">
+          <p className="text-sm text-tg-muted mb-2">Title</p>
+          <p className="text-sm text-tg-primary">{draft.title}</p>
+        </div>
+        {draft.text && (
+          <div>
+            <p className="text-sm text-tg-muted mb-2">Text</p>
+            <p className="text-sm text-tg-primary whitespace-pre-wrap">{draft.text}</p>
+          </div>
+        )}
+        {draft.mediaUrl && (
+          <div>
+            <p className="text-sm text-tg-muted mb-2">Media URL</p>
+            <p className="text-sm text-tg-primary break-all">{draft.mediaUrl}</p>
+          </div>
+        )}
+        <Button type="button" variant="primary" size="lg" fullWidth onClick={publish}>
+          <Check className="w-4 h-4" />
           Publish
-        </button>
-      </section>
+        </Button>
+      </Card>
     </PageShell>
   );
 };

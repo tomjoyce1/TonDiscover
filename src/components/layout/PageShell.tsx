@@ -1,6 +1,8 @@
 import { PropsWithChildren } from 'react';
 import { Link } from 'react-router-dom';
+import { ArrowLeft } from 'lucide-react';
 import { BottomNav } from '@/components/layout/BottomNav.tsx';
+import { buttonStyles } from '@/components/ui/Button.tsx';
 
 type PageShellProps = PropsWithChildren<{
   title: string;
@@ -10,18 +12,33 @@ type PageShellProps = PropsWithChildren<{
 
 export const PageShell = ({ title, subtitle, backTo, children }: PageShellProps) => {
   return (
-    <div className="td-page">
-      <header className="td-header">
-        <div className="td-header-row">
-          {backTo
-            ? <Link to={backTo} className="td-back-link">←</Link>
-            : <span className="td-back-link td-back-link-placeholder">←</span>}
-          <h1>{title}</h1>
+    <div className="min-h-screen bg-tg-bg flex flex-col">
+      <header className="sticky top-0 z-30 bg-tg-bg border-b border-tg-border safe-area-top">
+        <div className="flex items-center justify-between h-14 px-4">
+          {backTo ? (
+            <Link
+              to={backTo}
+              className={buttonStyles({
+                variant: 'ghost',
+                size: 'icon',
+                className: '-ml-2',
+              })}
+              aria-label="Go back"
+            >
+              <ArrowLeft className="w-5 h-5 text-tg-primary" />
+            </Link>
+          ) : (
+            <div className="w-9" />
+          )}
+          <h1 className="font-semibold text-tg-primary">{title}</h1>
+          <div className="w-9" />
         </div>
-        {subtitle && <p className="td-muted">{subtitle}</p>}
+        {subtitle && <p className="px-4 pb-3 text-sm text-tg-muted">{subtitle}</p>}
       </header>
-      <main className="td-container td-container-with-bottom-nav">
-        {children}
+      <main className="flex-1 pb-20 overflow-y-auto">
+        <div className="p-4 space-y-3">
+          {children}
+        </div>
       </main>
       <BottomNav />
     </div>
