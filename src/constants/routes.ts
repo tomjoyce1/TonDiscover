@@ -8,6 +8,7 @@ import Favorites from '@/pages/Favorites';
 import SearchHome from '@/pages/SearchHome';
 import SearchResults from '@/pages/SearchResults';
 import CreateHub from '@/pages/CreateHub';
+import CreateOverview from '@/pages/CreateOverview';
 import CreateRegister from '@/pages/CreateRegister';
 import CreatePost from '@/pages/CreatePost';
 import CreateReview from '@/pages/CreateReview';
@@ -38,6 +39,7 @@ export const routes: Route[] = [
   { path: '/search', Component: SearchHome },
   { path: '/search/results', Component: SearchResults },
   { path: '/create', Component: CreateHub },
+  { path: '/create/overview/:id', Component: CreateOverview },
   { path: '/create/register', Component: CreateRegister },
   { path: '/create/post', Component: CreatePost },
   { path: '/create/review', Component: CreateReview },

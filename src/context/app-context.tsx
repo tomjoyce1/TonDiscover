@@ -4,6 +4,11 @@ import { getEntities, searchEntities } from '@/data/repositories/entities-reposi
 import { seededFeaturedContent } from '@/data/seeds/featured-content.ts';
 import { getRankedEntities } from '@/domain/ranking.ts';
 import { readJSON, STORAGE_KEYS, writeJSON } from '@/services/storage/local-storage.ts';
+import {
+  isSharedFeedEnabled,
+  readSharedFeaturedOverrides,
+  writeSharedFeaturedOverrides,
+} from '@/services/storage/shared-featured-feed.ts';
 import type {
   BoostState,
   Entity,
@@ -18,6 +23,8 @@ import type {
 type AppStateContextProviderValue = {
   categories: string[];
   entities: Entity[];
+  savedEntities: Entity[];
+  ownedEntities: Entity[];
   featuredContent: FeaturedContent[];
   rankedEntities: Entity[];
   favorites: FavoritesState;
@@ -31,9 +38,14 @@ type AppStateContextProviderValue = {
   recordOpen: (entityId: string) => void;
   recordLaunch: (entityId: string) => void;
   registerEntity: (payload: RegisterEntityInput) => Entity;
+  updateSavedEntity: (
+    entityId: string,
+    payload: Partial<Pick<Entity, 'name' | 'category' | 'telegramUrl' | 'shortDescription' | 'tags'>>,
+  ) => void;
   setFeaturedContent: (payload: FeaturedContentInput) => FeaturedContent;
   setBoostState: (state: BoostState) => void;
   getBoostState: (entityId: string) => BoostState;
+  isOwnedEntity: (entityId: string) => boolean;
   search: (query: string) => Entity[];
   saveRecentSearch: (query: string) => void;
 };
@@ -67,6 +79,8 @@ const uniq = (items: string[]): string[] => Array.from(new Set(items));
 const initialContext: AppStateContextProviderValue = {
   categories,
   entities: [],
+  savedEntities: [],
+  ownedEntities: [],
   featuredContent: [],
   rankedEntities: [],
   favorites: initialFavorites,
@@ -82,11 +96,13 @@ const initialContext: AppStateContextProviderValue = {
   registerEntity: () => {
     throw new Error('AppStateProvider not mounted');
   },
+  updateSavedEntity: () => undefined,
   setFeaturedContent: () => {
     throw new Error('AppStateProvider not mounted');
   },
   setBoostState: () => undefined,
   getBoostState: (entityId: string) => ({ entityId, status: 'inactive', source: 'mock' }),
+  isOwnedEntity: () => false,
   search: () => [],
   saveRecentSearch: () => undefined,
 };
@@ -105,6 +121,10 @@ export const AppStateProvider = ({ children }: AppStateProviderProps) => {
   const [featuredOverrides, setFeaturedOverrides] = useState<FeaturedContent[]>(() => {
     return readJSON(STORAGE_KEYS.featuredOverrides, [] as FeaturedContent[]);
   });
+  const [ownedBoostEntityIds, setOwnedBoostEntityIds] = useState<string[]>(() => {
+    return readJSON(STORAGE_KEYS.ownedBoostEntityIds, [] as string[]);
+  });
+  const [hasHydratedSharedFeed, setHasHydratedSharedFeed] = useState<boolean>(() => !isSharedFeedEnabled);
   const [favorites, setFavorites] = useState<FavoritesState>(() => {
     return readJSON(STORAGE_KEYS.favorites, initialFavorites);
   });
@@ -121,6 +141,17 @@ export const AppStateProvider = ({ children }: AppStateProviderProps) => {
   const entities = useMemo(() => {
     return [...seededEntities, ...registeredEntities];
   }, [registeredEntities, seededEntities]);
+
+  const ownedEntityIds = useMemo(() => {
+    return uniq([
+      ...registeredEntities.map((entity) => entity.id),
+      ...ownedBoostEntityIds,
+    ]);
+  }, [ownedBoostEntityIds, registeredEntities]);
+
+  const ownedEntities = useMemo(() => {
+    return entities.filter((entity) => ownedEntityIds.includes(entity.id));
+  }, [entities, ownedEntityIds]);
 
   const featuredContent = useMemo(() => {
     const byEntity = new Map<string, FeaturedContent>();
@@ -229,6 +260,22 @@ export const AppStateProvider = ({ children }: AppStateProviderProps) => {
     return entity;
   }, []);
 
+  const updateSavedEntity = useCallback((
+    entityId: string,
+    payload: Partial<Pick<Entity, 'name' | 'category' | 'telegramUrl' | 'shortDescription' | 'tags'>>,
+  ) => {
+    setRegisteredEntities((previousState) => previousState.map((entity) => {
+      if (entity.id !== entityId) {
+        return entity;
+      }
+
+      return {
+        ...entity,
+        ...payload,
+      };
+    }));
+  }, []);
+
   const setFeaturedContent = useCallback((payload: FeaturedContentInput): FeaturedContent => {
     const next: FeaturedContent = {
       id: `featured-${payload.entityId}-${Date.now()}`,
@@ -243,6 +290,7 @@ export const AppStateProvider = ({ children }: AppStateProviderProps) => {
     setFeaturedOverrides((previousState) => {
       return [next, ...previousState.filter((item) => item.entityId !== payload.entityId)];
     });
+    setOwnedBoostEntityIds((previousState) => uniq([payload.entityId, ...previousState]));
 
     return next;
   }, []);
@@ -257,6 +305,10 @@ export const AppStateProvider = ({ children }: AppStateProviderProps) => {
   const getBoostState = useCallback((entityId: string): BoostState => {
     return boosts[entityId] ?? { entityId, status: 'inactive', source: 'mock' };
   }, [boosts]);
+
+  const isOwnedEntity = useCallback((entityId: string): boolean => {
+    return ownedEntityIds.includes(entityId);
+  }, [ownedEntityIds]);
 
   const search = useCallback((query: string): Entity[] => {
     if (!query.trim()) {
@@ -287,6 +339,50 @@ export const AppStateProvider = ({ children }: AppStateProviderProps) => {
   }, [featuredOverrides]);
 
   useEffect(() => {
+    writeJSON(STORAGE_KEYS.ownedBoostEntityIds, ownedBoostEntityIds);
+  }, [ownedBoostEntityIds]);
+
+  useEffect(() => {
+    if (!isSharedFeedEnabled) {
+      return;
+    }
+
+    let cancelled = false;
+    const hydrateSharedFeed = async () => {
+      const remoteFeatured = await readSharedFeaturedOverrides();
+      if (cancelled) {
+        return;
+      }
+
+      if (!remoteFeatured) {
+        setHasHydratedSharedFeed(true);
+        return;
+      }
+
+      setFeaturedOverrides((previousState) => {
+        const remoteByEntity = new Map(remoteFeatured.map((item) => [item.entityId, item]));
+        const localNotInRemote = previousState.filter((item) => !remoteByEntity.has(item.entityId));
+        return [...remoteFeatured, ...localNotInRemote];
+      });
+      setHasHydratedSharedFeed(true);
+    };
+
+    void hydrateSharedFeed();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isSharedFeedEnabled || !hasHydratedSharedFeed) {
+      return;
+    }
+
+    void writeSharedFeaturedOverrides(featuredOverrides);
+  }, [featuredOverrides, hasHydratedSharedFeed]);
+
+  useEffect(() => {
     writeJSON(STORAGE_KEYS.favorites, favorites);
   }, [favorites]);
 
@@ -306,6 +402,8 @@ export const AppStateProvider = ({ children }: AppStateProviderProps) => {
     return {
       categories,
       entities,
+      savedEntities: registeredEntities,
+      ownedEntities,
       featuredContent,
       rankedEntities,
       favorites,
@@ -319,9 +417,11 @@ export const AppStateProvider = ({ children }: AppStateProviderProps) => {
       recordOpen,
       recordLaunch,
       registerEntity,
+      updateSavedEntity,
       setFeaturedContent,
       setBoostState,
       getBoostState,
+      isOwnedEntity,
       search,
       saveRecentSearch,
     };
@@ -333,11 +433,15 @@ export const AppStateProvider = ({ children }: AppStateProviderProps) => {
     featuredContent,
     getBoostState,
     history,
+    isOwnedEntity,
     isFavorite,
+    ownedEntities,
+    registeredEntities,
     rankedEntities,
     recordLaunch,
     recordOpen,
     registerEntity,
+    updateSavedEntity,
     search,
     setBoostState,
     setFeaturedContent,

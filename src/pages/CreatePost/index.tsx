@@ -1,5 +1,5 @@
 import { FormEvent, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { PageShell } from '@/components/layout/PageShell.tsx';
 import { useAppState } from '@/context/app-context.tsx';
 import type { ContentType } from '@/types/tondiscover.ts';
@@ -8,21 +8,26 @@ const DRAFT_KEY = 'tondiscover:create-post-draft';
 
 const CreatePost = () => {
   const navigate = useNavigate();
-  const { entities } = useAppState();
-  const [entityId, setEntityId] = useState(entities[0]?.id ?? '');
+  const [searchParams] = useSearchParams();
+  const { savedEntities } = useAppState();
+  const requestedEntityId = searchParams.get('entityId');
+  const initialEntityId = requestedEntityId && savedEntities.some((entity) => entity.id === requestedEntityId)
+    ? requestedEntityId
+    : savedEntities[0]?.id ?? '';
+  const [entityId, setEntityId] = useState(initialEntityId);
   const [contentType, setContentType] = useState<ContentType>('text');
   const [title, setTitle] = useState('');
   const [text, setText] = useState('');
   const [mediaUrl, setMediaUrl] = useState('');
 
   const selectedEntity = useMemo(
-    () => entities.find((entity) => entity.id === entityId),
-    [entities, entityId],
+    () => savedEntities.find((entity) => entity.id === entityId),
+    [savedEntities, entityId],
   );
 
   const submit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!entityId || !title.trim()) {
+    if (!entityId || !selectedEntity || !title.trim()) {
       return;
     }
 
@@ -36,15 +41,26 @@ const CreatePost = () => {
     navigate('/create/review');
   };
 
+  if (savedEntities.length === 0) {
+    return (
+      <PageShell title="Create Post" backTo="/create">
+        <section className="td-card td-stack">
+          <p className="td-muted">Add a channel/app first. Posting is available only for your saved channels/apps.</p>
+          <Link to="/create/register" className="td-primary-button td-inline-link">Add Channel / App</Link>
+        </section>
+      </PageShell>
+    );
+  }
+
   return (
-    <PageShell title="Make Post" backTo="/create">
+    <PageShell title="Create Post" backTo="/create">
       <form className="td-card td-form" onSubmit={submit}>
         <label>
-          Entity
+          Saved channel / app
           <select value={entityId} onChange={(event) => setEntityId(event.target.value)}>
-            {entities.map((entity) => (
+            {savedEntities.map((entity) => (
               <option key={entity.id} value={entity.id}>
-                {entity.name} · {entity.type}
+                {entity.name} - {entity.type}
               </option>
             ))}
           </select>
@@ -70,8 +86,8 @@ const CreatePost = () => {
           <input value={mediaUrl} onChange={(event) => setMediaUrl(event.target.value)} />
         </label>
         <p className="td-muted">Target: {selectedEntity?.name ?? 'No entity selected'}</p>
-        <button type="submit" className="td-primary-button" disabled={!entityId || !title.trim()}>
-          Review / Confirm
+        <button type="submit" className="td-primary-button" disabled={!entityId || !selectedEntity || !title.trim()}>
+          Review Post
         </button>
       </form>
     </PageShell>

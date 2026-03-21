@@ -2,30 +2,24 @@ import { useMemo, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useTonConnectModal } from '@tonconnect/ui-react';
 import { PageShell } from '@/components/layout/PageShell.tsx';
+import { boostOptions } from '@/constants/boost-options.ts';
 import { useAppState } from '@/context/app-context.tsx';
 import { useTonConnect } from '@/hooks/useTonConnect.ts';
-import { createBoostService } from '@/services/boost/boost-service.ts';
-import type { BoostOption } from '@/types/tondiscover.ts';
-
-const boostOptions: BoostOption[] = [
-  { id: 'boost-6h', label: '6 hours · 0.05 TON', amountTon: '0.05', durationHours: 6 },
-  { id: 'boost-24h', label: '24 hours · 0.15 TON', amountTon: '0.15', durationHours: 24 },
-  { id: 'boost-72h', label: '72 hours · 0.35 TON', amountTon: '0.35', durationHours: 72 },
-];
+import { BOOST_RECEIVER_RAW, createBoostService } from '@/services/boost/boost-service.ts';
 
 const BoostConfirmation = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { open } = useTonConnectModal();
   const { sender, connected } = useTonConnect();
-  const { entities, setBoostState } = useAppState();
+  const { entities, setBoostState, isOwnedEntity } = useAppState();
   const [status, setStatus] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
   const entityId = searchParams.get('entityId') ?? '';
   const optionId = searchParams.get('optionId') ?? '';
   const option = boostOptions.find((item) => item.id === optionId) ?? boostOptions[0];
-  const entity = entities.find((item) => item.id === entityId);
+  const entity = isOwnedEntity(entityId) ? entities.find((item) => item.id === entityId) : undefined;
 
   const service = useMemo(() => {
     return createBoostService({
@@ -53,7 +47,9 @@ const BoostConfirmation = () => {
       <section className="td-card td-stack">
         <p><strong>Entity:</strong> {entity?.name ?? 'Unknown'}</p>
         <p><strong>Option:</strong> {option.label}</p>
+        <p><strong>Receiver:</strong> {BOOST_RECEIVER_RAW}</p>
         <p className="td-muted">{status || 'Confirm to activate boost and update feed ranking.'}</p>
+        {!entity && <p className="td-muted">Only your own entities/posts can be boosted.</p>}
         <button type="button" className="td-primary-button" disabled={!entity || submitting} onClick={confirm}>
           Confirm Payment
         </button>

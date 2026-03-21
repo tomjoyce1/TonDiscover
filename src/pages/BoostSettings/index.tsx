@@ -1,26 +1,23 @@
 import { useMemo, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { PageShell } from '@/components/layout/PageShell.tsx';
+import { boostOptions } from '@/constants/boost-options.ts';
 import { useAppState } from '@/context/app-context.tsx';
-import type { BoostOption } from '@/types/tondiscover.ts';
-
-const boostOptions: BoostOption[] = [
-  { id: 'boost-6h', label: '6 hours · 0.05 TON', amountTon: '0.05', durationHours: 6 },
-  { id: 'boost-24h', label: '24 hours · 0.15 TON', amountTon: '0.15', durationHours: 24 },
-  { id: 'boost-72h', label: '72 hours · 0.35 TON', amountTon: '0.35', durationHours: 72 },
-];
 
 const BoostSettings = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { entities } = useAppState();
-  const initialEntityId = searchParams.get('entityId') ?? entities[0]?.id ?? '';
+  const { ownedEntities, isOwnedEntity } = useAppState();
+  const requestedEntityId = searchParams.get('entityId');
+  const initialEntityId = requestedEntityId && isOwnedEntity(requestedEntityId)
+    ? requestedEntityId
+    : ownedEntities[0]?.id ?? '';
   const [entityId, setEntityId] = useState(initialEntityId);
   const [optionId, setOptionId] = useState(boostOptions[0].id);
 
   const entity = useMemo(
-    () => entities.find((item) => item.id === entityId),
-    [entities, entityId],
+    () => ownedEntities.find((item) => item.id === entityId),
+    [ownedEntities, entityId],
   );
 
   const proceed = () => {
@@ -33,14 +30,22 @@ const BoostSettings = () => {
   return (
     <PageShell title="Boost Settings" backTo="/create">
       <section className="td-card td-stack">
-        <label>
-          Entity
-          <select value={entityId} onChange={(event) => setEntityId(event.target.value)}>
-            {entities.map((item) => (
-              <option key={item.id} value={item.id}>{item.name}</option>
-            ))}
-          </select>
-        </label>
+        {ownedEntities.length === 0 ? (
+          <>
+            <p className="td-muted">No eligible content yet. You can only boost entities/posts you created.</p>
+            <Link to="/create/post" className="td-link-button td-inline-link">Make Post</Link>
+            <Link to="/create/register" className="td-link-button td-inline-link">Add Channel / App</Link>
+          </>
+        ) : (
+          <label>
+            Your entity
+            <select value={entityId} onChange={(event) => setEntityId(event.target.value)}>
+              {ownedEntities.map((item) => (
+                <option key={item.id} value={item.id}>{item.name}</option>
+              ))}
+            </select>
+          </label>
+        )}
         <div className="td-stack">
           {boostOptions.map((option) => (
             <button

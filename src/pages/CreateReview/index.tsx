@@ -28,9 +28,9 @@ const readDraft = (): Draft | null => {
 
 const CreateReview = () => {
   const navigate = useNavigate();
-  const { entities, setFeaturedContent } = useAppState();
+  const { savedEntities, setFeaturedContent } = useAppState();
   const draft = useMemo(readDraft, []);
-  const entity = entities.find((item) => item.id === draft?.entityId);
+  const entity = savedEntities.find((item) => item.id === draft?.entityId);
 
   const publish = () => {
     if (!draft || !entity) {
@@ -45,14 +45,15 @@ const CreateReview = () => {
       text: draft.text || undefined,
       mediaUrl: draft.mediaUrl || undefined,
     });
-    navigate('/create/publish-success');
+    window.localStorage.removeItem(DRAFT_KEY);
+    navigate(`/create/publish-success?entityId=${encodeURIComponent(entity.id)}`);
   };
 
   if (!draft || !entity) {
     return (
       <PageShell title="Review / Confirm" backTo="/create/post">
         <section className="td-card td-stack">
-          <p className="td-muted">No draft found. Create a post first.</p>
+          <p className="td-muted">No valid draft found for your saved channels/apps. Create a post first.</p>
           <button type="button" className="td-primary-button" onClick={() => navigate('/create/post')}>
             Go to Make Post
           </button>

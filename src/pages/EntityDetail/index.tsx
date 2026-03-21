@@ -16,6 +16,7 @@ const EntityDetail = () => {
     recordLaunch,
     recordOpen,
     getBoostState,
+    isOwnedEntity,
   } = useAppState();
 
   const entity = entities.find((item) => item.id === id);
@@ -74,13 +75,17 @@ const EntityDetail = () => {
               </button>
             )}
           </div>
-          <button
-            type="button"
-            className="td-pill-button td-inline-link"
-            onClick={() => navigate(`/create/boost?entityId=${encodeURIComponent(entity.id)}`)}
-          >
-            Boost this entity
-          </button>
+          {isOwnedEntity(entity.id) ? (
+            <button
+              type="button"
+              className="td-pill-button td-inline-link"
+              onClick={() => navigate(`/create/boost?entityId=${encodeURIComponent(entity.id)}`)}
+            >
+              Boost this entity
+            </button>
+          ) : (
+            <p className="td-muted">Boost is available only for your own entities/posts.</p>
+          )}
         </div>
     </PageShell>
   );

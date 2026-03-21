@@ -1,5 +1,6 @@
-import { FormEvent, MouseEvent, useMemo, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { MouseEvent, useMemo, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { DiscoveryTile } from '@/components/discovery/DiscoveryTile.tsx';
 import { PageShell } from '@/components/layout/PageShell.tsx';
 import { useAppState } from '@/context/app-context.tsx';
 
@@ -7,19 +8,32 @@ const parseList = (value: string | null): string[] => {
   if (!value) {
     return [];
   }
+
   return value.split(',').map((item) => item.trim()).filter(Boolean);
 };
 
-const encodeList = (items: string[]): string => items.join(',');
+const normalize = (value: string): string => value.trim().toLowerCase();
 
 const SearchHome = () => {
-  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { userPrefs, entities, categories, saveRecentSearch } = useAppState();
+  const {
+    entities,
+    categories,
+    rankedEntities,
+    featuredContent,
+    getBoostState,
+  } = useAppState();
+
   const [query, setQuery] = useState(searchParams.get('q') ?? '');
   const [selectedCategories, setSelectedCategories] = useState<string[]>(parseList(searchParams.get('categories')));
   const [selectedTags, setSelectedTags] = useState<string[]>(parseList(searchParams.get('tags')));
   const [filtersOpen, setFiltersOpen] = useState(false);
+
+  const featuredByEntityId = useMemo(() => {
+    const map = new Map<string, (typeof featuredContent)[number]>();
+    featuredContent.forEach((item) => map.set(item.entityId, item));
+    return map;
+  }, [featuredContent]);
 
   const tags = useMemo(() => {
     return Array.from(new Set(entities.flatMap((entity) => entity.tags))).sort((left, right) => {
@@ -31,32 +45,38 @@ const SearchHome = () => {
     setItems(items.includes(target) ? items.filter((item) => item !== target) : [...items, target]);
   };
 
-  const runSearch = (event: FormEvent) => {
-    event.preventDefault();
-    const trimmedQuery = query.trim();
-    if (trimmedQuery) {
-      saveRecentSearch(trimmedQuery);
+  const filteredBaseResults = useMemo(() => {
+    return rankedEntities.filter((entity) => {
+      const byCategory = selectedCategories.length === 0 || selectedCategories.includes(entity.category);
+      const byTag = selectedTags.length === 0 || entity.tags.some((tag) => selectedTags.includes(tag));
+      return byCategory && byTag;
+    });
+  }, [rankedEntities, selectedCategories, selectedTags]);
+
+  const visibleResults = useMemo(() => {
+    const normalizedQuery = normalize(query);
+    if (!normalizedQuery) {
+      return filteredBaseResults;
     }
 
-    const nextParams = new URLSearchParams();
-    if (trimmedQuery) {
-      nextParams.set('q', trimmedQuery);
-    }
-    if (selectedCategories.length) {
-      nextParams.set('categories', encodeList(selectedCategories));
-    }
-    if (selectedTags.length) {
-      nextParams.set('tags', encodeList(selectedTags));
-    }
+    return filteredBaseResults.filter((entity) => {
+      const featured = featuredByEntityId.get(entity.id);
+      const fields = [
+        entity.name,
+        entity.shortDescription,
+        entity.longDescription ?? '',
+        entity.previewText ?? '',
+        featured?.title ?? '',
+        featured?.text ?? '',
+      ].map(normalize);
 
-    navigate(`/search/results?${nextParams.toString()}`);
-  };
-
-  const closeFilters = () => setFiltersOpen(false);
+      return fields.some((field) => field.includes(normalizedQuery));
+    });
+  }, [featuredByEntityId, filteredBaseResults, query]);
 
   const onOverlayClick = (event: MouseEvent<HTMLDivElement>) => {
     if (event.target === event.currentTarget) {
-      closeFilters();
+      setFiltersOpen(false);
     }
   };
 
@@ -66,44 +86,41 @@ const SearchHome = () => {
   };
 
   return (
-    <PageShell title="Search" subtitle="Tap the search bar to open filters and #tags.">
-      <form className="td-card td-stack" onSubmit={runSearch}>
-        <input
-          className="td-search-input"
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
-          onFocus={() => setFiltersOpen(true)}
-          placeholder="Search channels, apps, tags"
-        />
-        <div className="td-button-row">
+    <PageShell title="Search" subtitle="Type to see relevant posts instantly. Tags are separate filters." backTo="/explore">
+      <section className="td-card td-stack">
+        <div className="td-search-row">
+          <input
+            className="td-search-input"
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder="Search posts, channels, apps..."
+          />
           <button type="button" className="td-pill-button" onClick={() => setFiltersOpen(true)}>
             Filters
           </button>
-          <button type="submit" className="td-primary-button">Search</button>
         </div>
-      </form>
-
-      <section className="td-card td-stack">
-        <h2>Recent</h2>
-        {userPrefs.recentSearches.length === 0 && <p className="td-muted">No recent searches yet.</p>}
-        {userPrefs.recentSearches.map((item) => (
-          <button
-            key={item}
-            type="button"
-            className="td-list-link td-list-button"
-            onClick={() => navigate(`/search/results?q=${encodeURIComponent(item)}`)}
-          >
-            {item}
-          </button>
-        ))}
+        <p className="td-muted">
+          Results: {visibleResults.length} | Categories: {selectedCategories.length || 'all'} | Tags: {selectedTags.length || 'all'}
+        </p>
       </section>
+
+      <div className="td-grid">
+        {visibleResults.map((entity) => (
+          <DiscoveryTile
+            key={entity.id}
+            entity={entity}
+            featuredContent={featuredByEntityId.get(entity.id)}
+            boostState={getBoostState(entity.id)}
+          />
+        ))}
+      </div>
 
       {filtersOpen && (
         <div className="td-sheet-overlay" onClick={onOverlayClick} role="presentation">
           <section className="td-sheet">
             <div className="td-sheet-header">
               <h2>Filters</h2>
-              <button type="button" className="td-pill-button" onClick={closeFilters}>Done</button>
+              <button type="button" className="td-pill-button" onClick={() => setFiltersOpen(false)}>Done</button>
             </div>
 
             <div className="td-stack">
@@ -140,7 +157,7 @@ const SearchHome = () => {
 
             <div className="td-button-row">
               <button type="button" className="td-pill-button" onClick={resetFilters}>Reset</button>
-              <button type="button" className="td-primary-button" onClick={closeFilters}>Apply</button>
+              <button type="button" className="td-primary-button" onClick={() => setFiltersOpen(false)}>Apply</button>
             </div>
           </section>
         </div>

@@ -1,7 +1,8 @@
 import { Address, Sender, toNano } from '@ton/core';
 import type { BoostOption, BoostState } from '@/types/tondiscover.ts';
 
-const BOOST_RECEIVER = Address.parse('0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-');
+export const BOOST_RECEIVER_RAW = '0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-';
+const BOOST_RECEIVER = Address.parse(BOOST_RECEIVER_RAW);
 
 type CreateBoostServiceParams = {
   sender: Sender;

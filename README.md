@@ -31,6 +31,42 @@ TonDiscover is a Telegram Mini App for visual discovery of channels and apps.
 - Telegram Mini App SDK
 - TonConnect for wallet flow
 - local seeded data first (no required backend)
+- optional shared feed sync endpoint for cross-user post visibility
+
+## Shared post visibility (optional, for multi-user demo)
+
+By default, published featured posts are stored in browser `localStorage`, which means only the current user/device sees them.
+
+To make posts visible to all users, configure a shared JSON endpoint:
+
+```bash
+VITE_SHARED_FEED_URL=https://your-api.example.com/featured-overrides
+```
+
+Optional variables:
+
+```bash
+VITE_SHARED_FEED_READ_URL=https://your-api.example.com/featured-overrides
+VITE_SHARED_FEED_WRITE_URL=https://your-api.example.com/featured-overrides
+VITE_SHARED_FEED_WRITE_METHOD=PUT
+VITE_SHARED_FEED_TOKEN=your_bearer_token
+```
+
+Read endpoint response format:
+
+```json
+{
+  "featuredOverrides": []
+}
+```
+
+Write request body format:
+
+```json
+{
+  "featuredOverrides": []
+}
+```
 
 ## Local run
 
