@@ -22,10 +22,10 @@ const CreateHub = () => {
       enabled: true,
     },
     {
-      to: hasSavedEntities ? `/create/overview/${encodeURIComponent(defaultOverviewEntityId)}` : '#',
+      to: hasSavedEntities ? '/create/overview/manage' : '#',
       icon: Boxes,
-      label: 'Overview',
-      description: hasSavedEntities ? 'Manage your entities' : 'Register first',
+      label: 'Manage',
+      description: hasSavedEntities ? 'Channels, apps & posts' : 'Register first',
       accent: 'bg-emerald-500/15 text-emerald-400',
       enabled: hasSavedEntities,
     },

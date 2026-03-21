@@ -41,9 +41,10 @@ type AppStateContextProviderValue = {
   deleteEntity: (entityId: string) => void;
   updateSavedEntity: (
     entityId: string,
-    payload: Partial<Pick<Entity, 'name' | 'category' | 'telegramUrl' | 'shortDescription' | 'tags'>>,
+    payload: Partial<Pick<Entity, 'name' | 'category' | 'telegramUrl' | 'shortDescription' | 'tags' | 'previewMediaUrl'>>,
   ) => void;
   setFeaturedContent: (payload: FeaturedContentInput) => FeaturedContent;
+  deleteFeaturedContent: (entityId: string) => void;
   setBoostState: (state: BoostState) => void;
   getBoostState: (entityId: string) => BoostState;
   isOwnedEntity: (entityId: string) => boolean;
@@ -110,6 +111,7 @@ const initialContext: AppStateContextProviderValue = {
   setFeaturedContent: () => {
     throw new Error('AppStateProvider not mounted');
   },
+  deleteFeaturedContent: () => undefined,
   setBoostState: () => undefined,
   getBoostState: (entityId: string) => ({ entityId, status: 'inactive', source: 'mock' }),
   isOwnedEntity: () => false,
@@ -307,7 +309,7 @@ export const AppStateProvider = ({ children }: AppStateProviderProps) => {
 
   const updateSavedEntity = useCallback((
     entityId: string,
-    payload: Partial<Pick<Entity, 'name' | 'category' | 'telegramUrl' | 'shortDescription' | 'tags'>>,
+    payload: Partial<Pick<Entity, 'name' | 'category' | 'telegramUrl' | 'shortDescription' | 'tags' | 'previewMediaUrl'>>,
   ) => {
     setRegisteredEntities((previousState) => previousState.map((entity) => {
       if (entity.id !== entityId) {
@@ -338,6 +340,10 @@ export const AppStateProvider = ({ children }: AppStateProviderProps) => {
     setOwnedBoostEntityIds((previousState) => uniq([payload.entityId, ...previousState]));
 
     return next;
+  }, []);
+
+  const deleteFeaturedContent = useCallback((entityId: string) => {
+    setFeaturedOverrides((previousState) => previousState.filter((item) => item.entityId !== entityId));
   }, []);
 
   const setBoostState = useCallback((state: BoostState) => {
@@ -499,6 +505,7 @@ export const AppStateProvider = ({ children }: AppStateProviderProps) => {
       deleteEntity,
       updateSavedEntity,
       setFeaturedContent,
+      deleteFeaturedContent,
       setBoostState,
       getBoostState,
       isOwnedEntity,
@@ -528,6 +535,7 @@ export const AppStateProvider = ({ children }: AppStateProviderProps) => {
     search,
     setBoostState,
     setFeaturedContent,
+    deleteFeaturedContent,
     saveRecentSearch,
     toggleFavorite,
     userPrefs,

@@ -12,7 +12,7 @@ export const BoostBadge = ({ active, source }: BoostBadgeProps) => {
 
   return (
     <Chip variant="boost" size="sm" className="font-semibold text-[10px]">
-      Boosted {source ? `(${source})` : ''}
+      Boosted
     </Chip>
   );
 };

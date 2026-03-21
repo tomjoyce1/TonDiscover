@@ -1,10 +1,8 @@
 import { useMemo, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Check } from 'lucide-react';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { ArrowLeft, Check, FileText, Wallet } from 'lucide-react';
 import { useTonConnectModal } from '@tonconnect/ui-react';
-import { PageShell } from '@/components/layout/PageShell.tsx';
-import { Button } from '@/components/ui/Button.tsx';
-import { Card } from '@/components/ui/Card.tsx';
+import { BottomNav } from '@/components/layout/BottomNav.tsx';
 import { boostOptions } from '@/constants/boost-options.ts';
 import { useAppState } from '@/context/app-context.tsx';
 import { useTonConnect } from '@/hooks/useTonConnect.ts';
@@ -41,36 +39,82 @@ const BoostConfirmation = () => {
     setStatus('Processing payment...');
     const state = await service.activateBoost(entity.id, option);
     setBoostState(state);
-    setStatus(state.source === 'ton' ? 'TON payment confirmed.' : 'Fallback mock confirmation applied.');
+    setStatus('Payment confirmed.');
     navigate(`/create/boost/success?entityId=${encodeURIComponent(entity.id)}&source=${encodeURIComponent(state.source)}`);
   };
 
   return (
-    <PageShell title="Confirm Payment" backTo="/create/boost/connect">
-      <Card>
-        <div className="space-y-3 text-sm">
-          <div className="flex justify-between"><span className="text-tg-muted">Entity</span><span className="text-tg-primary">{entity?.name ?? 'Unknown'}</span></div>
-          <div className="flex justify-between"><span className="text-tg-muted">Option</span><span className="text-tg-primary">{option.label}</span></div>
-          <div className="flex justify-between"><span className="text-tg-muted">Receiver</span><span className="text-tg-primary">{BOOST_RECEIVER_RAW}</span></div>
+    <main className="flex min-h-screen flex-col bg-background pb-24 pt-6">
+      {/* Header */}
+      <header className="flex items-center gap-3 px-5 pb-6">
+        <Link
+          to={`/create/boost/connect?entityId=${encodeURIComponent(entityId)}&optionId=${encodeURIComponent(optionId)}`}
+          className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl border border-border bg-muted text-muted-foreground"
+          aria-label="Go back"
+        >
+          <ArrowLeft className="h-4 w-4" />
+        </Link>
+        <div>
+          <h1 className="text-xl font-bold tracking-tight text-foreground">Confirm Payment</h1>
+          <p className="text-[12px] text-muted-foreground mt-0.5">Review and confirm your boost</p>
         </div>
-      </Card>
+      </header>
 
-      <Card className="space-y-3">
-        <p className="text-sm text-tg-muted">{status || 'Confirm to activate boost and update feed ranking.'}</p>
-        {!entity && <p className="text-sm text-tg-muted">Only your own entities/posts can be boosted.</p>}
-        <Button
+      <div className="px-4 space-y-4">
+        {/* Order summary */}
+        <div className="rounded-2xl border border-border bg-card p-5">
+          <div className="flex items-center gap-2.5 mb-4">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-500/15 border border-amber-500/20">
+              <FileText className="h-4 w-4 text-amber-400" />
+            </div>
+            <span className="text-sm font-semibold text-foreground">Summary</span>
+          </div>
+          <div className="space-y-3 text-sm">
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Entity</span>
+              <span className="text-foreground font-medium">{entity?.name ?? 'Unknown'}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Option</span>
+              <span className="text-foreground font-medium">{option.label}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Receiver</span>
+              <span className="text-foreground font-medium text-xs text-right truncate max-w-[55%]" title={BOOST_RECEIVER_RAW}>{BOOST_RECEIVER_RAW.slice(0, 8)}...{BOOST_RECEIVER_RAW.slice(-6)}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Status */}
+        <div className="rounded-2xl border border-border bg-card p-5">
+          <div className="flex items-center gap-2.5 mb-4">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-500/15 border border-emerald-500/20">
+              <Wallet className="h-4 w-4 text-emerald-400" />
+            </div>
+            <span className="text-sm font-semibold text-foreground">Payment</span>
+          </div>
+          <p className="text-sm text-muted-foreground">
+            {status || 'Confirm to activate boost and update feed ranking.'}
+          </p>
+          {!entity && (
+            <p className="text-sm text-rose-400 mt-2">Only your own entities can be boosted.</p>
+          )}
+        </div>
+
+        {/* Confirm */}
+        <button
           type="button"
-          variant="boost"
-          size="lg"
-          fullWidth
           disabled={!entity || submitting}
           onClick={confirm}
+          className="w-full flex items-center justify-center gap-2 h-[52px] rounded-2xl bg-amber-500 text-black font-bold text-[15px] transition-all active:scale-[0.97] disabled:opacity-40"
         >
           <Check className="w-4 h-4" />
           Confirm Payment
-        </Button>
-      </Card>
-    </PageShell>
+        </button>
+      </div>
+
+      <BottomNav />
+    </main>
   );
 };
 
