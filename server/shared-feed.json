@@ -84,6 +84,21 @@
       "editorialScore": 55,
       "activityScore": 30,
       "engagementScore": 25
+    },
+    {
+      "id": "custom-1774123671187",
+      "type": "channel",
+      "name": "Bitcoin",
+      "category": "DeFi",
+      "tags": [
+        "DVD"
+      ],
+      "shortDescription": "Bitcoin",
+      "telegramUrl": "T.me/bitcoin",
+      "contentType": "text",
+      "editorialScore": 55,
+      "activityScore": 30,
+      "engagementScore": 25
     }
   ]
 }

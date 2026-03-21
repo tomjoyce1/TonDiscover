@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__Claude_Preview__preview_start",
+      "Bash(where npm.cmd)",
+      "Bash(where npx.cmd)",
+      "Read(//c/Program Files/nodejs//**)",
+      "Bash(npm root:*)",
+      "Bash(npm install:*)",
+      "Bash(npx tsc:*)",
+      "Bash(grep -r \"favorites\\\\|Favorite\" C:UsersDimitriDesktopTonDiscoverTonDiscover.claudeworktreessleepy-ptolemy/src --include=*.ts --include=*.tsx --include=*.js --include=*.jsx -l)",
+      "Bash(find C:UsersDimitriDesktopTonDiscoverTonDiscover.claudeworktreessleepy-ptolemy/src -type f -name *route* -o -name *router*)"
+    ]
+  }
+}

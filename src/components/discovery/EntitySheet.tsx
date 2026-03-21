@@ -52,6 +52,24 @@ export const EntitySheet = ({ entityId, onClose }: EntitySheetProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [entityId]);
 
+  // Lock body scroll while sheet is open
+  useEffect(() => {
+    if (mounted) {
+      const scrollY = window.scrollY;
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.left = '0';
+      document.body.style.right = '0';
+      return () => {
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.left = '';
+        document.body.style.right = '';
+        window.scrollTo(0, scrollY);
+      };
+    }
+  }, [mounted]);
+
   const entity = entityId ? entities.find((e) => e.id === entityId) : undefined;
 
   useEffect(() => {

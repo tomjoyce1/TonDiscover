@@ -72,7 +72,7 @@ const CreateHub = () => {
         {actions.map(({ to, icon: Icon, label, description, accent, enabled }) => {
           const content = (
             <div className={cx(
-              'flex flex-col items-center text-center rounded-2xl border border-border bg-card p-6 transition-all',
+              'flex flex-col items-center justify-center text-center rounded-2xl border border-border bg-card aspect-square p-4 transition-all',
               enabled ? 'active:scale-[0.97]' : 'opacity-40',
             )}>
               <div className={cx('w-14 h-14 rounded-2xl flex items-center justify-center mb-4', accent)}>
