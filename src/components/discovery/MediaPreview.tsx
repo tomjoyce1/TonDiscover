@@ -15,7 +15,7 @@ export const MediaPreview = ({
 }: MediaPreviewProps) => {
   const wrapperClass = variant === 'tile'
     ? 'w-full h-full'
-    : 'w-full h-56 rounded-2xl overflow-hidden border border-tg-border bg-tg-card';
+    : 'w-full h-56 overflow-hidden bg-tg-card';
 
   if (contentType === 'text') {
     return (

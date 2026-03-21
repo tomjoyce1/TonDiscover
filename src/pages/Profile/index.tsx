@@ -1,78 +1,79 @@
 import { Link } from 'react-router-dom';
-import { Clock, Heart, Settings, UserRound, Wallet } from 'lucide-react';
-import { PageShell } from '@/components/layout/PageShell.tsx';
+import { Heart, Clock, Settings, User, Wallet, Sliders, ChevronRight } from 'lucide-react';
+import { BottomNav } from '@/components/layout/BottomNav.tsx';
 import { useAppState } from '@/context/app-context.tsx';
+
+const menuItems = [
+  { icon: Heart, label: 'Favorites', to: '/profile/favorites', description: 'Saved channels & apps' },
+  { icon: Clock, label: 'History', to: '/profile/history', description: 'Recently viewed' },
+  { icon: Settings, label: 'Settings', to: '/profile/settings', description: 'App preferences' },
+  { icon: User, label: 'Account', to: '/profile/account', description: 'Identity & security' },
+  { icon: Wallet, label: 'Wallet', to: '/profile/wallet', description: 'TON wallet & balance' },
+  { icon: Sliders, label: 'Preferences', to: '/profile/preferences', description: 'Feed & notifications' },
+];
 
 const Profile = () => {
   const { favorites, history } = useAppState();
 
   return (
-    <PageShell title="Profile" subtitle="Manage account, favorites, wallet, and preferences.">
-      <section className="bg-tg-card rounded-2xl p-4 border border-tg-border">
-        <div className="text-center mb-5">
-          <div className="w-20 h-20 rounded-full bg-tg-accent/20 flex items-center justify-center mx-auto mb-3">
-            <UserRound className="w-10 h-10 text-tg-accent" />
+    <main className="flex min-h-screen flex-col bg-background pb-20">
+      {/* Header */}
+      <header className="px-4 pt-6 pb-2 safe-area-top">
+        <h1 className="text-2xl font-bold tracking-tight text-foreground">Profile</h1>
+        <p className="mt-0.5 text-sm text-muted-foreground">Manage account, favorites, wallet, and preferences.</p>
+      </header>
+
+      {/* Avatar & name card */}
+      <section className="mx-4 mt-4 rounded-2xl border border-border bg-card p-5">
+        <div className="flex items-center gap-4">
+          <div className="relative h-16 w-16 flex-shrink-0 rounded-full bg-primary/15 border-2 border-primary/30 flex items-center justify-center">
+            <User className="h-8 w-8 text-primary" />
+            <span className="absolute bottom-0.5 right-0.5 h-3 w-3 rounded-full bg-emerald-400 border-2 border-card" aria-hidden="true" />
           </div>
-          <h2 className="text-lg font-bold text-tg-primary">TON User</h2>
-          <p className="text-xs text-tg-muted">Hackathon mode</p>
+          <div>
+            <h2 className="text-lg font-bold text-foreground leading-tight">TON User</h2>
+            <span className="inline-flex items-center gap-1 mt-0.5 rounded-full border border-primary/30 bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary uppercase tracking-wider">
+              Hackathon mode
+            </span>
+          </div>
         </div>
-        <div className="grid grid-cols-2 gap-3">
-          <div className="bg-tg-input rounded-2xl p-3 text-center">
-            <p className="text-xl font-semibold text-tg-primary">{favorites.favoriteAppIds.length}</p>
-            <p className="text-xs text-tg-muted mt-1">Favorites</p>
+
+        {/* Stats */}
+        <div className="mt-5 grid grid-cols-2 gap-3">
+          <div className="flex flex-col items-center justify-center rounded-xl bg-muted py-3">
+            <span className="text-2xl font-bold text-foreground">{favorites.favoriteAppIds.length}</span>
+            <span className="text-xs text-muted-foreground mt-0.5">Favorites</span>
           </div>
-          <div className="bg-tg-input rounded-2xl p-3 text-center">
-            <p className="text-xl font-semibold text-tg-primary">{history.recentLaunchedAppIds.length}</p>
-            <p className="text-xs text-tg-muted mt-1">Launches</p>
+          <div className="flex flex-col items-center justify-center rounded-xl bg-muted py-3">
+            <span className="text-2xl font-bold text-foreground">{history.recentLaunchedAppIds.length}</span>
+            <span className="text-xs text-muted-foreground mt-0.5">Launches</span>
           </div>
         </div>
       </section>
 
-      <section className="space-y-2">
-        <Link to="/profile/favorites" className="w-full bg-tg-card rounded-2xl p-4 flex items-center justify-between border border-tg-border">
-          <div className="flex items-center gap-3">
-            <Heart className="w-5 h-5 text-tg-muted" />
-            <span className="text-sm text-tg-primary">Favorites</span>
-          </div>
-          <span className="text-xs text-tg-muted">Open</span>
-        </Link>
-        <Link to="/profile/history" className="w-full bg-tg-card rounded-2xl p-4 flex items-center justify-between border border-tg-border">
-          <div className="flex items-center gap-3">
-            <Clock className="w-5 h-5 text-tg-muted" />
-            <span className="text-sm text-tg-primary">History</span>
-          </div>
-          <span className="text-xs text-tg-muted">Open</span>
-        </Link>
-        <Link to="/profile/settings" className="w-full bg-tg-card rounded-2xl p-4 flex items-center justify-between border border-tg-border">
-          <div className="flex items-center gap-3">
-            <Settings className="w-5 h-5 text-tg-muted" />
-            <span className="text-sm text-tg-primary">Settings</span>
-          </div>
-          <span className="text-xs text-tg-muted">Open</span>
-        </Link>
-        <Link to="/profile/account" className="w-full bg-tg-card rounded-2xl p-4 flex items-center justify-between border border-tg-border">
-          <div className="flex items-center gap-3">
-            <UserRound className="w-5 h-5 text-tg-muted" />
-            <span className="text-sm text-tg-primary">Account</span>
-          </div>
-          <span className="text-xs text-tg-muted">Open</span>
-        </Link>
-        <Link to="/profile/wallet" className="w-full bg-tg-card rounded-2xl p-4 flex items-center justify-between border border-tg-border">
-          <div className="flex items-center gap-3">
-            <Wallet className="w-5 h-5 text-tg-muted" />
-            <span className="text-sm text-tg-primary">Wallet</span>
-          </div>
-          <span className="text-xs text-tg-muted">Open</span>
-        </Link>
-        <Link to="/profile/preferences" className="w-full bg-tg-card rounded-2xl p-4 flex items-center justify-between border border-tg-border">
-          <div className="flex items-center gap-3">
-            <Settings className="w-5 h-5 text-tg-muted" />
-            <span className="text-sm text-tg-primary">Preferences</span>
-          </div>
-          <span className="text-xs text-tg-muted">Open</span>
-        </Link>
-      </section>
-    </PageShell>
+      {/* Menu */}
+      <nav className="mx-4 mt-4 overflow-hidden rounded-2xl border border-border bg-card" aria-label="Profile menu">
+        {menuItems.map(({ icon: Icon, label, to, description }, i) => (
+          <Link
+            key={label}
+            to={to}
+            className="group flex items-center gap-4 px-4 py-3.5 transition-colors active:bg-muted/50"
+            style={i < menuItems.length - 1 ? { borderBottom: '1px solid var(--border)' } : {}}
+          >
+            <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl border border-border bg-muted">
+              <Icon className="h-4 w-4 text-muted-foreground" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-semibold text-foreground leading-tight">{label}</p>
+              <p className="text-xs text-muted-foreground mt-0.5">{description}</p>
+            </div>
+            <ChevronRight className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+          </Link>
+        ))}
+      </nav>
+
+      <BottomNav />
+    </main>
   );
 };
 

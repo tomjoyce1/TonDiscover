@@ -1,29 +1,36 @@
 import { MouseEvent, useMemo, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import { ArrowLeft, Search as SearchIcon, SlidersHorizontal, TrendingUp, X } from 'lucide-react';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { ArrowLeft, ChevronRight, LayoutGrid, Search, SlidersHorizontal, TrendingUp, X } from 'lucide-react';
 import { useAppState } from '@/context/app-context.tsx';
 import { isBoostActive } from '@/domain/ranking.ts';
+import { cx } from '@/helpers/class-name.ts';
 
-const parseList = (value: string | null): string[] => {
-  if (!value) {
-    return [];
-  }
+/* ── Visual config ── */
+const trendingTagColors = [
+  'text-sky-400', 'text-emerald-400', 'text-amber-400', 'text-rose-400',
+  'text-violet-400', 'text-cyan-400', 'text-lime-400', 'text-orange-400',
+  'text-pink-400', 'text-teal-400',
+];
 
-  return value.split(',').map((item) => item.trim()).filter(Boolean);
+const CATEGORY_META: Record<string, { icon: string; color: string }> = {
+  DeFi:      { icon: '💱', color: 'from-sky-600/20 to-sky-500/5 border-sky-500/20' },
+  Games:     { icon: '🎮', color: 'from-violet-600/20 to-violet-500/5 border-violet-500/20' },
+  Tools:     { icon: '🔧', color: 'from-slate-600/20 to-slate-500/5 border-slate-500/20' },
+  Community: { icon: '🌐', color: 'from-emerald-600/20 to-emerald-500/5 border-emerald-500/20' },
+  Education: { icon: '⚡', color: 'from-amber-600/20 to-amber-500/5 border-amber-500/20' },
+  News:      { icon: '📰', color: 'from-rose-600/20 to-rose-500/5 border-rose-500/20' },
 };
 
-const normalize = (value: string): string => value.trim().toLowerCase();
+const DEFAULT_CAT = { icon: '✨', color: 'from-slate-600/20 to-slate-500/5 border-slate-500/20' };
+
+const parseList = (v: string | null): string[] =>
+  v ? v.split(',').map((s) => s.trim()).filter(Boolean) : [];
+const normalize = (v: string): string => v.trim().toLowerCase();
 
 const SearchHome = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const {
-    entities,
-    categories,
-    rankedEntities,
-    featuredContent,
-    getBoostState,
-  } = useAppState();
+  const { entities, categories, rankedEntities, featuredContent, getBoostState } = useAppState();
 
   const [query, setQuery] = useState(searchParams.get('q') ?? '');
   const [selectedCategories, setSelectedCategories] = useState<string[]>(parseList(searchParams.get('categories')));
@@ -31,253 +38,283 @@ const SearchHome = () => {
   const [filtersOpen, setFiltersOpen] = useState(false);
 
   const featuredByEntityId = useMemo(() => {
-    const map = new Map<string, (typeof featuredContent)[number]>();
-    featuredContent.forEach((item) => map.set(item.entityId, item));
-    return map;
+    const m = new Map<string, (typeof featuredContent)[number]>();
+    featuredContent.forEach((i) => m.set(i.entityId, i));
+    return m;
   }, [featuredContent]);
 
-  const tags = useMemo(() => {
-    return Array.from(new Set(entities.flatMap((entity) => entity.tags))).sort((left, right) => {
-      return left.localeCompare(right);
-    });
+  const tags = useMemo(
+    () => Array.from(new Set(entities.flatMap((e) => e.tags))).sort((a, b) => a.localeCompare(b)),
+    [entities],
+  );
+  const trendingTags = useMemo(() => tags.slice(0, 9), [tags]);
+
+  const categoryCounts = useMemo(() => {
+    const c: Record<string, number> = {};
+    entities.forEach((e) => { c[e.category] = (c[e.category] ?? 0) + 1; });
+    return c;
   }, [entities]);
 
-  const trendingTags = useMemo(() => tags.slice(0, 8), [tags]);
+  const toggle = (items: string[], set: (n: string[]) => void, t: string) =>
+    set(items.includes(t) ? items.filter((i) => i !== t) : [...items, t]);
 
-  const toggleFilter = (items: string[], setItems: (next: string[]) => void, target: string) => {
-    setItems(items.includes(target) ? items.filter((item) => item !== target) : [...items, target]);
-  };
+  const filtered = useMemo(() =>
+    rankedEntities.filter((e) => {
+      const byCat = selectedCategories.length === 0 || selectedCategories.includes(e.category);
+      const byTag = selectedTags.length === 0 || e.tags.some((t) => selectedTags.includes(t));
+      return byCat && byTag;
+    }),
+  [rankedEntities, selectedCategories, selectedTags]);
 
-  const filteredBaseResults = useMemo(() => {
-    return rankedEntities.filter((entity) => {
-      const byCategory = selectedCategories.length === 0 || selectedCategories.includes(entity.category);
-      const byTag = selectedTags.length === 0 || entity.tags.some((tag) => selectedTags.includes(tag));
-      return byCategory && byTag;
+  const results = useMemo(() => {
+    const q = normalize(query);
+    if (!q) return filtered;
+    return filtered.filter((e) => {
+      const fc = featuredByEntityId.get(e.id);
+      return [e.name, e.shortDescription, e.longDescription ?? '', e.previewText ?? '', fc?.title ?? '', fc?.text ?? '']
+        .map(normalize).some((f) => f.includes(q));
     });
-  }, [rankedEntities, selectedCategories, selectedTags]);
+  }, [featuredByEntityId, filtered, query]);
 
-  const visibleResults = useMemo(() => {
-    const normalizedQuery = normalize(query);
-    if (!normalizedQuery) {
-      return filteredBaseResults;
-    }
-
-    return filteredBaseResults.filter((entity) => {
-      const featured = featuredByEntityId.get(entity.id);
-      const fields = [
-        entity.name,
-        entity.shortDescription,
-        entity.longDescription ?? '',
-        entity.previewText ?? '',
-        featured?.title ?? '',
-        featured?.text ?? '',
-      ].map(normalize);
-
-      return fields.some((field) => field.includes(normalizedQuery));
-    });
-  }, [featuredByEntityId, filteredBaseResults, query]);
-
-  const onOverlayClick = (event: MouseEvent<HTMLDivElement>) => {
-    if (event.target === event.currentTarget) {
-      setFiltersOpen(false);
-    }
-  };
-
-  const resetFilters = () => {
-    setSelectedCategories([]);
-    setSelectedTags([]);
-  };
-
-  const showSearchResults = Boolean(query.trim()) || selectedCategories.length > 0 || selectedTags.length > 0;
+  const onOverlay = (ev: MouseEvent<HTMLDivElement>) => { if (ev.target === ev.currentTarget) setFiltersOpen(false); };
+  const resetFilters = () => { setSelectedCategories([]); setSelectedTags([]); };
+  const filterCount = selectedCategories.length + selectedTags.length;
+  const hasSearch = Boolean(query.trim()) || filterCount > 0;
 
   return (
-    <div className="min-h-screen bg-tg-bg flex flex-col">
-      <header className="sticky top-0 z-30 bg-tg-bg border-b border-tg-border safe-area-top">
-        <div className="flex items-center gap-3 h-14 px-4">
-          <button onClick={() => navigate('/explore')} className="p-2 -ml-2 rounded-full" aria-label="Back">
-            <ArrowLeft className="w-5 h-5 text-tg-primary" />
-          </button>
-          <div className="flex-1 relative">
-            <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-tg-muted" />
-            <input
-              type="text"
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              placeholder="Search channels, apps, tags..."
-              className="w-full h-10 pl-10 pr-10 bg-tg-input text-tg-primary placeholder:text-tg-dim rounded-full border-none outline-none text-sm"
-              autoFocus
-            />
-            {query && (
-              <button
-                type="button"
-                className="absolute right-2 top-1/2 -translate-y-1/2 p-1"
-                onClick={() => setQuery('')}
-                aria-label="Clear search"
-              >
-                <X className="w-4 h-4 text-tg-muted" />
-              </button>
-            )}
-          </div>
-          <button onClick={() => setFiltersOpen(true)} className="p-2 rounded-full bg-tg-input" aria-label="Filters">
-            <SlidersHorizontal className="w-5 h-5 text-tg-muted" />
-          </button>
+    <main className="flex min-h-screen flex-col bg-background pb-20">
+      {/* Search header */}
+      <header className="sticky top-0 z-40 flex items-center gap-3 bg-background/80 px-4 pt-5 pb-4 backdrop-blur-md safe-area-top">
+        <Link
+          to="/explore"
+          className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl border border-border bg-muted text-muted-foreground"
+          aria-label="Go back"
+        >
+          <ArrowLeft className="h-4 w-4" />
+        </Link>
+
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground pointer-events-none" />
+          <input
+            type="search"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Channels, apps, tags…"
+            autoFocus
+            className="h-11 w-full rounded-xl border border-border bg-secondary pl-10 pr-10 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
+          />
+          {query && (
+            <button
+              type="button"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center rounded-full bg-muted-foreground/20"
+              onClick={() => setQuery('')}
+              aria-label="Clear"
+            >
+              <X className="w-3 h-3 text-foreground" />
+            </button>
+          )}
         </div>
+
+        <button
+          onClick={() => setFiltersOpen(true)}
+          className="relative flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl border border-border bg-muted text-muted-foreground"
+          aria-label="Filters"
+        >
+          <SlidersHorizontal className="h-4 w-4" />
+          {filterCount > 0 && (
+            <span className="absolute -top-1 -right-1 min-w-[16px] h-[16px] flex items-center justify-center rounded-full bg-primary text-[9px] font-bold text-primary-foreground px-1">
+              {filterCount}
+            </span>
+          )}
+        </button>
       </header>
 
-      <main className="flex-1 overflow-y-auto p-4">
-        {showSearchResults ? (
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <h2 className="font-semibold text-tg-primary">
-                {query ? `Results for "${query}"` : 'Filtered results'}
-              </h2>
-              <span className="text-sm text-tg-muted">{visibleResults.length} found</span>
-            </div>
+      {/* Active filter pills */}
+      {filterCount > 0 && (
+        <div className="flex items-center gap-1.5 px-4 pb-2 overflow-x-auto no-scrollbar">
+          {selectedCategories.map((c) => (
+            <button key={c} type="button" onClick={() => toggle(selectedCategories, setSelectedCategories, c)}
+              className="inline-flex items-center gap-1 pl-2.5 pr-1.5 py-1 rounded-full border border-primary/30 bg-primary/10 text-[11px] font-medium text-primary whitespace-nowrap">
+              {c}<X className="w-3 h-3" />
+            </button>
+          ))}
+          {selectedTags.map((t) => (
+            <button key={t} type="button" onClick={() => toggle(selectedTags, setSelectedTags, t)}
+              className="inline-flex items-center gap-1 pl-2.5 pr-1.5 py-1 rounded-full border border-border bg-secondary text-[11px] font-medium text-foreground whitespace-nowrap">
+              #{t}<X className="w-3 h-3 text-muted-foreground" />
+            </button>
+          ))}
+          <button type="button" onClick={resetFilters} className="text-[11px] text-primary whitespace-nowrap px-2 py-1 font-medium">
+            Clear
+          </button>
+        </div>
+      )}
 
-            {visibleResults.length === 0 ? (
-              <div className="text-center py-14">
-                <div className="w-16 h-16 rounded-full bg-tg-input flex items-center justify-center mx-auto mb-4">
-                  <SearchIcon className="w-8 h-8 text-tg-muted" />
-                </div>
-                <h3 className="font-medium text-tg-primary mb-2">No results found</h3>
-                <p className="text-sm text-tg-muted">Try searching with different keywords.</p>
+      {/* Content */}
+      {hasSearch ? (
+        <div className="px-4 pt-4 pb-6 space-y-2">
+          <p className="text-sm text-muted-foreground mb-3">
+            {query.trim()
+              ? <>Searching for <span className="font-semibold text-foreground">&ldquo;{query.trim()}&rdquo;</span> &middot; {results.length} found</>
+              : <>{results.length} filtered result{results.length !== 1 ? 's' : ''}</>}
+          </p>
+
+          {results.length === 0 ? (
+            <div className="text-center pt-14 pb-8">
+              <div className="w-14 h-14 rounded-2xl border border-border bg-muted flex items-center justify-center mx-auto mb-3">
+                <Search className="w-6 h-6 text-muted-foreground" />
               </div>
-            ) : (
-              visibleResults.map((entity) => {
-                const boosted = isBoostActive(getBoostState(entity.id));
+              <h3 className="text-sm font-semibold text-foreground mb-1">No results</h3>
+              <p className="text-xs text-muted-foreground">Try different keywords or adjust filters.</p>
+            </div>
+          ) : (
+            results.map((entity) => {
+              const boosted = isBoostActive(getBoostState(entity.id));
+              const meta = CATEGORY_META[entity.category] ?? DEFAULT_CAT;
+              return (
+                <button
+                  key={entity.id}
+                  type="button"
+                  onClick={() => navigate(`/entity/${entity.id}`)}
+                  className="w-full flex items-center gap-3 rounded-2xl border border-border bg-card p-3.5 text-left transition-all active:scale-[0.98]"
+                >
+                  <div className={cx('w-10 h-10 rounded-xl border bg-gradient-to-br flex items-center justify-center flex-shrink-0', meta.color)}>
+                    <span className="text-base">{meta.icon}</span>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <h3 className="text-sm font-semibold text-foreground truncate">{entity.name}</h3>
+                      {boosted && (
+                        <span className="px-1.5 py-0.5 text-[9px] font-bold rounded-full border border-amber-500/30 bg-amber-500/10 text-amber-300 flex-shrink-0">Boosted</span>
+                      )}
+                    </div>
+                    <p className="text-[12px] text-muted-foreground line-clamp-1 mt-0.5">{entity.shortDescription}</p>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+                </button>
+              );
+            })
+          )}
+        </div>
+      ) : (
+        /* Browse state */
+        <div className="px-4 space-y-8 pt-4">
+          {/* Trending tags */}
+          <section>
+            <div className="flex items-center gap-2 mb-3">
+              <TrendingUp className="h-3.5 w-3.5 text-muted-foreground" />
+              <h2 className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">Trending Tags</h2>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {trendingTags.map((tag, i) => (
+                <button
+                  key={tag}
+                  type="button"
+                  onClick={() => setQuery(tag)}
+                  className={cx(
+                    'rounded-full border border-border bg-secondary px-3.5 py-1.5 text-sm font-semibold transition-colors',
+                    trendingTagColors[i % trendingTagColors.length],
+                  )}
+                >
+                  #{tag}
+                </button>
+              ))}
+            </div>
+          </section>
+
+          {/* Browse categories */}
+          <section>
+            <div className="flex items-center gap-2 mb-3">
+              <LayoutGrid className="h-3.5 w-3.5 text-muted-foreground" />
+              <h2 className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">Browse Categories</h2>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              {categories.map((cat) => {
+                const meta = CATEGORY_META[cat] ?? DEFAULT_CAT;
+                const count = categoryCounts[cat] ?? 0;
                 return (
                   <button
-                    key={entity.id}
+                    key={cat}
                     type="button"
-                    onClick={() => navigate(`/entity/${entity.id}`)}
-                    className="w-full bg-tg-card border border-tg-border rounded-2xl p-4 flex items-center gap-4 text-left"
+                    onClick={() => setSelectedCategories([cat])}
+                    className={cx(
+                      'flex items-center gap-4 rounded-2xl border bg-gradient-to-br p-5 text-left transition-all active:scale-[0.97]',
+                      meta.color,
+                    )}
                   >
-                    <div className="w-14 h-14 rounded-xl bg-tg-input flex items-center justify-center text-xl font-semibold text-tg-primary flex-shrink-0">
-                      {entity.name.slice(0, 1).toUpperCase()}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1">
-                        <h3 className="font-medium text-tg-primary truncate">{entity.name}</h3>
-                        {boosted && (
-                          <span className="px-2 py-0.5 bg-tg-boost/20 text-tg-boost text-xs rounded-full flex-shrink-0">
-                            Boosted
-                          </span>
-                        )}
-                      </div>
-                      <p className="text-xs text-tg-muted line-clamp-1">{entity.shortDescription}</p>
-                      <div className="flex items-center gap-2 mt-2">
-                        <span className="text-xs text-tg-dim capitalize">{entity.type}</span>
-                        <span className="text-xs text-tg-dim">•</span>
-                        <span className="text-xs text-tg-dim capitalize">{entity.category}</span>
-                      </div>
+                    <span className="text-2xl leading-none" aria-hidden="true">{meta.icon}</span>
+                    <div>
+                      <p className="font-semibold text-foreground text-sm">{cat}</p>
+                      <p className="text-xs text-muted-foreground mt-0.5">{count} {count === 1 ? 'item' : 'items'}</p>
                     </div>
                   </button>
                 );
-              })
-            )}
-          </div>
-        ) : (
-          <div className="space-y-6">
-            <div>
-              <div className="flex items-center gap-2 mb-3">
-                <TrendingUp className="w-4 h-4 text-tg-accent" />
-                <h2 className="font-semibold text-tg-primary">Trending Tags</h2>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {trendingTags.map((tag) => (
-                  <button
-                    key={tag}
-                    type="button"
-                    onClick={() => setQuery(tag)}
-                    className="px-3 py-2 bg-tg-card border border-tg-border rounded-full text-sm text-tg-primary"
-                  >
-                    #{tag}
-                  </button>
-                ))}
-              </div>
+              })}
             </div>
+          </section>
+        </div>
+      )}
 
-            <div>
-              <h2 className="font-semibold text-tg-primary mb-3">Browse Categories</h2>
-              <div className="grid grid-cols-2 gap-3">
-                {categories.map((category) => (
-                  <button
-                    key={category}
-                    type="button"
-                    onClick={() => setSelectedCategories([category])}
-                    className="p-4 bg-tg-card border border-tg-border rounded-2xl text-left"
-                  >
-                    <span className="text-sm font-medium text-tg-primary">{category}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
-      </main>
-
+      {/* Filter sheet */}
       {filtersOpen && (
-        <div className="fixed inset-0 z-50 flex flex-col" onClick={onOverlayClick} role="presentation">
+        <div className="fixed inset-0 z-50 flex flex-col" onClick={onOverlay} role="presentation">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
-          <div className="relative mt-auto bg-tg-bg rounded-t-3xl max-h-[85vh] flex flex-col">
-            <div className="flex justify-center py-3">
-              <div className="w-10 h-1 bg-tg-dim rounded-full" />
+          <div className="relative mt-auto bg-background rounded-t-2xl max-h-[80vh] flex flex-col border-t border-border">
+            <div className="flex justify-center pt-3 pb-1">
+              <div className="w-8 h-1 rounded-full bg-muted-foreground/30" />
             </div>
-            <div className="flex items-center justify-between px-4 pb-4">
-              <h2 className="text-lg font-semibold text-tg-primary">Filters</h2>
-              <button onClick={() => setFiltersOpen(false)} className="p-2 rounded-full bg-tg-input">
-                <X className="w-5 h-5 text-tg-muted" />
+            <div className="flex items-center justify-between px-4 py-3">
+              <h2 className="text-lg font-bold text-foreground">Filters</h2>
+              <button onClick={() => setFiltersOpen(false)} className="w-8 h-8 flex items-center justify-center rounded-full border border-border bg-muted">
+                <X className="w-4 h-4 text-muted-foreground" />
               </button>
             </div>
-            <div className="flex-1 overflow-y-auto px-4 pb-8">
+            <div className="flex-1 overflow-y-auto px-4 pb-4">
               <div className="mb-6">
-                <h3 className="text-sm font-medium text-tg-muted mb-3">Categories</h3>
+                <h3 className="text-[11px] font-semibold text-muted-foreground uppercase tracking-widest mb-3">Categories</h3>
                 <div className="flex flex-wrap gap-2">
-                  {categories.map((category) => (
-                    <button
-                      key={category}
-                      type="button"
-                      onClick={() => toggleFilter(selectedCategories, setSelectedCategories, category)}
-                      className={selectedCategories.includes(category)
-                        ? 'px-4 py-2 rounded-full text-sm font-medium bg-tg-accent text-white'
-                        : 'px-4 py-2 rounded-full text-sm font-medium bg-tg-input text-tg-muted'}
-                    >
-                      {category}
+                  {categories.map((c) => (
+                    <button key={c} type="button" onClick={() => toggle(selectedCategories, setSelectedCategories, c)}
+                      className={cx(
+                        'px-4 py-2.5 rounded-xl text-sm font-medium border transition-colors',
+                        selectedCategories.includes(c)
+                          ? 'bg-primary text-primary-foreground border-transparent'
+                          : 'bg-secondary text-muted-foreground border-border',
+                      )}>
+                      {c}
                     </button>
                   ))}
                 </div>
               </div>
-
               <div>
-                <h3 className="text-sm font-medium text-tg-muted mb-3">Tags</h3>
+                <h3 className="text-[11px] font-semibold text-muted-foreground uppercase tracking-widest mb-3">Tags</h3>
                 <div className="flex flex-wrap gap-2">
-                  {tags.map((tag) => (
-                    <button
-                      key={tag}
-                      type="button"
-                      onClick={() => toggleFilter(selectedTags, setSelectedTags, tag)}
-                      className={selectedTags.includes(tag)
-                        ? 'px-3 py-1.5 rounded-full text-sm bg-tg-accent text-white'
-                        : 'px-3 py-1.5 rounded-full text-sm bg-tg-card text-tg-muted border border-tg-border'}
-                    >
-                      #{tag}
+                  {tags.map((t) => (
+                    <button key={t} type="button" onClick={() => toggle(selectedTags, setSelectedTags, t)}
+                      className={cx(
+                        'px-3 py-1.5 rounded-full text-sm border transition-colors',
+                        selectedTags.includes(t)
+                          ? 'bg-primary text-primary-foreground border-transparent'
+                          : 'bg-secondary text-muted-foreground border-border',
+                      )}>
+                      #{t}
                     </button>
                   ))}
                 </div>
               </div>
             </div>
-            <div className="p-4 border-t border-tg-border flex gap-2">
-              <button onClick={resetFilters} className="flex-1 h-12 bg-tg-input text-tg-muted font-semibold rounded-full">
+            <div className="p-4 border-t border-border flex gap-2">
+              <button onClick={resetFilters} className="flex-1 h-11 rounded-xl border border-border bg-muted text-muted-foreground font-semibold text-sm transition-colors active:scale-[0.98]">
                 Reset
               </button>
-              <button onClick={() => setFiltersOpen(false)} className="flex-1 h-12 bg-tg-accent text-white font-semibold rounded-full">
+              <button onClick={() => setFiltersOpen(false)} className="flex-1 h-11 rounded-xl bg-primary text-primary-foreground font-semibold text-sm transition-colors active:scale-[0.98]">
                 Apply
               </button>
             </div>
           </div>
         </div>
       )}
-    </div>
+    </main>
   );
 };
 

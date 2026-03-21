@@ -1,110 +1,89 @@
 import { Link } from 'react-router-dom';
 import { BoostBadge } from '@/components/common/BoostBadge.tsx';
-import { buttonStyles } from '@/components/ui/Button.tsx';
-import { Card } from '@/components/ui/Card.tsx';
-import { Chip } from '@/components/ui/Chip.tsx';
 import type { BoostState, Entity, FeaturedContent } from '@/types/tondiscover.ts';
 import { isBoostActive } from '@/domain/ranking.ts';
+import { cx } from '@/helpers/class-name.ts';
 
 type DiscoveryTileProps = {
   entity: Entity;
   featuredContent?: FeaturedContent;
   boostState?: BoostState;
+  className?: string;
 };
 
-const toTitle = (value?: string): string => {
-  if (!value) {
-    return 'TONDiscover';
-  }
-  return value.slice(0, 56);
+/* Colored type badges matching _imports design */
+const typeColors: Record<string, string> = {
+  app: 'bg-sky-500/20 text-sky-300 border-sky-500/30',
+  channel: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
 };
 
-export const DiscoveryTile = ({ entity, featuredContent, boostState }: DiscoveryTileProps) => {
+/* Category-themed gradient for text-only placeholders */
+const CATEGORY_GRADIENTS: Record<string, string> = {
+  DeFi:      'from-sky-900/60 to-sky-950/40',
+  Games:     'from-violet-900/60 to-violet-950/40',
+  News:      'from-rose-900/60 to-rose-950/40',
+  Education: 'from-amber-900/60 to-amber-950/40',
+  Community: 'from-emerald-900/60 to-emerald-950/40',
+  Tools:     'from-slate-800/60 to-slate-900/40',
+};
+
+const CATEGORY_ICONS: Record<string, string> = {
+  DeFi: '💱', Games: '🎮', News: '📰', Education: '⚡', Community: '🌐', Tools: '🔧',
+};
+
+export const DiscoveryTile = ({ entity, featuredContent, boostState, className }: DiscoveryTileProps) => {
   const previewText = featuredContent?.text ?? entity.previewText ?? entity.shortDescription;
   const previewMediaUrl = featuredContent?.mediaUrl ?? entity.previewMediaUrl;
   const previewType = featuredContent?.contentType ?? entity.contentType;
   const boosted = isBoostActive(boostState);
-  const ctaLabel = entity.type === 'app' ? 'View app' : 'View channel';
+  const gradient = CATEGORY_GRADIENTS[entity.category] ?? 'from-slate-800/60 to-slate-900/40';
 
-  const renderMedia = () => {
-    if (previewType === 'video' && previewMediaUrl) {
-      return (
-        <video
-          src={previewMediaUrl}
-          className="absolute inset-0 w-full h-full object-cover"
-          muted
-          loop
-          playsInline
-          autoPlay
-          preload="metadata"
-        />
-      );
-    }
-
-    if (previewType !== 'text' && previewMediaUrl) {
-      return (
-        <img
-          src={previewMediaUrl}
-          alt={entity.name}
-          className="absolute inset-0 w-full h-full object-cover"
-        />
-      );
-    }
-
-    return (
-      <div className="absolute inset-0 bg-gradient-to-br from-[#274B67] to-[#1A2733] flex items-center justify-center p-3">
-        <p className="text-sm text-white text-center line-clamp-2">{toTitle(previewText)}</p>
-      </div>
-    );
-  };
+  const hasMedia = previewType !== 'text' && previewMediaUrl;
 
   return (
-    <Card as="article" padding="none" className="relative flex flex-col overflow-hidden">
-      <Link to={`/entity/${entity.id}`} className="relative aspect-[3/4] overflow-hidden">
-        {renderMedia()}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-
-        <div className="absolute top-2 left-2 right-2 flex items-start justify-between gap-2">
-          <div className="flex flex-wrap gap-1.5">
-            <BoostBadge active={boosted} source={boostState?.source} />
-          </div>
-          <Chip size="sm" className="bg-black/40 border-white/20 text-white text-[10px] capitalize">
-            {entity.type}
-          </Chip>
+    <Link to={`/entity/${entity.id}`} className={cx('block', className)}>
+      <article className="group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-card transition-all duration-200 active:scale-[0.97] cursor-pointer h-56">
+        {/* Cover */}
+        <div className="absolute inset-0">
+          {previewType === 'video' && previewMediaUrl ? (
+            <video
+              src={previewMediaUrl}
+              className="h-full w-full object-cover"
+              muted loop playsInline autoPlay preload="metadata"
+            />
+          ) : hasMedia ? (
+            <img src={previewMediaUrl} alt={entity.name} className="h-full w-full object-cover" />
+          ) : (
+            /* Category-themed placeholder */
+            <div className={`h-full w-full bg-gradient-to-br ${gradient} flex items-center justify-center`}>
+              <span className="text-4xl opacity-30">{CATEGORY_ICONS[entity.category] ?? '✨'}</span>
+            </div>
+          )}
+          {/* Overlay gradient */}
+          <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(13,17,30,0.95)_0%,rgba(13,17,30,0.5)_45%,rgba(13,17,30,0.1)_100%)]" />
         </div>
 
-        <div className="absolute bottom-0 left-0 right-0 p-3">
-          <h3 className="text-sm font-semibold text-white truncate">{entity.name}</h3>
-          <p className="text-xs text-tg-muted line-clamp-2 mt-1">
-            {toTitle(featuredContent?.title ?? previewText)}
-          </p>
-          <div className="flex flex-wrap gap-1 mt-2">
+        {/* Type badge + boost */}
+        <div className="relative flex items-start justify-between p-3">
+          <BoostBadge active={boosted} source={boostState?.source} />
+          <span className={cx('rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider', typeColors[entity.type] ?? typeColors.app)}>
+            {entity.type}
+          </span>
+        </div>
+
+        {/* Content */}
+        <div className="relative mt-auto px-3.5 pb-3.5">
+          <p className="text-[11px] text-muted-foreground leading-snug mb-1 line-clamp-1">{previewText?.slice(0, 60)}</p>
+          <h3 className="font-semibold text-foreground text-sm leading-tight line-clamp-1">{entity.name}</h3>
+          <div className="mt-2 flex flex-wrap gap-1.5">
             {entity.tags.slice(0, 2).map((tag) => (
-              <Chip key={tag} variant="muted" size="sm" className="text-[10px]">
+              <span key={tag} className="text-[10px] text-muted-foreground">
                 #{tag}
-              </Chip>
+              </span>
             ))}
           </div>
         </div>
-      </Link>
-
-      <div className="p-3">
-        <div className="flex items-center justify-between text-[10px] uppercase tracking-wide text-tg-muted mb-2">
-          <span>{entity.category}</span>
-          <span className="capitalize">{entity.type}</span>
-        </div>
-        <Link
-          to={`/entity/${entity.id}`}
-          className={buttonStyles({
-            variant: 'primary',
-            size: 'sm',
-            fullWidth: true,
-            className: 'text-xs',
-          })}
-        >
-          {ctaLabel}
-        </Link>
-      </div>
-    </Card>
+      </article>
+    </Link>
   );
 };

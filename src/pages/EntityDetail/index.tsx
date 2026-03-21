@@ -61,7 +61,7 @@ const EntityDetail = () => {
 
   return (
     <PageShell title={entity.name} backTo="/explore">
-      <section className="rounded-2xl overflow-hidden">
+      <section className="-mx-4 overflow-hidden">
         <MediaPreview
           contentType={featured?.contentType ?? entity.contentType}
           mediaUrl={featured?.mediaUrl ?? entity.previewMediaUrl}

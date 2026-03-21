@@ -6,10 +6,13 @@ const OnboardingWelcome = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-tg-bg flex flex-col items-center justify-center p-6">
+    <div
+      className="min-h-screen flex flex-col items-center justify-center p-6"
+      style={{ background: 'radial-gradient(ellipse at 50% 30%, rgba(42,171,238,0.08) 0%, var(--tg-bg) 70%)' }}
+    >
       <div className="text-center mb-12">
-        <div className="w-24 h-24 rounded-full bg-tg-accent/20 flex items-center justify-center mx-auto mb-6">
-          <span className="text-5xl">T</span>
+        <div className="w-28 h-28 rounded-full bg-tg-accent/15 border border-tg-accent/20 flex items-center justify-center mx-auto mb-6">
+          <span className="text-5xl font-bold text-tg-accent">T</span>
         </div>
         <h1 className="text-2xl font-bold text-tg-primary mb-3">
           Welcome to TONDiscover

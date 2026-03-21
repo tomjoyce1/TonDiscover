@@ -1,55 +1,39 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Compass, PlusCircle, User } from 'lucide-react';
-
-const items = [
-  { to: '/explore', label: 'Discover', icon: Compass },
-  { to: '/create', label: '', icon: PlusCircle },
-  { to: '/profile', label: 'Profile', icon: User },
-];
+import { Compass, Plus, User } from 'lucide-react';
+import { cx } from '@/helpers/class-name.ts';
 
 export const BottomNav = () => {
-  const location = useLocation();
+  const { pathname } = useLocation();
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 bg-tg-card border-t border-tg-border safe-area-bottom" aria-label="Primary">
-      <div className="flex items-center justify-around h-16 max-w-[680px] mx-auto">
-      {items.map((item) => {
-        const active = location.pathname === item.to || location.pathname.startsWith(`${item.to}/`);
-        const isCreate = item.to === '/create';
+    <nav className="fixed bottom-0 left-0 right-0 z-50 flex h-16 items-end justify-around border-t border-border bg-background/95 pb-2 backdrop-blur-md safe-area-bottom">
+      <Link
+        to="/explore"
+        className={cx(
+          'flex flex-col items-center gap-0.5 px-5 pt-2 pb-1 rounded-xl transition-colors',
+          pathname === '/explore' || pathname === '/' ? 'text-primary' : 'text-muted-foreground',
+        )}
+      >
+        <Compass className="h-5 w-5" />
+        <span className="text-[10px] font-medium tracking-wide">Discover</span>
+      </Link>
 
-        if (isCreate) {
-          return (
-            <Link
-              key={item.to}
-              to={item.to}
-              className="flex flex-col items-center justify-center gap-1 flex-1 h-full relative"
-              aria-label="Create"
-            >
-              <div className="w-12 h-12 rounded-full bg-tg-accent flex items-center justify-center -mt-4 shadow-lg shadow-tg-accent/30">
-                <item.icon className="w-6 h-6 text-white" strokeWidth={2} />
-              </div>
-            </Link>
-          );
-        }
+      <Link to="/create" className="flex flex-col items-center -mt-5" aria-label="Create">
+        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary shadow-[0_0_20px_rgba(56,189,248,0.4)] transition-transform active:scale-95">
+          <Plus className="h-6 w-6 text-primary-foreground" strokeWidth={2.5} />
+        </div>
+      </Link>
 
-        return (
-          <Link
-            key={item.to}
-            to={item.to}
-            className="flex flex-col items-center justify-center gap-1 flex-1 h-full relative"
-          >
-            <item.icon
-              className={active ? 'w-6 h-6 text-tg-accent' : 'w-6 h-6 text-tg-muted'}
-              strokeWidth={2}
-            />
-            <span className={active ? 'text-[10px] font-medium text-tg-accent' : 'text-[10px] font-medium text-tg-muted'}>
-              {item.label}
-            </span>
-            {active && <span className="absolute bottom-1 w-1 h-1 bg-tg-accent rounded-full" />}
-          </Link>
-        );
-      })}
-      </div>
+      <Link
+        to="/profile"
+        className={cx(
+          'flex flex-col items-center gap-0.5 px-5 pt-2 pb-1 rounded-xl transition-colors',
+          pathname.startsWith('/profile') ? 'text-primary' : 'text-muted-foreground',
+        )}
+      >
+        <User className="h-5 w-5" />
+        <span className="text-[10px] font-medium tracking-wide">Profile</span>
+      </Link>
     </nav>
   );
 };

@@ -1,7 +1,7 @@
 import type { ButtonHTMLAttributes, HTMLAttributes } from 'react';
 import { cx } from '@/helpers/class-name.ts';
 
-export type ChipVariant = 'default' | 'accent' | 'boost' | 'muted';
+export type ChipVariant = 'default' | 'accent' | 'boost' | 'muted' | 'overlay';
 export type ChipSize = 'sm' | 'md';
 
 type ChipStyleOptions = {
@@ -16,6 +16,7 @@ const variantClasses: Record<ChipVariant, string> = {
   accent: 'border-tg-accent/45 bg-tg-accent/10 text-tg-primary',
   boost: 'border-tg-boost/40 bg-tg-boost/12 text-tg-boost',
   muted: 'border-transparent bg-tg-input text-tg-muted',
+  overlay: 'border-white/[0.08] bg-white/[0.08] text-white/70',
 };
 
 const sizeClasses: Record<ChipSize, string> = {

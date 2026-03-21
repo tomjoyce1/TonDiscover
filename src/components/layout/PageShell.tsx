@@ -13,7 +13,7 @@ type PageShellProps = PropsWithChildren<{
 export const PageShell = ({ title, subtitle, backTo, children }: PageShellProps) => {
   return (
     <div className="min-h-screen bg-tg-bg flex flex-col">
-      <header className="sticky top-0 z-30 bg-tg-bg border-b border-tg-border safe-area-top">
+      <header className="sticky top-0 z-30 bg-tg-bg border-b border-white/[0.04] safe-area-top">
         <div className="flex items-center justify-between h-14 px-4">
           {backTo ? (
             <Link
