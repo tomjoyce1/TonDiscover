@@ -1,5 +1,6 @@
+import { useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { ExternalLink, Star, Zap } from 'lucide-react';
+import { ExternalLink, Star, Trash2, Zap } from 'lucide-react';
 import { BoostBadge } from '@/components/common/BoostBadge.tsx';
 import { PageShell } from '@/components/layout/PageShell.tsx';
 import { MediaPreview } from '@/components/discovery/MediaPreview.tsx';
@@ -19,11 +20,17 @@ const EntityDetail = () => {
     toggleFavorite,
     recordLaunch,
     recordOpen,
+    deleteEntity,
     getBoostState,
     isOwnedEntity,
   } = useAppState();
 
   const entity = entities.find((item) => item.id === id);
+
+  // Record view on mount
+  useEffect(() => {
+    if (entity) recordOpen(entity.id);
+  }, [entity, recordOpen]);
 
   if (!entity) {
     return (
@@ -113,15 +120,25 @@ const EntityDetail = () => {
 
       <Card>
         {isOwnedEntity(entity.id) ? (
-          <Button
-            variant="boost"
-            size="lg"
-            fullWidth
-            onClick={() => navigate(`/create/boost?entityId=${encodeURIComponent(entity.id)}`)}
-          >
-            <Zap className="w-4 h-4" />
-            Boost this entity
-          </Button>
+          <div className="space-y-3">
+            <Button
+              variant="boost"
+              size="lg"
+              fullWidth
+              onClick={() => navigate(`/create/boost?entityId=${encodeURIComponent(entity.id)}`)}
+            >
+              <Zap className="w-4 h-4" />
+              Boost this entity
+            </Button>
+            <button
+              type="button"
+              onClick={() => { deleteEntity(entity.id); navigate('/explore'); }}
+              className="w-full flex items-center justify-center gap-2 h-11 rounded-xl border border-rose-500/30 bg-rose-500/10 text-rose-400 font-semibold text-sm transition-all active:scale-[0.97]"
+            >
+              <Trash2 className="w-4 h-4" />
+              Delete post
+            </button>
+          </div>
         ) : (
           <p className="text-sm text-tg-muted">Boost is available only for your own entities/posts.</p>
         )}

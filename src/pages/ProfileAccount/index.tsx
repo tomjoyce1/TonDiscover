@@ -1,6 +1,8 @@
 import { FormEvent, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useTonAddress } from '@tonconnect/ui-react';
-import { PageShell } from '@/components/layout/PageShell.tsx';
+import { ArrowLeft, CheckCircle2, User, FileText, Wallet } from 'lucide-react';
+import { BottomNav } from '@/components/layout/BottomNav.tsx';
 import { separateTonAddress } from '@/helpers/common-helpers.ts';
 
 type AccountState = {
@@ -17,10 +19,7 @@ const defaultAccount: AccountState = {
 
 const readAccount = (): AccountState => {
   const raw = window.localStorage.getItem(STORAGE_KEY);
-  if (!raw) {
-    return defaultAccount;
-  }
-
+  if (!raw) return defaultAccount;
   try {
     return { ...defaultAccount, ...(JSON.parse(raw) as Partial<AccountState>) };
   } catch {
@@ -43,31 +42,96 @@ const ProfileAccount = () => {
   };
 
   return (
-    <PageShell title="Account" backTo="/profile">
-      <form className="bg-tg-card border border-tg-border rounded-2xl p-4 space-y-4" onSubmit={save}>
-        <label className="block">
-          <span className="block text-sm text-tg-muted mb-2">Display name</span>
+    <main className="flex min-h-screen flex-col bg-background pb-24 pt-6">
+      {/* Header */}
+      <header className="flex items-center gap-3 px-5 pb-6">
+        <Link
+          to="/profile"
+          className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl border border-border bg-muted text-muted-foreground"
+          aria-label="Go back"
+        >
+          <ArrowLeft className="h-4 w-4" />
+        </Link>
+        <div>
+          <h1 className="text-xl font-bold tracking-tight text-foreground">Identity</h1>
+          <p className="text-[12px] text-muted-foreground mt-0.5">Profile & security</p>
+        </div>
+      </header>
+
+      <form className="px-4 space-y-4" onSubmit={save}>
+        {/* Display name */}
+        <div className="rounded-2xl border border-border bg-card p-5">
+          <div className="flex items-center gap-2.5 mb-4">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-violet-500/15 border border-violet-500/20">
+              <User className="h-4 w-4 text-violet-400" />
+            </div>
+            <label htmlFor="displayName" className="text-sm font-semibold text-foreground">Display name</label>
+          </div>
           <input
-            className="w-full h-12 px-4 bg-tg-input text-tg-primary rounded-xl border-none outline-none"
+            id="displayName"
+            className="w-full h-12 px-4 bg-muted/60 text-foreground rounded-xl border border-border/50 outline-none text-sm placeholder:text-muted-foreground focus:border-primary/40 focus:ring-1 focus:ring-primary/20 transition-colors"
             value={account.displayName}
-            onChange={(event) => setAccount((state) => ({ ...state, displayName: event.target.value }))}
+            onChange={(e) => setAccount((s) => ({ ...s, displayName: e.target.value }))}
+            placeholder="Your name"
           />
-        </label>
-        <label className="block">
-          <span className="block text-sm text-tg-muted mb-2">Bio</span>
+        </div>
+
+        {/* Bio */}
+        <div className="rounded-2xl border border-border bg-card p-5">
+          <div className="flex items-center gap-2.5 mb-4">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-500/15 border border-amber-500/20">
+              <FileText className="h-4 w-4 text-amber-400" />
+            </div>
+            <label htmlFor="bio" className="text-sm font-semibold text-foreground">Bio</label>
+          </div>
           <textarea
-            className="w-full p-4 bg-tg-input text-tg-primary rounded-xl border-none outline-none resize-none"
+            id="bio"
+            rows={3}
+            className="w-full p-4 bg-muted/60 text-foreground rounded-xl border border-border/50 outline-none text-sm placeholder:text-muted-foreground resize-none focus:border-primary/40 focus:ring-1 focus:ring-primary/20 transition-colors"
             value={account.bio}
-            onChange={(event) => setAccount((state) => ({ ...state, bio: event.target.value }))}
+            onChange={(e) => setAccount((s) => ({ ...s, bio: e.target.value }))}
+            placeholder="A few words about you"
           />
-        </label>
-        <p className="text-sm text-tg-muted">
-          Wallet linked: {address ? separateTonAddress(address) : 'No wallet linked'}
-        </p>
-        <button type="submit" className="w-full h-12 bg-tg-accent text-white font-semibold rounded-full">Save profile</button>
-        {savedAt && <p className="text-sm text-tg-muted">Saved at {savedAt}</p>}
+        </div>
+
+        {/* Linked wallet */}
+        <div className="rounded-2xl border border-border bg-card p-5">
+          <div className="flex items-center gap-2.5 mb-3">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-sky-500/15 border border-sky-500/20">
+              <Wallet className="h-4 w-4 text-sky-400" />
+            </div>
+            <span className="text-sm font-semibold text-foreground">Linked wallet</span>
+          </div>
+          <div className="flex items-center gap-2 px-4 py-3 rounded-xl bg-muted/60 border border-border/50">
+            {address ? (
+              <>
+                <span className="h-2 w-2 rounded-full bg-emerald-400 flex-shrink-0" />
+                <span className="text-sm font-mono text-foreground">{separateTonAddress(address)}</span>
+              </>
+            ) : (
+              <span className="text-sm text-muted-foreground">No wallet linked</span>
+            )}
+          </div>
+        </div>
+
+        {/* Save */}
+        <button
+          type="submit"
+          className="w-full flex items-center justify-center gap-2 h-12 rounded-xl bg-primary text-primary-foreground font-semibold text-sm transition-all active:scale-[0.97]"
+        >
+          <CheckCircle2 className="h-4 w-4" />
+          Save profile
+        </button>
+
+        {savedAt && (
+          <p className="text-center text-[12px] text-muted-foreground">
+            Last saved at {savedAt}
+          </p>
+        )}
       </form>
-    </PageShell>
+
+      <BottomNav />
+    </main>
   );
 };
 

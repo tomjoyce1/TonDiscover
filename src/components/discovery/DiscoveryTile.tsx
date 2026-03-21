@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { BoostBadge } from '@/components/common/BoostBadge.tsx';
 import type { BoostState, Entity, FeaturedContent } from '@/types/tondiscover.ts';
@@ -9,6 +10,7 @@ type DiscoveryTileProps = {
   featuredContent?: FeaturedContent;
   boostState?: BoostState;
   className?: string;
+  onSelect?: (entityId: string) => void;
 };
 
 /* Colored type badges matching _imports design */
@@ -31,7 +33,7 @@ const CATEGORY_ICONS: Record<string, string> = {
   DeFi: '💱', Games: '🎮', News: '📰', Education: '⚡', Community: '🌐', Tools: '🔧',
 };
 
-export const DiscoveryTile = ({ entity, featuredContent, boostState, className }: DiscoveryTileProps) => {
+export const DiscoveryTile = ({ entity, featuredContent, boostState, className, onSelect }: DiscoveryTileProps) => {
   const previewText = featuredContent?.text ?? entity.previewText ?? entity.shortDescription;
   const previewMediaUrl = featuredContent?.mediaUrl ?? entity.previewMediaUrl;
   const previewType = featuredContent?.contentType ?? entity.contentType;
@@ -40,8 +42,20 @@ export const DiscoveryTile = ({ entity, featuredContent, boostState, className }
 
   const hasMedia = previewType !== 'text' && previewMediaUrl;
 
+  const Wrapper = onSelect
+    ? ({ children }: { children: ReactNode }) => (
+        <button type="button" onClick={() => onSelect(entity.id)} className={cx('block w-full text-left', className)}>
+          {children}
+        </button>
+      )
+    : ({ children }: { children: ReactNode }) => (
+        <Link to={`/entity/${entity.id}`} className={cx('block', className)}>
+          {children}
+        </Link>
+      );
+
   return (
-    <Link to={`/entity/${entity.id}`} className={cx('block', className)}>
+    <Wrapper>
       <article className="group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-card transition-all duration-200 active:scale-[0.97] cursor-pointer h-56">
         {/* Cover */}
         <div className="absolute inset-0">
@@ -73,17 +87,10 @@ export const DiscoveryTile = ({ entity, featuredContent, boostState, className }
 
         {/* Content */}
         <div className="relative mt-auto px-3.5 pb-3.5">
-          <p className="text-[11px] text-muted-foreground leading-snug mb-1 line-clamp-1">{previewText?.slice(0, 60)}</p>
-          <h3 className="font-semibold text-foreground text-sm leading-tight line-clamp-1">{entity.name}</h3>
-          <div className="mt-2 flex flex-wrap gap-1.5">
-            {entity.tags.slice(0, 2).map((tag) => (
-              <span key={tag} className="text-[10px] text-muted-foreground">
-                #{tag}
-              </span>
-            ))}
-          </div>
+          <p className="text-[13px] text-white/60 font-medium leading-snug mb-1.5 line-clamp-1">{previewText?.slice(0, 60)}</p>
+          <h3 className="font-extrabold text-white text-lg leading-tight line-clamp-1">{entity.name}</h3>
         </div>
       </article>
-    </Link>
+    </Wrapper>
   );
 };

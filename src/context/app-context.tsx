@@ -39,6 +39,7 @@ type AppStateContextProviderValue = {
   recordOpen: (entityId: string) => void;
   recordLaunch: (entityId: string) => void;
   registerEntity: (payload: RegisterEntityInput) => Entity;
+  deleteEntity: (entityId: string) => void;
   updateSavedEntity: (
     entityId: string,
     payload: Partial<Pick<Entity, 'name' | 'category' | 'telegramUrl' | 'shortDescription' | 'tags'>>,
@@ -97,6 +98,7 @@ const initialContext: AppStateContextProviderValue = {
   registerEntity: () => {
     throw new Error('AppStateProvider not mounted');
   },
+  deleteEntity: () => undefined,
   updateSavedEntity: () => undefined,
   setFeaturedContent: () => {
     throw new Error('AppStateProvider not mounted');
@@ -282,6 +284,11 @@ export const AppStateProvider = ({ children }: AppStateProviderProps) => {
     return entity;
   }, []);
 
+  const deleteEntity = useCallback((entityId: string) => {
+    setRegisteredEntities((previousState) => previousState.filter((e) => e.id !== entityId));
+    setFeaturedOverrides((previousState) => previousState.filter((fc) => fc.entityId !== entityId));
+  }, []);
+
   const updateSavedEntity = useCallback((
     entityId: string,
     payload: Partial<Pick<Entity, 'name' | 'category' | 'telegramUrl' | 'shortDescription' | 'tags'>>,
@@ -455,6 +462,7 @@ export const AppStateProvider = ({ children }: AppStateProviderProps) => {
       recordOpen,
       recordLaunch,
       registerEntity,
+      deleteEntity,
       updateSavedEntity,
       setFeaturedContent,
       setBoostState,
@@ -479,6 +487,7 @@ export const AppStateProvider = ({ children }: AppStateProviderProps) => {
     recordLaunch,
     recordOpen,
     registerEntity,
+    deleteEntity,
     updateSavedEntity,
     search,
     setBoostState,
