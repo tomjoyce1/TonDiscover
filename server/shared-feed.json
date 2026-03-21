@@ -47,48 +47,6 @@
       "editorialScore": 55,
       "activityScore": 30,
       "engagementScore": 25
-    },
-    {
-      "id": "custom-1774104415584",
-      "type": "channel",
-      "name": "fdgfjsdh",
-      "category": "DeFi",
-      "tags": [],
-      "shortDescription": "dsffsdg",
-      "telegramUrl": "youtube.com",
-      "contentType": "text",
-      "editorialScore": 55,
-      "activityScore": 30,
-      "engagementScore": 25
-    },
-    {
-      "id": "custom-1774103732519",
-      "type": "app",
-      "name": "dd",
-      "category": "DeFi",
-      "tags": [
-        "f"
-      ],
-      "shortDescription": "fdf",
-      "telegramUrl": "t.me/botfather",
-      "contentType": "text",
-      "previewText": "ff",
-      "editorialScore": 55,
-      "activityScore": 30,
-      "engagementScore": 25
-    },
-    {
-      "id": "custom-1774104764956",
-      "type": "channel",
-      "name": "TestingPost",
-      "category": "DeFi",
-      "tags": [],
-      "shortDescription": "Testing",
-      "telegramUrl": "https://t.me/TechPuran",
-      "contentType": "text",
-      "editorialScore": 55,
-      "activityScore": 30,
-      "engagementScore": 25
     }
   ]
 }
