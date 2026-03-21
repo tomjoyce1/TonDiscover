@@ -37,26 +37,29 @@ TonDiscover is a Telegram Mini App for visual discovery of channels and apps.
 
 By default, published featured posts are stored in browser `localStorage`, which means only the current user/device sees them.
 
-To make posts visible to all users, configure a shared JSON endpoint:
+Default setup uses same-origin shared API (recommended for hackathon):
 
 ```bash
-VITE_SHARED_FEED_URL=https://your-api.example.com/featured-overrides
+VITE_SHARED_FEED_URL=/shared-feed
 ```
 
 Optional variables:
 
 ```bash
-VITE_SHARED_FEED_READ_URL=https://your-api.example.com/featured-overrides
-VITE_SHARED_FEED_WRITE_URL=https://your-api.example.com/featured-overrides
+VITE_SHARED_FEED_READ_URL=/shared-feed
+VITE_SHARED_FEED_WRITE_URL=/shared-feed
 VITE_SHARED_FEED_WRITE_METHOD=PUT
 VITE_SHARED_FEED_TOKEN=your_bearer_token
 ```
+
+When configured, each app instance also auto-refreshes shared featured posts (focus + periodic pull) so friend posts appear without manual patching.
 
 Read endpoint response format:
 
 ```json
 {
-  "featuredOverrides": []
+  "featuredOverrides": [],
+  "registeredEntities": []
 }
 ```
 
@@ -64,9 +67,25 @@ Write request body format:
 
 ```json
 {
-  "featuredOverrides": []
+  "featuredOverrides": [],
+  "registeredEntities": []
 }
 ```
+
+Quick start shared mode:
+
+```bash
+# Terminal 1: shared feed backend
+npm run shared-feed
+
+# Terminal 2: mini app
+npm run dev
+
+# Terminal 3: public tunnel for app + shared API
+npm run public-app
+```
+
+Share the ngrok app URL with your friend. Because `VITE_SHARED_FEED_URL=/shared-feed`, both users hit the same public app host and the same shared backend data.
 
 ## Local run
 

@@ -1,7 +1,30 @@
-import type { FeaturedContent } from '@/types/tondiscover.ts';
+import type { Entity, FeaturedContent } from '@/types/tondiscover.ts';
 
 type SharedFeedPayload = {
-  featuredOverrides: FeaturedContent[];
+  featuredOverrides?: unknown;
+  registeredEntities?: unknown;
+};
+
+const mergeFeaturedOverrides = (preferred: FeaturedContent[], fallback: FeaturedContent[]): FeaturedContent[] => {
+  const byEntity = new Map<string, FeaturedContent>();
+  fallback.forEach((item) => {
+    byEntity.set(item.entityId, item);
+  });
+  preferred.forEach((item) => {
+    byEntity.set(item.entityId, item);
+  });
+  return Array.from(byEntity.values());
+};
+
+const mergeRegisteredEntities = (preferred: Entity[], fallback: Entity[]): Entity[] => {
+  const byId = new Map<string, Entity>();
+  fallback.forEach((entity) => {
+    byId.set(entity.id, entity);
+  });
+  preferred.forEach((entity) => {
+    byId.set(entity.id, entity);
+  });
+  return Array.from(byId.values());
 };
 
 const trim = (value: string | undefined): string => (value ?? '').trim();
@@ -37,8 +60,26 @@ const isContentType = (value: unknown): value is FeaturedContent['contentType'] 
   return value === 'text' || value === 'image' || value === 'video';
 };
 
+const isEntityType = (value: unknown): value is Entity['type'] => {
+  return value === 'channel' || value === 'app';
+};
+
 const toOptionalString = (value: unknown): string | undefined => {
   return typeof value === 'string' && value.trim() ? value : undefined;
+};
+
+const toNumber = (value: unknown, fallback: number): number => {
+  return typeof value === 'number' && Number.isFinite(value) ? value : fallback;
+};
+
+const sanitizeTags = (value: unknown): string[] => {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+  return value
+    .filter((item): item is string => typeof item === 'string')
+    .map((item) => item.trim())
+    .filter(Boolean);
 };
 
 const sanitizeFeaturedContent = (value: unknown): FeaturedContent | null => {
@@ -67,19 +108,61 @@ const sanitizeFeaturedContent = (value: unknown): FeaturedContent | null => {
   };
 };
 
+const sanitizeEntity = (value: unknown): Entity | null => {
+  if (!value || typeof value !== 'object') {
+    return null;
+  }
+
+  const candidate = value as Partial<Entity>;
+  if (
+    typeof candidate.id !== 'string'
+    || !isEntityType(candidate.type)
+    || typeof candidate.name !== 'string'
+    || typeof candidate.category !== 'string'
+    || typeof candidate.shortDescription !== 'string'
+    || typeof candidate.telegramUrl !== 'string'
+    || !isContentType(candidate.contentType)
+  ) {
+    return null;
+  }
+
+  return {
+    id: candidate.id,
+    type: candidate.type,
+    name: candidate.name,
+    category: candidate.category,
+    tags: sanitizeTags(candidate.tags),
+    shortDescription: candidate.shortDescription,
+    longDescription: toOptionalString(candidate.longDescription),
+    telegramUrl: candidate.telegramUrl,
+    contentType: candidate.contentType,
+    previewText: toOptionalString(candidate.previewText),
+    previewMediaUrl: toOptionalString(candidate.previewMediaUrl),
+    editorialScore: toNumber(candidate.editorialScore, 55),
+    activityScore: toNumber(candidate.activityScore, 30),
+    engagementScore: toNumber(candidate.engagementScore, 25),
+  };
+};
+
 const parseFeaturedOverrides = (payload: unknown): FeaturedContent[] => {
   const source: unknown[] = Array.isArray(payload)
     ? payload
-    : (payload as Partial<SharedFeedPayload> | null)?.featuredOverrides ?? [];
+    : (payload as SharedFeedPayload | null)?.featuredOverrides as unknown[] ?? [];
 
   return source
     .map(sanitizeFeaturedContent)
     .filter((item): item is FeaturedContent => item !== null);
 };
 
-export const isSharedFeedEnabled = Boolean(readUrl && writeUrl);
+const parseRegisteredEntities = (payload: unknown): Entity[] => {
+  const source: unknown[] = (payload as SharedFeedPayload | null)?.registeredEntities as unknown[] ?? [];
 
-export const readSharedFeaturedOverrides = async (): Promise<FeaturedContent[] | null> => {
+  return source
+    .map(sanitizeEntity)
+    .filter((entity): entity is Entity => entity !== null);
+};
+
+const readSharedPayload = async (): Promise<unknown | null> => {
   if (!isSharedFeedEnabled) {
     return null;
   }
@@ -95,25 +178,56 @@ export const readSharedFeaturedOverrides = async (): Promise<FeaturedContent[] |
       return null;
     }
 
-    const payload = await response.json();
-    return parseFeaturedOverrides(payload);
+    return await response.json();
   } catch {
     return null;
   }
 };
 
-export const writeSharedFeaturedOverrides = async (featuredOverrides: FeaturedContent[]): Promise<boolean> => {
+export const isSharedFeedEnabled = Boolean(readUrl && writeUrl);
+
+export const readSharedFeaturedOverrides = async (): Promise<FeaturedContent[] | null> => {
+  const payload = await readSharedPayload();
+  if (!payload) {
+    return null;
+  }
+  return parseFeaturedOverrides(payload);
+};
+
+export const readSharedRegisteredEntities = async (): Promise<Entity[] | null> => {
+  const payload = await readSharedPayload();
+  if (!payload) {
+    return null;
+  }
+  return parseRegisteredEntities(payload);
+};
+
+export const writeSharedFeaturedOverrides = async (
+  featuredOverrides: FeaturedContent[],
+  registeredEntities: Entity[] = [],
+): Promise<boolean> => {
   if (!isSharedFeedEnabled) {
     return false;
   }
 
   const method = isAllowedWriteMethod(writeMethod) ? writeMethod : 'PUT';
+  let nextFeaturedOverrides = featuredOverrides;
+  let nextRegisteredEntities = registeredEntities;
+
+  const remotePayload = await readSharedPayload();
+  if (remotePayload) {
+    nextFeaturedOverrides = mergeFeaturedOverrides(featuredOverrides, parseFeaturedOverrides(remotePayload));
+    nextRegisteredEntities = mergeRegisteredEntities(registeredEntities, parseRegisteredEntities(remotePayload));
+  }
 
   try {
     const response = await fetch(writeUrl, {
       method,
       headers: buildHeaders(true),
-      body: JSON.stringify({ featuredOverrides }),
+      body: JSON.stringify({
+        featuredOverrides: nextFeaturedOverrides,
+        registeredEntities: nextRegisteredEntities,
+      }),
     });
 
     return response.ok;

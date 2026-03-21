@@ -7,6 +7,7 @@ import { readJSON, STORAGE_KEYS, writeJSON } from '@/services/storage/local-stor
 import {
   isSharedFeedEnabled,
   readSharedFeaturedOverrides,
+  readSharedRegisteredEntities,
   writeSharedFeaturedOverrides,
 } from '@/services/storage/shared-featured-feed.ts';
 import type {
@@ -118,6 +119,7 @@ export const AppStateProvider = ({ children }: AppStateProviderProps) => {
   const [registeredEntities, setRegisteredEntities] = useState<Entity[]>(() => {
     return readJSON(STORAGE_KEYS.registeredEntities, [] as Entity[]);
   });
+  const [sharedRegisteredEntities, setSharedRegisteredEntities] = useState<Entity[]>([]);
   const [featuredOverrides, setFeaturedOverrides] = useState<FeaturedContent[]>(() => {
     return readJSON(STORAGE_KEYS.featuredOverrides, [] as FeaturedContent[]);
   });
@@ -139,8 +141,12 @@ export const AppStateProvider = ({ children }: AppStateProviderProps) => {
   });
 
   const entities = useMemo(() => {
-    return [...seededEntities, ...registeredEntities];
-  }, [registeredEntities, seededEntities]);
+    const byId = new Map<string, Entity>();
+    [...seededEntities, ...sharedRegisteredEntities, ...registeredEntities].forEach((entity) => {
+      byId.set(entity.id, entity);
+    });
+    return Array.from(byId.values());
+  }, [registeredEntities, seededEntities, sharedRegisteredEntities]);
 
   const ownedEntityIds = useMemo(() => {
     return uniq([
@@ -160,6 +166,22 @@ export const AppStateProvider = ({ children }: AppStateProviderProps) => {
     });
     return Array.from(byEntity.values());
   }, [featuredOverrides]);
+
+  const mergeSharedFeaturedIntoLocal = useCallback((remoteFeatured: FeaturedContent[]) => {
+    setFeaturedOverrides((previousState) => {
+      const remoteByEntity = new Map(remoteFeatured.map((item) => [item.entityId, item]));
+      const localNotInRemote = previousState.filter((item) => !remoteByEntity.has(item.entityId));
+      return [...remoteFeatured, ...localNotInRemote];
+    });
+  }, []);
+
+  const mergeSharedRegisteredIntoLocal = useCallback((remoteEntities: Entity[]) => {
+    setSharedRegisteredEntities(() => {
+      return remoteEntities.filter((remoteEntity) => {
+        return !registeredEntities.some((localEntity) => localEntity.id === remoteEntity.id);
+      });
+    });
+  }, [registeredEntities]);
 
   const rankedEntities = useMemo(() => {
     return getRankedEntities(entities, userPrefs, boosts);
@@ -348,39 +370,55 @@ export const AppStateProvider = ({ children }: AppStateProviderProps) => {
     }
 
     let cancelled = false;
-    const hydrateSharedFeed = async () => {
-      const remoteFeatured = await readSharedFeaturedOverrides();
+    const pullSharedFeed = async () => {
+      const [remoteFeatured, remoteEntities] = await Promise.all([
+        readSharedFeaturedOverrides(),
+        readSharedRegisteredEntities(),
+      ]);
       if (cancelled) {
         return;
       }
 
-      if (!remoteFeatured) {
-        setHasHydratedSharedFeed(true);
-        return;
+      if (remoteFeatured) {
+        mergeSharedFeaturedIntoLocal(remoteFeatured);
       }
-
-      setFeaturedOverrides((previousState) => {
-        const remoteByEntity = new Map(remoteFeatured.map((item) => [item.entityId, item]));
-        const localNotInRemote = previousState.filter((item) => !remoteByEntity.has(item.entityId));
-        return [...remoteFeatured, ...localNotInRemote];
-      });
+      if (remoteEntities) {
+        mergeSharedRegisteredIntoLocal(remoteEntities);
+      }
       setHasHydratedSharedFeed(true);
     };
 
-    void hydrateSharedFeed();
+    const handleFocus = () => {
+      void pullSharedFeed();
+    };
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        void pullSharedFeed();
+      }
+    };
+
+    void pullSharedFeed();
+    const intervalId = window.setInterval(() => {
+      void pullSharedFeed();
+    }, 10_000);
+    window.addEventListener('focus', handleFocus);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
 
     return () => {
       cancelled = true;
+      window.clearInterval(intervalId);
+      window.removeEventListener('focus', handleFocus);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
-  }, []);
+  }, [mergeSharedFeaturedIntoLocal, mergeSharedRegisteredIntoLocal]);
 
   useEffect(() => {
     if (!isSharedFeedEnabled || !hasHydratedSharedFeed) {
       return;
     }
 
-    void writeSharedFeaturedOverrides(featuredOverrides);
-  }, [featuredOverrides, hasHydratedSharedFeed]);
+    void writeSharedFeaturedOverrides(featuredOverrides, registeredEntities);
+  }, [featuredOverrides, hasHydratedSharedFeed, registeredEntities]);
 
   useEffect(() => {
     writeJSON(STORAGE_KEYS.favorites, favorites);

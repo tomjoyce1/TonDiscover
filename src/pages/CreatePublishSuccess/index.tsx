@@ -16,7 +16,7 @@ const CreatePublishSuccess = () => {
         {entity && <p className="td-muted">Published for: {entity.name}</p>}
         <p className="td-muted">
           {isSharedFeedEnabled
-            ? 'Featured content has been updated and synced to the shared feed.'
+            ? 'Featured content is synced to the shared feed. Other devices should see it after refresh or within ~10 seconds.'
             : 'Featured content was updated locally on this device. Configure a shared feed endpoint for cross-user visibility.'}
         </p>
         {entity && (
