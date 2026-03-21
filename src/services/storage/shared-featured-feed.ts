@@ -5,6 +5,11 @@ type SharedFeedPayload = {
   registeredEntities?: unknown;
 };
 
+export type SharedFeedSnapshot = {
+  featuredOverrides: FeaturedContent[];
+  registeredEntities: Entity[];
+};
+
 const mergeFeaturedOverrides = (preferred: FeaturedContent[], fallback: FeaturedContent[]): FeaturedContent[] => {
   const byEntity = new Map<string, FeaturedContent>();
   fallback.forEach((item) => {
@@ -186,20 +191,32 @@ const readSharedPayload = async (): Promise<unknown | null> => {
 
 export const isSharedFeedEnabled = Boolean(readUrl && writeUrl);
 
-export const readSharedFeaturedOverrides = async (): Promise<FeaturedContent[] | null> => {
+export const readSharedFeedSnapshot = async (): Promise<SharedFeedSnapshot | null> => {
   const payload = await readSharedPayload();
   if (!payload) {
     return null;
   }
-  return parseFeaturedOverrides(payload);
+
+  return {
+    featuredOverrides: parseFeaturedOverrides(payload),
+    registeredEntities: parseRegisteredEntities(payload),
+  };
+};
+
+export const readSharedFeaturedOverrides = async (): Promise<FeaturedContent[] | null> => {
+  const snapshot = await readSharedFeedSnapshot();
+  if (!snapshot) {
+    return null;
+  }
+  return snapshot.featuredOverrides;
 };
 
 export const readSharedRegisteredEntities = async (): Promise<Entity[] | null> => {
-  const payload = await readSharedPayload();
-  if (!payload) {
+  const snapshot = await readSharedFeedSnapshot();
+  if (!snapshot) {
     return null;
   }
-  return parseRegisteredEntities(payload);
+  return snapshot.registeredEntities;
 };
 
 export const writeSharedFeaturedOverrides = async (

@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { memo, useEffect, useRef, useState, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { BoostBadge } from '@/components/common/BoostBadge.tsx';
 import type { BoostState, Entity, FeaturedContent } from '@/types/tondiscover.ts';
@@ -21,26 +21,113 @@ const typeColors: Record<string, string> = {
 
 /* Category-themed gradient for text-only placeholders */
 const CATEGORY_GRADIENTS: Record<string, string> = {
-  DeFi:      'from-sky-900/60 to-sky-950/40',
-  Games:     'from-violet-900/60 to-violet-950/40',
-  News:      'from-rose-900/60 to-rose-950/40',
+  DeFi: 'from-sky-900/60 to-sky-950/40',
+  Games: 'from-violet-900/60 to-violet-950/40',
+  News: 'from-rose-900/60 to-rose-950/40',
   Education: 'from-amber-900/60 to-amber-950/40',
   Community: 'from-emerald-900/60 to-emerald-950/40',
-  Tools:     'from-slate-800/60 to-slate-900/40',
+  Tools: 'from-slate-800/60 to-slate-900/40',
 };
 
 const CATEGORY_ICONS: Record<string, string> = {
-  DeFi: '💱', Games: '🎮', News: '📰', Education: '⚡', Community: '🌐', Tools: '🔧',
+  DeFi: '\uD83D\uDCB1',
+  Games: '\uD83C\uDFAE',
+  News: '\uD83D\uDCF0',
+  Education: '\u26A1',
+  Community: '\uD83C\uDF10',
+  Tools: '\uD83D\uDD27',
 };
 
-export const DiscoveryTile = ({ entity, featuredContent, boostState, className, onSelect }: DiscoveryTileProps) => {
+type TileMediaProps = {
+  contentType: Entity['contentType'];
+  mediaUrl?: string;
+  entityName: string;
+  gradient: string;
+  categoryIcon: string;
+};
+
+const TileMedia = ({ contentType, mediaUrl, entityName, gradient, categoryIcon }: TileMediaProps) => {
+  const shouldShowFallback = contentType === 'text' || !mediaUrl;
+  const [shouldLoadVideo, setShouldLoadVideo] = useState(false);
+  const mediaRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (contentType !== 'video' || !mediaUrl || !mediaRef.current) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) {
+          return;
+        }
+
+        setShouldLoadVideo(true);
+        observer.disconnect();
+      },
+      { rootMargin: '240px 0px' },
+    );
+
+    observer.observe(mediaRef.current);
+    return () => observer.disconnect();
+  }, [contentType, mediaUrl]);
+
+  if (shouldShowFallback) {
+    return (
+      <div className={`h-full w-full bg-gradient-to-br ${gradient} flex items-center justify-center`}>
+        <span className="text-xl opacity-35 font-semibold tracking-wide">{categoryIcon}</span>
+      </div>
+    );
+  }
+
+  if (contentType === 'video') {
+    return (
+      <div ref={mediaRef} className="h-full w-full">
+        {shouldLoadVideo ? (
+          <video
+            src={mediaUrl}
+            className="h-full w-full object-cover"
+            muted
+            loop
+            playsInline
+            autoPlay
+            preload="none"
+          />
+        ) : (
+          <div className={`h-full w-full bg-gradient-to-br ${gradient} flex items-center justify-center`}>
+            <span className="rounded-full border border-white/25 bg-black/35 px-3 py-1 text-xs font-semibold text-white">
+              Video
+            </span>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  return (
+    <img
+      src={mediaUrl}
+      alt={entityName}
+      className="h-full w-full object-cover"
+      loading="lazy"
+      decoding="async"
+    />
+  );
+};
+
+export const DiscoveryTile = memo(({
+  entity,
+  featuredContent,
+  boostState,
+  className,
+  onSelect,
+}: DiscoveryTileProps) => {
   const previewText = featuredContent?.text ?? entity.previewText ?? entity.shortDescription;
   const previewMediaUrl = featuredContent?.mediaUrl ?? entity.previewMediaUrl;
   const previewType = featuredContent?.contentType ?? entity.contentType;
   const boosted = isBoostActive(boostState);
   const gradient = CATEGORY_GRADIENTS[entity.category] ?? 'from-slate-800/60 to-slate-900/40';
-
-  const hasMedia = previewType !== 'text' && previewMediaUrl;
+  const categoryIcon = CATEGORY_ICONS[entity.category] ?? '\u2728';
 
   const Wrapper = onSelect
     ? ({ children }: { children: ReactNode }) => (
@@ -56,23 +143,16 @@ export const DiscoveryTile = ({ entity, featuredContent, boostState, className, 
 
   return (
     <Wrapper>
-      <article className="group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-card transition-all duration-200 active:scale-[0.97] cursor-pointer h-56">
+      <article className="group relative flex h-56 cursor-pointer flex-col overflow-hidden rounded-2xl border border-border bg-card transition-all duration-200 active:scale-[0.97]">
         {/* Cover */}
         <div className="absolute inset-0">
-          {previewType === 'video' && previewMediaUrl ? (
-            <video
-              src={previewMediaUrl}
-              className="h-full w-full object-cover"
-              muted loop playsInline autoPlay preload="metadata"
-            />
-          ) : hasMedia ? (
-            <img src={previewMediaUrl} alt={entity.name} className="h-full w-full object-cover" />
-          ) : (
-            /* Category-themed placeholder */
-            <div className={`h-full w-full bg-gradient-to-br ${gradient} flex items-center justify-center`}>
-              <span className="text-4xl opacity-30">{CATEGORY_ICONS[entity.category] ?? '✨'}</span>
-            </div>
-          )}
+          <TileMedia
+            contentType={previewType}
+            mediaUrl={previewMediaUrl}
+            entityName={entity.name}
+            gradient={gradient}
+            categoryIcon={categoryIcon}
+          />
           {/* Overlay gradient */}
           <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(13,17,30,0.95)_0%,rgba(13,17,30,0.5)_45%,rgba(13,17,30,0.1)_100%)]" />
         </div>
@@ -87,10 +167,12 @@ export const DiscoveryTile = ({ entity, featuredContent, boostState, className, 
 
         {/* Content */}
         <div className="relative mt-auto px-3.5 pb-3.5">
-          <p className="text-[13px] text-white/60 font-medium leading-snug mb-1.5 line-clamp-1">{previewText?.slice(0, 60)}</p>
-          <h3 className="font-extrabold text-white text-lg leading-tight line-clamp-1">{entity.name}</h3>
+          <p className="mb-1.5 line-clamp-1 text-[13px] font-medium leading-snug text-white/60">{previewText?.slice(0, 60)}</p>
+          <h3 className="line-clamp-1 text-lg font-extrabold leading-tight text-white">{entity.name}</h3>
         </div>
       </article>
     </Wrapper>
   );
-};
+});
+
+DiscoveryTile.displayName = 'DiscoveryTile';

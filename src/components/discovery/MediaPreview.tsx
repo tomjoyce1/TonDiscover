@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react';
 import type { ContentType } from '@/types/tondiscover.ts';
 
 type MediaPreviewProps = {
@@ -13,6 +14,37 @@ export const MediaPreview = ({
   text,
   variant = 'default',
 }: MediaPreviewProps) => {
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const [isPaused, setIsPaused] = useState(false);
+
+  useEffect(() => {
+    if (contentType !== 'video' || variant === 'tile') {
+      return;
+    }
+
+    const video = videoRef.current;
+    if (!video) {
+      return;
+    }
+
+    setIsPaused(video.paused);
+
+    const syncPauseState = () => {
+      setIsPaused(video.paused);
+    };
+
+    video.addEventListener('pause', syncPauseState);
+    video.addEventListener('play', syncPauseState);
+
+    // Keep default preview behavior: autoplay silently, allow pause by tap.
+    void video.play().catch(() => undefined);
+
+    return () => {
+      video.removeEventListener('pause', syncPauseState);
+      video.removeEventListener('play', syncPauseState);
+    };
+  }, [contentType, mediaUrl, variant]);
+
   const wrapperClass = variant === 'tile'
     ? 'w-full h-full'
     : 'w-full h-56 overflow-hidden bg-tg-card';
@@ -42,10 +74,43 @@ export const MediaPreview = ({
       );
     }
 
+    const togglePause = () => {
+      const video = videoRef.current;
+      if (!video) {
+        return;
+      }
+
+      if (video.paused) {
+        void video.play().catch(() => undefined);
+      } else {
+        video.pause();
+      }
+    };
+
     return (
-      <video className={wrapperClass} controls preload="none">
-        <source src={mediaUrl} />
-      </video>
+      <button
+        type="button"
+        className={`${wrapperClass} relative block`}
+        onClick={togglePause}
+        aria-label={isPaused ? 'Play video' : 'Pause video'}
+      >
+        <video
+          ref={videoRef}
+          className="w-full h-full object-cover"
+          muted
+          loop
+          playsInline
+          autoPlay
+          preload="metadata"
+          controls={false}
+          disablePictureInPicture
+        >
+          <source src={mediaUrl} />
+        </video>
+        <span className="absolute bottom-3 right-3 rounded-full bg-black/65 px-3 py-1 text-xs font-semibold text-white">
+          {isPaused ? 'Play' : 'Pause'}
+        </span>
+      </button>
     );
   }
 
