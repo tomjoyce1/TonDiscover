@@ -46,15 +46,15 @@ Goal:
 - no complex animations
 - no expensive micro-interactions
 
-This phase lives on the main build branch.
+This phase lives on the core build branch.
 
 ### Phase 2 — UI polish in parallel
 Once the happy path is stable, visual improvements can be developed in **a dedicated separate Git branch**, then integrated after validation.
 
 Example strategy:
-- `main` or integration branch: stable base
-- `lane-core`: product logic / happy path / integrations
-- `lane-ui-polish`: visual improvements, layout, light animations, better-looking cards
+- `master`: stable integration branch
+- `core`: product logic / happy path / integrations
+- `ui`: visual improvements, layout, light animations, better-looking cards
 
 ### Absolute rule
 The UI branch must **never** block the demo.
@@ -124,9 +124,9 @@ then keep the minimal version.
   - how to test it
 
 ## Git / branches
-- `main`: stable / integration branch
-- `lane-core`: product features and main logic
-- `lane-ui-polish`: parallel UI improvements
+- `master`: stable / integration branch
+- `core`: product features and main logic
+- `ui`: parallel UI improvements
 - single merge owner
 - do not mix large visual refactors and business logic in the same diff
 

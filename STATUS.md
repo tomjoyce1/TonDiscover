@@ -8,11 +8,11 @@ Ship a Telegram Mini App for visual discovery of channels + apps, with a simple 
 
 ## Current state
 - Concept locked
-- Main pages defined
-- 2-column visual feed targeted
-- Creator flow clarified
-- MVP scope clarified
-- Repo / template still needs initialization
+- Core routes migrated to TonDiscover pages
+- Seeded channels + apps integrated
+- localStorage states wired (onboarding, favorites, history, boosts)
+- TON boost flow scoped to native transfer with safe mock fallback
+- Template shop/USDT pages removed
 - Strategy confirmed: **minimal UI first, UI polish later in a separate branch**
 
 ## Selected MVP
@@ -45,9 +45,9 @@ Build **visual polish in a separate Git branch**:
 - merge only after validation on a stable base
 
 ## Working branches
-- `main`: stable integration
-- `lane-core`: product logic, pages, data, boost
-- `lane-ui-polish`: parallel visual improvements
+- `master`: stable integration
+- `core`: product logic, pages, data, boost
+- `ui`: parallel visual improvements
 
 ## Out of scope
 - real AI recommendations
@@ -75,13 +75,12 @@ Build **visual polish in a separate Git branch**:
 - postpone UI polish if it threatens integration
 
 ## Immediate priorities
-1. Initialize the repo from a Telegram Mini App template
-2. Set up page structure + routing
-3. Integrate seeded dataset
-4. Build minimal UI
-5. Build feed + detail + creator flow
-6. Add TON boost after that
-7. Start the UI polish branch in parallel once the base is stable
+1. Validate onboarding -> explore -> detail -> join/launch
+2. Validate favorites/history persistence
+3. Validate creator register + featured content flow
+4. Validate boost visibility (badge + ranking change)
+5. Freeze `core` for demo stability
+6. Start safe visual polish on `ui` only after `core` is stable
 
 ## Source of truth
 - local build

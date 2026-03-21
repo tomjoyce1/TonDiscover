@@ -40,7 +40,6 @@ function Inner() {
     return (
         <TonConnectUIProvider
             manifestUrl={manifestUrl}
-            actionsConfiguration={{ twaReturnUrl: 'https://t.me/tma_jetton_processing_bot/tma_jetton_processing' }}
         >
             <TonClientProvider>
                 <AppStateProvider>
