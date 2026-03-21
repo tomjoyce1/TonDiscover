@@ -22,3 +22,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+*/ngrok
+   ngrok.zip
+        ngrok/
+
+   ngrok.zip
+        ngrok/
