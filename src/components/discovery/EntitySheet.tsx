@@ -4,6 +4,7 @@ import { ExternalLink, Heart, Trash2, X, Zap } from 'lucide-react';
 import { useAppState } from '@/context/app-context.tsx';
 import { isBoostActive } from '@/domain/ranking.ts';
 import { cx } from '@/helpers/class-name.ts';
+import { openTelegramAwareLink } from '@/services/telegram/open-link.ts';
 
 const CATEGORY_GRADIENTS: Record<string, string> = {
   DeFi: 'from-sky-900/60 to-sky-950/40',
@@ -92,7 +93,7 @@ export const EntitySheet = ({ entityId, onClose }: EntitySheetProps) => {
   const onPrimaryAction = () => {
     if (entity.type === 'app') recordLaunch(entity.id);
     else recordOpen(entity.id);
-    window.open(entity.telegramUrl, '_blank', 'noopener,noreferrer');
+    openTelegramAwareLink(entity.telegramUrl);
   };
 
   const onDelete = () => { deleteEntity(entity.id); close(); };

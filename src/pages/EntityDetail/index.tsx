@@ -9,6 +9,7 @@ import { Card } from '@/components/ui/Card.tsx';
 import { Chip } from '@/components/ui/Chip.tsx';
 import { useAppState } from '@/context/app-context.tsx';
 import { isBoostActive } from '@/domain/ranking.ts';
+import { openTelegramAwareLink } from '@/services/telegram/open-link.ts';
 
 const EntityDetail = () => {
   const { id } = useParams();
@@ -63,7 +64,7 @@ const EntityDetail = () => {
       recordOpen(entity.id);
     }
 
-    window.open(entity.telegramUrl, '_blank', 'noopener,noreferrer');
+    openTelegramAwareLink(entity.telegramUrl);
   };
 
   return (

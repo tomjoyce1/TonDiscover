@@ -6,8 +6,7 @@ import { getRankedEntities } from '@/domain/ranking.ts';
 import { readJSON, STORAGE_KEYS, writeJSON } from '@/services/storage/local-storage.ts';
 import {
   isSharedFeedEnabled,
-  readSharedFeaturedOverrides,
-  readSharedRegisteredEntities,
+  readSharedFeedSnapshot,
   writeSharedFeaturedOverrides,
 } from '@/services/storage/shared-featured-feed.ts';
 import type {
@@ -48,6 +47,7 @@ type AppStateContextProviderValue = {
   setBoostState: (state: BoostState) => void;
   getBoostState: (entityId: string) => BoostState;
   isOwnedEntity: (entityId: string) => boolean;
+  resetProfile: () => void;
   search: (query: string) => Entity[];
   saveRecentSearch: (query: string) => void;
 };
@@ -68,8 +68,15 @@ const initialHistory: HistoryState = {
   recentOpenedEntityIds: [],
 };
 
+const MIN_CATEGORY_WEIGHT = 0;
+const MAX_CATEGORY_WEIGHT = 60;
+const DOMAIN_SELECTION_WEIGHT_DELTA = 5;
+
 const adjustWeight = (weights: Record<string, number>, category: string, diff: number): Record<string, number> => {
-  const nextValue = Math.max(0, Math.min(20, (weights[category] ?? 0) + diff));
+  const nextValue = Math.max(
+    MIN_CATEGORY_WEIGHT,
+    Math.min(MAX_CATEGORY_WEIGHT, (weights[category] ?? 0) + diff),
+  );
   return {
     ...weights,
     [category]: nextValue,
@@ -106,6 +113,7 @@ const initialContext: AppStateContextProviderValue = {
   setBoostState: () => undefined,
   getBoostState: (entityId: string) => ({ entityId, status: 'inactive', source: 'mock' }),
   isOwnedEntity: () => false,
+  resetProfile: () => undefined,
   search: () => [],
   saveRecentSearch: () => undefined,
 };
@@ -207,20 +215,28 @@ export const AppStateProvider = ({ children }: AppStateProviderProps) => {
 
   const completeOnboarding = useCallback((selectedCategories: string[]) => {
     const normalizedSelection = uniq(selectedCategories);
-    const nextWeights = normalizedSelection.reduce<Record<string, number>>((acc, category) => {
-      acc[category] = 3;
-      return acc;
-    }, {});
 
-    setUserPrefs((previousState) => ({
-      ...previousState,
-      onboardingCompleted: true,
-      selectedCategories: normalizedSelection,
-      categoryWeights: {
-        ...previousState.categoryWeights,
-        ...nextWeights,
-      },
-    }));
+    setUserPrefs((previousState) => {
+      const previousSelection = previousState.selectedCategories;
+      const addedCategories = normalizedSelection.filter((category) => !previousSelection.includes(category));
+      const removedCategories = previousSelection.filter((category) => !normalizedSelection.includes(category));
+      let nextCategoryWeights = { ...previousState.categoryWeights };
+
+      addedCategories.forEach((category) => {
+        nextCategoryWeights = adjustWeight(nextCategoryWeights, category, DOMAIN_SELECTION_WEIGHT_DELTA);
+      });
+
+      removedCategories.forEach((category) => {
+        nextCategoryWeights = adjustWeight(nextCategoryWeights, category, -DOMAIN_SELECTION_WEIGHT_DELTA);
+      });
+
+      return {
+        ...previousState,
+        onboardingCompleted: true,
+        selectedCategories: normalizedSelection,
+        categoryWeights: nextCategoryWeights,
+      };
+    });
   }, []);
 
   const toggleFavorite = useCallback((entityId: string) => {
@@ -339,6 +355,29 @@ export const AppStateProvider = ({ children }: AppStateProviderProps) => {
     return ownedEntityIds.includes(entityId);
   }, [ownedEntityIds]);
 
+  const resetProfile = useCallback(() => {
+    setRegisteredEntities([]);
+    setSharedRegisteredEntities([]);
+    setFeaturedOverrides([]);
+    setOwnedBoostEntityIds([]);
+    setFavorites(initialFavorites);
+    setHistory(initialHistory);
+    setUserPrefs(initialPrefs);
+    setBoosts({} as Record<string, BoostState>);
+
+    if (typeof window !== 'undefined') {
+      const keysToRemove: string[] = [];
+      for (let i = 0; i < window.localStorage.length; i += 1) {
+        const key = window.localStorage.key(i);
+        if (key?.startsWith('tondiscover:')) {
+          keysToRemove.push(key);
+        }
+      }
+
+      keysToRemove.forEach((key) => window.localStorage.removeItem(key));
+    }
+  }, []);
+
   const search = useCallback((query: string): Entity[] => {
     if (!query.trim()) {
       return rankedEntities;
@@ -378,19 +417,14 @@ export const AppStateProvider = ({ children }: AppStateProviderProps) => {
 
     let cancelled = false;
     const pullSharedFeed = async () => {
-      const [remoteFeatured, remoteEntities] = await Promise.all([
-        readSharedFeaturedOverrides(),
-        readSharedRegisteredEntities(),
-      ]);
+      const snapshot = await readSharedFeedSnapshot();
       if (cancelled) {
         return;
       }
 
-      if (remoteFeatured) {
-        mergeSharedFeaturedIntoLocal(remoteFeatured);
-      }
-      if (remoteEntities) {
-        mergeSharedRegisteredIntoLocal(remoteEntities);
+      if (snapshot) {
+        mergeSharedFeaturedIntoLocal(snapshot.featuredOverrides);
+        mergeSharedRegisteredIntoLocal(snapshot.registeredEntities);
       }
       setHasHydratedSharedFeed(true);
     };
@@ -468,6 +502,7 @@ export const AppStateProvider = ({ children }: AppStateProviderProps) => {
       setBoostState,
       getBoostState,
       isOwnedEntity,
+      resetProfile,
       search,
       saveRecentSearch,
     };
@@ -480,6 +515,7 @@ export const AppStateProvider = ({ children }: AppStateProviderProps) => {
     getBoostState,
     history,
     isOwnedEntity,
+    resetProfile,
     isFavorite,
     ownedEntities,
     registeredEntities,

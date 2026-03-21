@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { ArrowLeft, Bell, Minimize2, PlayCircle } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { AlertTriangle, ArrowLeft, Bell, Minimize2, PlayCircle } from 'lucide-react';
 import { BottomNav } from '@/components/layout/BottomNav.tsx';
+import { useAppState } from '@/context/app-context.tsx';
 import { cx } from '@/helpers/class-name.ts';
 
 type SettingsState = {
@@ -55,6 +56,8 @@ const Toggle = ({ enabled, onToggle }: { enabled: boolean; onToggle: () => void 
 );
 
 const ProfileSettings = () => {
+  const navigate = useNavigate();
+  const { resetProfile } = useAppState();
   const [settings, setSettings] = useState<SettingsState>(readSettings);
 
   useEffect(() => {
@@ -63,6 +66,19 @@ const ProfileSettings = () => {
 
   const toggle = (key: keyof SettingsState) => {
     setSettings((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  const handleResetProfile = () => {
+    const shouldReset = window.confirm(
+      'Reset profile and restart onboarding? This will clear your apps, favorites, history, boosts, and settings on this device.',
+    );
+    if (!shouldReset) {
+      return;
+    }
+
+    resetProfile();
+    setSettings(defaultSettings);
+    navigate('/onboarding/welcome', { replace: true });
   };
 
   return (
@@ -104,6 +120,30 @@ const ProfileSettings = () => {
           ))}
         </nav>
       </div>
+
+      <section className="mt-6 px-5">
+        <div className="rounded-2xl border border-red-500/30 bg-red-500/10 p-5">
+          <div className="flex items-start gap-3">
+            <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl border border-red-500/40 bg-red-500/15 text-red-300">
+              <AlertTriangle className="h-4 w-4" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <h2 className="text-sm font-semibold text-foreground">Reset profile</h2>
+              <p className="mt-1 text-[12px] text-muted-foreground">
+                Clears local profile data and restarts onboarding.
+              </p>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={handleResetProfile}
+            className="h-11 w-full rounded-xl bg-red-600 text-sm font-semibold text-white transition-colors hover:bg-red-500 active:bg-red-700"
+            style={{ marginTop: '20px' }}
+          >
+            Reset profile
+          </button>
+        </div>
+      </section>
 
       <BottomNav />
     </main>

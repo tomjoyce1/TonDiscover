@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Heart, Clock, Settings, User, Wallet, Sliders, ChevronRight, Sparkles } from 'lucide-react';
 import { BottomNav } from '@/components/layout/BottomNav.tsx';
@@ -8,10 +9,10 @@ const ACCOUNT_KEY = 'tondiscover:profile-account';
 const readAccount = () => {
   try {
     const raw = window.localStorage.getItem(ACCOUNT_KEY);
-    if (!raw) return { displayName: 'TON User', bio: '' };
-    return { displayName: 'TON User', bio: '', ...(JSON.parse(raw) as Record<string, string>) };
+    if (!raw) return { displayName: 'TON User', bio: '', avatarUrl: '' };
+    return { displayName: 'TON User', bio: '', avatarUrl: '', ...(JSON.parse(raw) as Record<string, string>) };
   } catch {
-    return { displayName: 'TON User', bio: '' };
+    return { displayName: 'TON User', bio: '', avatarUrl: '' };
   }
 };
 
@@ -42,6 +43,9 @@ const menuSections = [
 const Profile = () => {
   const { favorites, ownedEntities } = useAppState();
   const account = readAccount();
+  const [avatarLoadFailed, setAvatarLoadFailed] = useState(false);
+  const avatarUrl = account.avatarUrl.trim();
+  const showAvatar = avatarUrl.length > 0 && !avatarLoadFailed;
 
   return (
     <main className="flex min-h-screen flex-col bg-background pb-24 pt-6">
@@ -56,7 +60,16 @@ const Profile = () => {
       <section className="mx-4 rounded-2xl border border-border bg-card p-6">
         <div className="flex items-center gap-4">
           <div className="relative h-16 w-16 flex-shrink-0 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 border-2 border-primary/30 flex items-center justify-center">
-            <User className="h-7 w-7 text-primary" />
+            {showAvatar ? (
+              <img
+                src={avatarUrl}
+                alt={`${account.displayName} profile`}
+                className="h-full w-full rounded-full object-cover"
+                onError={() => setAvatarLoadFailed(true)}
+              />
+            ) : (
+              <User className="h-7 w-7 text-primary" />
+            )}
             <span className="absolute bottom-0.5 right-0.5 h-3.5 w-3.5 rounded-full bg-emerald-400 border-[2.5px] border-card" aria-hidden="true" />
           </div>
           <div className="flex-1 min-w-0">

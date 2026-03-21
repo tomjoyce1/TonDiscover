@@ -28,6 +28,44 @@ const parseList = (v: string | null): string[] =>
   v ? v.split(',').map((s) => s.trim()).filter(Boolean) : [];
 const normalize = (v: string): string => v.trim().toLowerCase();
 
+type ResultThumbProps = {
+  name: string;
+  mediaUrl?: string;
+  fallbackIcon: string;
+  fallbackColor: string;
+};
+
+const ResultThumb = ({ name, mediaUrl, fallbackIcon, fallbackColor }: ResultThumbProps) => {
+  const [hasImageError, setHasImageError] = useState(false);
+  const normalizedMediaUrl = mediaUrl?.trim() ?? '';
+  const showImage = Boolean(normalizedMediaUrl) && !hasImageError;
+
+  useEffect(() => {
+    setHasImageError(false);
+  }, [normalizedMediaUrl]);
+
+  return (
+    <div
+      className={cx(
+        'w-10 h-10 rounded-xl border flex items-center justify-center flex-shrink-0 overflow-hidden',
+        !showImage && `bg-gradient-to-br ${fallbackColor}`,
+      )}
+    >
+      {showImage ? (
+        <img
+          src={normalizedMediaUrl}
+          alt={`${name} thumbnail`}
+          className="h-full w-full object-cover"
+          loading="lazy"
+          onError={() => setHasImageError(true)}
+        />
+      ) : (
+        <span className="text-base">{fallbackIcon}</span>
+      )}
+    </div>
+  );
+};
+
 const SearchHome = () => {
   const [searchParams] = useSearchParams();
   const { entities, categories, rankedEntities, featuredContent, getBoostState } = useAppState();
@@ -192,6 +230,9 @@ const SearchHome = () => {
             results.map((entity) => {
               const boosted = isBoostActive(getBoostState(entity.id));
               const meta = CATEGORY_META[entity.category] ?? DEFAULT_CAT;
+              const featuredItem = featuredByEntityId.get(entity.id);
+              const thumbnailUrl = entity.previewMediaUrl
+                ?? (featuredItem?.contentType === 'image' ? featuredItem.mediaUrl : undefined);
               return (
                 <button
                   key={entity.id}
@@ -199,9 +240,12 @@ const SearchHome = () => {
                   onClick={() => setSelectedEntityId(entity.id)}
                   className="w-full flex items-center gap-3 rounded-2xl border border-border bg-card p-3.5 text-left transition-all active:scale-[0.98]"
                 >
-                  <div className={cx('w-10 h-10 rounded-xl border bg-gradient-to-br flex items-center justify-center flex-shrink-0', meta.color)}>
-                    <span className="text-base">{meta.icon}</span>
-                  </div>
+                  <ResultThumb
+                    name={entity.name}
+                    mediaUrl={thumbnailUrl}
+                    fallbackIcon={meta.icon}
+                    fallbackColor={meta.color}
+                  />
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
                       <h3 className="text-sm font-semibold text-foreground truncate">{entity.name}</h3>

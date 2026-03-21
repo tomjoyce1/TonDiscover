@@ -1,13 +1,14 @@
 import { FormEvent, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTonAddress } from '@tonconnect/ui-react';
-import { ArrowLeft, CheckCircle2, User, FileText, Wallet } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, User, FileText, Wallet, Link2 } from 'lucide-react';
 import { BottomNav } from '@/components/layout/BottomNav.tsx';
 import { separateTonAddress } from '@/helpers/common-helpers.ts';
 
 type AccountState = {
   displayName: string;
   bio: string;
+  avatarUrl: string;
 };
 
 const STORAGE_KEY = 'tondiscover:profile-account';
@@ -15,6 +16,7 @@ const STORAGE_KEY = 'tondiscover:profile-account';
 const defaultAccount: AccountState = {
   displayName: 'TonDiscover User',
   bio: 'Building and discovering Telegram channels + apps.',
+  avatarUrl: '',
 };
 
 const readAccount = (): AccountState => {
@@ -91,6 +93,23 @@ const ProfileAccount = () => {
             value={account.bio}
             onChange={(e) => setAccount((s) => ({ ...s, bio: e.target.value }))}
             placeholder="A few words about you"
+          />
+        </div>
+
+        {/* Profile picture URL */}
+        <div className="rounded-2xl border border-border bg-card p-5">
+          <div className="flex items-center gap-2.5 mb-4">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-500/15 border border-emerald-500/20">
+              <Link2 className="h-4 w-4 text-emerald-400" />
+            </div>
+            <label htmlFor="avatarUrl" className="text-sm font-semibold text-foreground">Profile picture URL</label>
+          </div>
+          <input
+            id="avatarUrl"
+            className="w-full h-12 px-4 bg-muted/60 text-foreground rounded-xl border border-border/50 outline-none text-sm placeholder:text-muted-foreground focus:border-primary/40 focus:ring-1 focus:ring-primary/20 transition-colors"
+            value={account.avatarUrl}
+            onChange={(e) => setAccount((s) => ({ ...s, avatarUrl: e.target.value }))}
+            placeholder="https://example.com/avatar.jpg"
           />
         </div>
 
