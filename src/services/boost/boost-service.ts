@@ -1,7 +1,8 @@
-import { Address, Sender, toNano } from '@ton/core';
-import type { BoostOption, BoostState } from '@/types/tondiscover.ts';
+import { Address, Sender, toNano } from "@ton/core";
+import type { BoostOption, BoostState } from "@/types/tondiscover.ts";
 
-export const BOOST_RECEIVER_RAW = '0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-';
+export const BOOST_RECEIVER_RAW =
+  "0QBegGpGDQL88FDGNHn9fy0heTWuiv35cNfKlvfHnm2ucW2p";
 const BOOST_RECEIVER = Address.parse(BOOST_RECEIVER_RAW);
 
 type CreateBoostServiceParams = {
@@ -13,7 +14,10 @@ type CreateBoostServiceParams = {
 export interface BoostService {
   connectWallet: () => Promise<boolean>;
   activateBoost: (entityId: string, option: BoostOption) => Promise<BoostState>;
-  getBoostState: (entityId: string, states: Record<string, BoostState>) => BoostState;
+  getBoostState: (
+    entityId: string,
+    states: Record<string, BoostState>
+  ) => BoostState;
 }
 
 const addHours = (hours: number): string => {
@@ -41,7 +45,7 @@ export const createBoostService = ({
 
       try {
         if (!connected || !sender.address) {
-          throw new Error('Wallet not connected');
+          throw new Error("Wallet not connected");
         }
 
         await sender.send({
@@ -51,24 +55,26 @@ export const createBoostService = ({
 
         return {
           entityId,
-          status: 'active',
+          status: "active",
           startedAt,
           expiresAt,
-          source: 'ton',
+          source: "ton",
         };
       } catch {
         return {
           entityId,
-          status: 'active',
+          status: "active",
           startedAt,
           expiresAt,
-          source: 'mock',
+          source: "mock",
         };
       }
     },
 
     getBoostState: (entityId, states) => {
-      return states[entityId] ?? { entityId, status: 'inactive', source: 'mock' };
+      return (
+        states[entityId] ?? { entityId, status: "inactive", source: "mock" }
+      );
     },
   };
 };
