@@ -17,6 +17,7 @@ const CreateRegister = () => {
   const [telegramUrl, setTelegramUrl] = useState('');
   const [shortDescription, setShortDescription] = useState('');
   const [tags, setTags] = useState('');
+  const [previewMediaUrl, setPreviewMediaUrl] = useState('');
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -27,13 +28,14 @@ const CreateRegister = () => {
       telegramUrl: telegramUrl.trim(),
       shortDescription: shortDescription.trim(),
       tags: tags.split(',').map((value) => value.trim()).filter(Boolean),
-      contentType: 'text',
+      contentType: 'image',
+      previewMediaUrl: previewMediaUrl.trim(),
     });
 
     navigate(`/create?saved=${encodeURIComponent(created.id)}`);
   };
 
-  const isDisabled = !name.trim() || !telegramUrl.trim() || !shortDescription.trim();
+  const isDisabled = !name.trim() || !telegramUrl.trim() || !shortDescription.trim() || !previewMediaUrl.trim();
 
   return (
     <PageShell title="Register Channel / App" subtitle="Save first, then publish post content." backTo="/create">
@@ -62,6 +64,16 @@ const CreateRegister = () => {
         <label className="block">
           <span className="block text-sm text-tg-muted mb-2">Short description</span>
           <Textarea value={shortDescription} onChange={(event) => setShortDescription(event.target.value)} rows={4} />
+        </label>
+        <label className="block">
+          <span className="block text-sm text-tg-muted mb-2">Preview image URL</span>
+          <Textarea
+            value={previewMediaUrl}
+            onChange={(event) => setPreviewMediaUrl(event.target.value)}
+            placeholder="https://..."
+            rows={2}
+            className="min-h-0 resize-none"
+          />
         </label>
         <label className="block">
           <span className="block text-sm text-tg-muted mb-2">Tags (comma separated)</span>
