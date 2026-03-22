@@ -125,7 +125,7 @@ const ProfileAccount = () => {
   };
 
   const status = getCreatorActivityTier(reputation);
-  const sourceLabel = hasTonReputation ? 'Recorded on TON' : 'Using local demo data';
+  const sourceLabel = 'Smart contract data';
   const showSyncing = Boolean(walletAddress && contractAddress && tonClient && isLoadingReputation);
 
   return (
