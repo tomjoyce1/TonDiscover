@@ -161,14 +161,17 @@ export const AppStateProvider = ({ children }: AppStateProviderProps) => {
   const [boostEvents, setBoostEvents] = useState<BoostEvent[]>(() => {
     return readJSON(STORAGE_KEYS.boostEvents, [] as BoostEvent[]);
   });
+  const [deletedEntityIds, setDeletedEntityIds] = useState<string[]>(() => {
+    return readJSON(STORAGE_KEYS.deletedEntityIds, [] as string[]);
+  });
 
   const entities = useMemo(() => {
     const byId = new Map<string, Entity>();
     [...seededEntities, ...sharedRegisteredEntities, ...registeredEntities].forEach((entity) => {
       byId.set(entity.id, entity);
     });
-    return Array.from(byId.values());
-  }, [registeredEntities, seededEntities, sharedRegisteredEntities]);
+    return Array.from(byId.values()).filter((e) => !deletedEntityIds.includes(e.id));
+  }, [registeredEntities, seededEntities, sharedRegisteredEntities, deletedEntityIds]);
 
   const ownedEntityIds = useMemo(() => {
     return uniq([
@@ -186,8 +189,8 @@ export const AppStateProvider = ({ children }: AppStateProviderProps) => {
     [...seededFeaturedContent, ...featuredOverrides].forEach((item) => {
       byEntity.set(item.entityId, item);
     });
-    return Array.from(byEntity.values());
-  }, [featuredOverrides]);
+    return Array.from(byEntity.values()).filter((fc) => !deletedEntityIds.includes(fc.entityId));
+  }, [featuredOverrides, deletedEntityIds]);
 
   const mergeSharedFeaturedIntoLocal = useCallback((remoteFeatured: FeaturedContent[]) => {
     setFeaturedOverrides((previousState) => {
@@ -320,6 +323,8 @@ export const AppStateProvider = ({ children }: AppStateProviderProps) => {
   const deleteEntity = useCallback((entityId: string) => {
     setRegisteredEntities((previousState) => previousState.filter((e) => e.id !== entityId));
     setFeaturedOverrides((previousState) => previousState.filter((fc) => fc.entityId !== entityId));
+    setOwnedBoostEntityIds((previousState) => previousState.filter((id) => id !== entityId));
+    setDeletedEntityIds((previousState) => uniq([...previousState, entityId]));
   }, []);
 
   const updateSavedEntity = useCallback((
@@ -381,6 +386,7 @@ export const AppStateProvider = ({ children }: AppStateProviderProps) => {
     setSharedRegisteredEntities([]);
     setFeaturedOverrides([]);
     setOwnedBoostEntityIds([]);
+    setDeletedEntityIds([]);
     setFavorites(initialFavorites);
     setHistory(initialHistory);
     setUserPrefs(initialPrefs);
@@ -430,6 +436,10 @@ export const AppStateProvider = ({ children }: AppStateProviderProps) => {
   useEffect(() => {
     writeJSON(STORAGE_KEYS.ownedBoostEntityIds, ownedBoostEntityIds);
   }, [ownedBoostEntityIds]);
+
+  useEffect(() => {
+    writeJSON(STORAGE_KEYS.deletedEntityIds, deletedEntityIds);
+  }, [deletedEntityIds]);
 
   useEffect(() => {
     if (!isSharedFeedEnabled) {
