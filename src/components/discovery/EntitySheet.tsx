@@ -216,7 +216,7 @@ export const EntitySheet = ({ entityId, onClose }: EntitySheetProps) => {
                 <button
                   type="button"
                   onClick={() => navigate(`/create/boost?entityId=${encodeURIComponent(entity.id)}`)}
-                  className="flex-1 flex items-center justify-center gap-2 h-11 rounded-xl bg-amber-500/10 text-amber-300 font-semibold text-sm transition-all active:scale-[0.97]"
+                  className="flex-1 flex items-center justify-center gap-2 h-[52px] rounded-2xl bg-amber-500/10 text-amber-300 font-bold text-[15px] transition-all active:scale-[0.97]"
                 >
                   <Zap className="w-4 h-4" />
                   Boost
@@ -224,7 +224,7 @@ export const EntitySheet = ({ entityId, onClose }: EntitySheetProps) => {
                 <button
                   type="button"
                   onClick={onDelete}
-                  className="flex-1 flex items-center justify-center gap-2 h-11 rounded-xl bg-rose-500/10 text-rose-400 font-semibold text-sm transition-all active:scale-[0.97]"
+                  className="flex-1 flex items-center justify-center gap-2 h-[52px] rounded-2xl bg-rose-500/10 text-rose-400 font-bold text-[15px] transition-all active:scale-[0.97]"
                 >
                   <Trash2 className="w-4 h-4" />
                   Delete

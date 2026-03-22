@@ -1,5 +1,7 @@
-import { Address, Sender, toNano } from "@ton/core";
-import type { BoostOption, BoostState } from "@/types/tondiscover.ts";
+import { Address, Sender, toNano } from '@ton/core';
+import type { TonConnectUI } from '@tonconnect/ui';
+import { getReputationContractAddress, sendBoostWithReputationTransaction } from '@/services/reputation/reputation-contract.ts';
+import type { BoostOption, BoostState } from '@/types/tondiscover.ts';
 
 export const BOOST_RECEIVER_RAW =
   "0QBegGpGDQL88FDGNHn9fy0heTWuiv35cNfKlvfHnm2ucW2p";
@@ -8,6 +10,7 @@ const BOOST_RECEIVER = Address.parse(BOOST_RECEIVER_RAW);
 type CreateBoostServiceParams = {
   sender: Sender;
   connected: boolean;
+  tonConnectUI: TonConnectUI;
   openConnectModal: () => void;
 };
 
@@ -27,6 +30,7 @@ const addHours = (hours: number): string => {
 export const createBoostService = ({
   sender,
   connected,
+  tonConnectUI,
   openConnectModal,
 }: CreateBoostServiceParams): BoostService => {
   return {
@@ -48,10 +52,21 @@ export const createBoostService = ({
           throw new Error("Wallet not connected");
         }
 
-        await sender.send({
-          to: BOOST_RECEIVER,
-          value: toNano(option.amountTon),
-        });
+        const reputationContract = getReputationContractAddress();
+
+        if (reputationContract) {
+          await sendBoostWithReputationTransaction(
+            tonConnectUI,
+            { address: reputationContract },
+            BOOST_RECEIVER,
+            option.amountTon,
+          );
+        } else {
+          await sender.send({
+            to: BOOST_RECEIVER,
+            value: toNano(option.amountTon),
+          });
+        }
 
         return {
           entityId,

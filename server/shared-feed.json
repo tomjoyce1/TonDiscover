@@ -1,4 +1,87 @@
 {
-  "featuredOverrides": [],
-  "registeredEntities": []
+  "featuredOverrides": [
+    {
+      "id": "featured-custom-1774108323120-1774108343099",
+      "entityId": "custom-1774108323120",
+      "mode": "manual",
+      "contentType": "text",
+      "title": "test title",
+      "text": "test text"
+    },
+    {
+      "id": "featured-custom-1774104415584-1774108183452",
+      "entityId": "custom-1774104415584",
+      "mode": "manual",
+      "contentType": "text",
+      "title": "Title",
+      "mediaUrl": "youtube.com"
+    },
+    {
+      "id": "featured-app-swap-x-1774104391351",
+      "entityId": "app-swap-x",
+      "mode": "manual",
+      "contentType": "text",
+      "title": "ffggdfgffgfg",
+      "text": "fdggggggggg",
+      "mediaUrl": "youtube.com"
+    },
+    {
+      "id": "featured-custom-1774104764956-1774104821948",
+      "entityId": "custom-1774104764956",
+      "mode": "manual",
+      "contentType": "text",
+      "title": "TestingS",
+      "text": "Join this link"
+    },
+    {
+      "id": "featured-custom-1774119364577-1774119376436",
+      "entityId": "custom-1774119364577",
+      "mode": "manual",
+      "contentType": "text",
+      "title": "g",
+      "text": "gg"
+    },
+    {
+      "id": "featured-custom-1774133523446-1774133582792",
+      "entityId": "custom-1774133523446",
+      "mode": "manual",
+      "contentType": "video",
+      "title": "Pavel Durov",
+      "mediaUrl": "https://www.instagram.com/reel/DTa29BqE5Yb"
+    },
+    {
+      "id": "featured-custom-1774132875832-1774133888442",
+      "entityId": "custom-1774132875832",
+      "mode": "manual",
+      "contentType": "text",
+      "title": "meme2",
+      "text": "d"
+    },
+    {
+      "id": "featured-ch-ton-news-1774109667204",
+      "entityId": "ch-ton-news",
+      "mode": "manual",
+      "contentType": "text",
+      "title": "Ttttt",
+      "text": "AAAAAAAAAAA",
+      "mediaUrl": "F.bi"
+    }
+  ],
+  "registeredEntities": [
+    {
+      "id": "custom-1774122152747",
+      "type": "channel",
+      "name": "Tom's Channel Hack",
+      "category": "DeFi",
+      "tags": [
+        "toncoin"
+      ],
+      "shortDescription": "Toncoin channel to learn, share info and have fun.",
+      "telegramUrl": "https://t.me/toncoin",
+      "contentType": "text",
+      "editorialScore": 55,
+      "activityScore": 30,
+      "engagementScore": 25
+    }
+  ]
 }

@@ -13,6 +13,7 @@ export interface Entity {
   contentType: ContentType;
   previewText?: string;
   previewMediaUrl?: string;
+  creatorWalletAddress?: string;
   editorialScore: number;
   activityScore: number;
   engagementScore: number;
@@ -50,6 +51,28 @@ export interface BoostState {
   startedAt?: string;
   expiresAt?: string;
   source: 'mock' | 'ton';
+}
+
+export interface BoostEvent {
+  id: string;
+  entityId: string;
+  walletAddress?: string;
+  amountTon: string;
+  amountNano: string;
+  createdAt: string;
+  source: 'mock' | 'ton';
+}
+
+export interface CreatorActivityMetrics {
+  submittedCount: number;
+  boostedCount: number;
+  totalTonSpentNano: string;
+  totalTonSpentTon: string;
+}
+
+export interface ReputationSnapshot extends CreatorActivityMetrics {
+  source: 'local' | 'ton';
+  updatedAt?: string;
 }
 
 export interface BoostOption {

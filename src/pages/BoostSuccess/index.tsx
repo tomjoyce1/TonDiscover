@@ -1,8 +1,6 @@
 import { Link, useSearchParams } from 'react-router-dom';
 import { Rocket } from 'lucide-react';
-import { PageShell } from '@/components/layout/PageShell.tsx';
-import { buttonStyles } from '@/components/ui/Button.tsx';
-import { Card } from '@/components/ui/Card.tsx';
+import { BottomNav } from '@/components/layout/BottomNav.tsx';
 
 const BoostSuccess = () => {
   const [searchParams] = useSearchParams();
@@ -10,27 +8,46 @@ const BoostSuccess = () => {
   const source = searchParams.get('source') ?? 'mock';
 
   return (
-    <PageShell title="Boost Activated">
-      <Card padding="lg" className="text-center">
-        <div className="w-20 h-20 rounded-full bg-tg-success/20 flex items-center justify-center mx-auto mb-5">
-          <Rocket className="w-10 h-10 text-tg-success" />
+    <main className="flex min-h-screen flex-col bg-background pb-24 pt-6">
+      {/* Header area — no back button, success state */}
+      <header className="flex items-center gap-3 px-5 pb-6">
+        <div>
+          <h1 className="text-xl font-bold tracking-tight text-foreground">Boost Activated</h1>
+          <p className="text-[12px] text-muted-foreground mt-0.5">Your entity is now boosted</p>
         </div>
-        <h2 className="text-xl font-bold text-tg-primary mb-2">Boost activated</h2>
-        <p className="text-sm text-tg-muted mb-5">
-          Source: {source}. The boosted label and ranking are now visible in discovery.
-        </p>
-        <div className="flex flex-col gap-2">
-          {entityId && (
-            <Link to={`/entity/${entityId}`} className={buttonStyles({ variant: 'primary', size: 'lg', fullWidth: true })}>
-              Open boosted entity
-            </Link>
-          )}
-          <Link to="/explore" className={buttonStyles({ variant: 'secondary', size: 'lg', fullWidth: true })}>
-            Back to Discover
+      </header>
+
+      <div className="px-4 space-y-4">
+        {/* Success card */}
+        <div className="rounded-2xl border border-border bg-card p-5 text-center">
+          <div className="w-20 h-20 rounded-full bg-emerald-500/15 flex items-center justify-center mx-auto mb-5">
+            <Rocket className="w-10 h-10 text-emerald-400" />
+          </div>
+          <h2 className="text-lg font-bold text-foreground mb-2">Boost activated</h2>
+          <p className="text-sm text-muted-foreground">
+            The boosted label and ranking are now visible in discovery.
+          </p>
+        </div>
+
+        {/* Actions */}
+        {entityId && (
+          <Link
+            to={`/entity/${entityId}`}
+            className="w-full flex items-center justify-center gap-2 h-[52px] rounded-2xl bg-primary text-primary-foreground font-bold text-[15px] transition-all active:scale-[0.97]"
+          >
+            Open Boosted Entity
           </Link>
-        </div>
-      </Card>
-    </PageShell>
+        )}
+        <Link
+          to="/explore"
+          className="w-full flex items-center justify-center gap-2 h-[52px] rounded-2xl bg-muted/60 text-foreground border border-border/50 font-bold text-[15px] transition-all active:scale-[0.97]"
+        >
+          Back to Discover
+        </Link>
+      </div>
+
+      <BottomNav />
+    </main>
   );
 };
 

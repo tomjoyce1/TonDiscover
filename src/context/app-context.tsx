@@ -3,6 +3,7 @@ import { categories } from '@/data/seeds/categories.ts';
 import { getEntities, searchEntities } from '@/data/repositories/entities-repository.ts';
 import { seededFeaturedContent } from '@/data/seeds/featured-content.ts';
 import { getRankedEntities } from '@/domain/ranking.ts';
+import { useTonConnect } from '@/hooks/useTonConnect.ts';
 import { readJSON, STORAGE_KEYS, writeJSON } from '@/services/storage/local-storage.ts';
 import {
   isSharedFeedEnabled,
@@ -10,6 +11,7 @@ import {
   writeSharedFeaturedOverrides,
 } from '@/services/storage/shared-featured-feed.ts';
 import type {
+  BoostEvent,
   BoostState,
   Entity,
   FavoritesState,
@@ -31,6 +33,7 @@ type AppStateContextProviderValue = {
   history: HistoryState;
   userPrefs: UserPrefs;
   boosts: Record<string, BoostState>;
+  boostEvents: BoostEvent[];
   hasCompletedOnboarding: boolean;
   completeOnboarding: (selectedCategories: string[]) => void;
   toggleFavorite: (entityId: string) => void;
@@ -38,12 +41,14 @@ type AppStateContextProviderValue = {
   recordOpen: (entityId: string) => void;
   recordLaunch: (entityId: string) => void;
   registerEntity: (payload: RegisterEntityInput) => Entity;
+  addBoostEvent: (event: BoostEvent) => void;
   deleteEntity: (entityId: string) => void;
   updateSavedEntity: (
     entityId: string,
-    payload: Partial<Pick<Entity, 'name' | 'category' | 'telegramUrl' | 'shortDescription' | 'tags'>>,
+    payload: Partial<Pick<Entity, 'name' | 'category' | 'telegramUrl' | 'shortDescription' | 'tags' | 'previewMediaUrl'>>,
   ) => void;
   setFeaturedContent: (payload: FeaturedContentInput) => FeaturedContent;
+  deleteFeaturedContent: (entityId: string) => void;
   setBoostState: (state: BoostState) => void;
   getBoostState: (entityId: string) => BoostState;
   isOwnedEntity: (entityId: string) => boolean;
@@ -96,6 +101,7 @@ const initialContext: AppStateContextProviderValue = {
   history: initialHistory,
   userPrefs: initialPrefs,
   boosts: {},
+  boostEvents: [],
   hasCompletedOnboarding: false,
   completeOnboarding: () => undefined,
   toggleFavorite: () => undefined,
@@ -105,11 +111,13 @@ const initialContext: AppStateContextProviderValue = {
   registerEntity: () => {
     throw new Error('AppStateProvider not mounted');
   },
+  addBoostEvent: () => undefined,
   deleteEntity: () => undefined,
   updateSavedEntity: () => undefined,
   setFeaturedContent: () => {
     throw new Error('AppStateProvider not mounted');
   },
+  deleteFeaturedContent: () => undefined,
   setBoostState: () => undefined,
   getBoostState: (entityId: string) => ({ entityId, status: 'inactive', source: 'mock' }),
   isOwnedEntity: () => false,
@@ -126,6 +134,7 @@ type AppStateProviderProps = {
 
 export const AppStateProvider = ({ children }: AppStateProviderProps) => {
   const seededEntities = useMemo(() => getEntities(), []);
+  const { walletAddress } = useTonConnect();
   const [registeredEntities, setRegisteredEntities] = useState<Entity[]>(() => {
     return readJSON(STORAGE_KEYS.registeredEntities, [] as Entity[]);
   });
@@ -149,14 +158,20 @@ export const AppStateProvider = ({ children }: AppStateProviderProps) => {
   const [boosts, setBoosts] = useState<Record<string, BoostState>>(() => {
     return readJSON(STORAGE_KEYS.boosts, {} as Record<string, BoostState>);
   });
+  const [boostEvents, setBoostEvents] = useState<BoostEvent[]>(() => {
+    return readJSON(STORAGE_KEYS.boostEvents, [] as BoostEvent[]);
+  });
+  const [deletedEntityIds, setDeletedEntityIds] = useState<string[]>(() => {
+    return readJSON(STORAGE_KEYS.deletedEntityIds, [] as string[]);
+  });
 
   const entities = useMemo(() => {
     const byId = new Map<string, Entity>();
     [...seededEntities, ...sharedRegisteredEntities, ...registeredEntities].forEach((entity) => {
       byId.set(entity.id, entity);
     });
-    return Array.from(byId.values());
-  }, [registeredEntities, seededEntities, sharedRegisteredEntities]);
+    return Array.from(byId.values()).filter((e) => !deletedEntityIds.includes(e.id));
+  }, [registeredEntities, seededEntities, sharedRegisteredEntities, deletedEntityIds]);
 
   const ownedEntityIds = useMemo(() => {
     return uniq([
@@ -174,8 +189,8 @@ export const AppStateProvider = ({ children }: AppStateProviderProps) => {
     [...seededFeaturedContent, ...featuredOverrides].forEach((item) => {
       byEntity.set(item.entityId, item);
     });
-    return Array.from(byEntity.values());
-  }, [featuredOverrides]);
+    return Array.from(byEntity.values()).filter((fc) => !deletedEntityIds.includes(fc.entityId));
+  }, [featuredOverrides, deletedEntityIds]);
 
   const mergeSharedFeaturedIntoLocal = useCallback((remoteFeatured: FeaturedContent[]) => {
     setFeaturedOverrides((previousState) => {
@@ -291,6 +306,7 @@ export const AppStateProvider = ({ children }: AppStateProviderProps) => {
       contentType: payload.contentType,
       previewText: payload.previewText,
       previewMediaUrl: payload.previewMediaUrl,
+      creatorWalletAddress: walletAddress?.toString(),
       editorialScore: 55,
       activityScore: 30,
       engagementScore: 25,
@@ -298,16 +314,22 @@ export const AppStateProvider = ({ children }: AppStateProviderProps) => {
 
     setRegisteredEntities((previousState) => [entity, ...previousState]);
     return entity;
+  }, [walletAddress]);
+
+  const addBoostEvent = useCallback((event: BoostEvent) => {
+    setBoostEvents((previousState) => [event, ...previousState]);
   }, []);
 
   const deleteEntity = useCallback((entityId: string) => {
     setRegisteredEntities((previousState) => previousState.filter((e) => e.id !== entityId));
     setFeaturedOverrides((previousState) => previousState.filter((fc) => fc.entityId !== entityId));
+    setOwnedBoostEntityIds((previousState) => previousState.filter((id) => id !== entityId));
+    setDeletedEntityIds((previousState) => uniq([...previousState, entityId]));
   }, []);
 
   const updateSavedEntity = useCallback((
     entityId: string,
-    payload: Partial<Pick<Entity, 'name' | 'category' | 'telegramUrl' | 'shortDescription' | 'tags'>>,
+    payload: Partial<Pick<Entity, 'name' | 'category' | 'telegramUrl' | 'shortDescription' | 'tags' | 'previewMediaUrl'>>,
   ) => {
     setRegisteredEntities((previousState) => previousState.map((entity) => {
       if (entity.id !== entityId) {
@@ -340,6 +362,10 @@ export const AppStateProvider = ({ children }: AppStateProviderProps) => {
     return next;
   }, []);
 
+  const deleteFeaturedContent = useCallback((entityId: string) => {
+    setFeaturedOverrides((previousState) => previousState.filter((item) => item.entityId !== entityId));
+  }, []);
+
   const setBoostState = useCallback((state: BoostState) => {
     setBoosts((previousState) => ({
       ...previousState,
@@ -360,6 +386,7 @@ export const AppStateProvider = ({ children }: AppStateProviderProps) => {
     setSharedRegisteredEntities([]);
     setFeaturedOverrides([]);
     setOwnedBoostEntityIds([]);
+    setDeletedEntityIds([]);
     setFavorites(initialFavorites);
     setHistory(initialHistory);
     setUserPrefs(initialPrefs);
@@ -409,6 +436,10 @@ export const AppStateProvider = ({ children }: AppStateProviderProps) => {
   useEffect(() => {
     writeJSON(STORAGE_KEYS.ownedBoostEntityIds, ownedBoostEntityIds);
   }, [ownedBoostEntityIds]);
+
+  useEffect(() => {
+    writeJSON(STORAGE_KEYS.deletedEntityIds, deletedEntityIds);
+  }, [deletedEntityIds]);
 
   useEffect(() => {
     if (!isSharedFeedEnabled) {
@@ -477,6 +508,10 @@ export const AppStateProvider = ({ children }: AppStateProviderProps) => {
     writeJSON(STORAGE_KEYS.boosts, boosts);
   }, [boosts]);
 
+  useEffect(() => {
+    writeJSON(STORAGE_KEYS.boostEvents, boostEvents);
+  }, [boostEvents]);
+
   const contextValue = useMemo<AppStateContextProviderValue>(() => {
     return {
       categories,
@@ -489,6 +524,7 @@ export const AppStateProvider = ({ children }: AppStateProviderProps) => {
       history,
       userPrefs,
       boosts,
+      boostEvents,
       hasCompletedOnboarding: userPrefs.onboardingCompleted,
       completeOnboarding,
       toggleFavorite,
@@ -496,9 +532,11 @@ export const AppStateProvider = ({ children }: AppStateProviderProps) => {
       recordOpen,
       recordLaunch,
       registerEntity,
+      addBoostEvent,
       deleteEntity,
       updateSavedEntity,
       setFeaturedContent,
+      deleteFeaturedContent,
       setBoostState,
       getBoostState,
       isOwnedEntity,
@@ -508,6 +546,7 @@ export const AppStateProvider = ({ children }: AppStateProviderProps) => {
     };
   }, [
     boosts,
+    boostEvents,
     completeOnboarding,
     entities,
     favorites,
@@ -523,11 +562,13 @@ export const AppStateProvider = ({ children }: AppStateProviderProps) => {
     recordLaunch,
     recordOpen,
     registerEntity,
+    addBoostEvent,
     deleteEntity,
     updateSavedEntity,
     search,
     setBoostState,
     setFeaturedContent,
+    deleteFeaturedContent,
     saveRecentSearch,
     toggleFavorite,
     userPrefs,
