@@ -1,53 +1,79 @@
 import { Link, useSearchParams } from 'react-router-dom';
-import { Rocket } from 'lucide-react';
-import { BottomNav } from '@/components/layout/BottomNav.tsx';
+import { Rocket, Sparkles } from 'lucide-react';
+import { PageShell } from '@/components/layout/PageShell.tsx';
+import { buttonStyles } from '@/components/ui/Button.tsx';
+import { Card } from '@/components/ui/Card.tsx';
+import { useAppState } from '@/context/app-context.tsx';
 
 const BoostSuccess = () => {
   const [searchParams] = useSearchParams();
-  const entityId = searchParams.get('entityId');
-  const source = searchParams.get('source') ?? 'mock';
+  const { entities, featuredContent } = useAppState();
+
+  const targetId = searchParams.get('targetId') ?? searchParams.get('entityId');
+  const requestedTargetType = searchParams.get('targetType');
+  const targetPost = targetId ? featuredContent.find((post) => post.id === targetId) : undefined;
+  const targetType = requestedTargetType === 'post'
+    || (requestedTargetType !== 'entity' && Boolean(targetPost))
+    ? 'post'
+    : 'entity';
+
+  const targetEntityId = targetType === 'post'
+    ? targetPost?.entityId
+    : targetId ?? undefined;
+  const targetEntity = targetEntityId ? entities.find((entity) => entity.id === targetEntityId) : undefined;
+  const source = searchParams.get('source') === 'ton' ? 'ton' : 'mock';
+  const targetName = targetType === 'post'
+    ? (targetPost?.title?.trim() || `${targetEntity?.name ?? 'Unknown'} post`)
+    : (targetEntity?.name ?? 'Unknown');
 
   return (
-    <main className="flex min-h-screen flex-col bg-background pb-24 pt-6">
-      {/* Header area — no back button, success state */}
-      <header className="flex items-center gap-3 px-5 pb-6">
-        <div>
-          <h1 className="text-xl font-bold tracking-tight text-foreground">Boost Activated</h1>
-          <p className="text-[12px] text-muted-foreground mt-0.5">Your entity is now boosted</p>
+    <PageShell
+      title="Boost Activated"
+      subtitle={targetType === 'post' ? 'Your post is now boosted.' : 'Your entity is now boosted.'}
+      backTo="/create/boost"
+    >
+      <Card variant="success" padding="lg" className="text-center">
+        <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-tg-success/20">
+          <Rocket className="h-10 w-10 text-tg-success" />
         </div>
-      </header>
+        <h2 className="mb-2 text-xl font-bold text-tg-primary">Boost live</h2>
+        <p className="text-sm text-tg-muted">
+          {targetName}
+        </p>
+        <p className="mt-1 text-xs text-tg-muted">
+          Source: {source === 'ton' ? 'TON payment' : 'Mock fallback'}
+        </p>
+      </Card>
 
-      <div className="px-4 space-y-4">
-        {/* Success card */}
-        <div className="rounded-2xl border border-border bg-card p-5 text-center">
-          <div className="w-20 h-20 rounded-full bg-emerald-500/15 flex items-center justify-center mx-auto mb-5">
-            <Rocket className="w-10 h-10 text-emerald-400" />
-          </div>
-          <h2 className="text-lg font-bold text-foreground mb-2">Boost activated</h2>
-          <p className="text-sm text-muted-foreground">
-            The boosted label and ranking are now visible in discovery.
-          </p>
+      <Card variant="boost" className="space-y-2">
+        <div className="flex items-center gap-2">
+          <Sparkles className="h-4 w-4 text-tg-boost" />
+          <p className="text-sm font-semibold text-tg-primary">What changed</p>
         </div>
+        <p className="text-sm text-tg-muted">
+          The boosted label and ranking are now prioritized in Discovery and Search.
+        </p>
+      </Card>
 
-        {/* Actions */}
-        {entityId && (
+      <div className="space-y-2">
+        {targetEntity && (
           <Link
-            to={`/entity/${entityId}`}
-            className="w-full flex items-center justify-center gap-2 h-[52px] rounded-2xl bg-primary text-primary-foreground font-bold text-[15px] transition-all active:scale-[0.97]"
+            to={targetType === 'post' && targetPost
+              ? `/explore?entityId=${encodeURIComponent(targetEntity.id)}&postId=${encodeURIComponent(targetPost.id)}`
+              : `/explore?entityId=${encodeURIComponent(targetEntity.id)}`}
+            className={buttonStyles({ variant: 'boost', size: 'lg', fullWidth: true })}
           >
-            Open Boosted Entity
+            {targetType === 'post' ? 'View Boosted Post' : 'View Boosted Entity'}
           </Link>
         )}
-        <Link
-          to="/explore"
-          className="w-full flex items-center justify-center gap-2 h-[52px] rounded-2xl bg-muted/60 text-foreground border border-border/50 font-bold text-[15px] transition-all active:scale-[0.97]"
-        >
+        <Link to="/explore" className={buttonStyles({ variant: 'secondary', size: 'lg', fullWidth: true })}>
           Back to Discover
         </Link>
+        <Link to="/create/boost" className={buttonStyles({ variant: 'secondary', size: 'lg', fullWidth: true })}>
+          Boost Another
+        </Link>
       </div>
-
-      <BottomNav />
-    </main>
+    </PageShell>
   );
 };
 

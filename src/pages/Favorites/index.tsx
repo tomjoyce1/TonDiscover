@@ -31,7 +31,11 @@ const Favorites = () => {
 
   const featuredByEntityId = useMemo(() => {
     const m = new Map<string, (typeof featuredContent)[number]>();
-    featuredContent.forEach((i) => m.set(i.entityId, i));
+    featuredContent.forEach((item) => {
+      if (!m.has(item.entityId)) {
+        m.set(item.entityId, item);
+      }
+    });
     return m;
   }, [featuredContent]);
 

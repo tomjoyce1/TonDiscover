@@ -1,0 +1,122 @@
+[
+  {
+    "id": "app-gamee-f1-racer",
+    "topic": "Formula_One",
+    "status": "fail",
+    "error": "No thumbnail/originalimage in summary"
+  },
+  {
+    "id": "app-gamee-moto-fx",
+    "topic": "Motorcycle_racing",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/MotoGP_-_Sachsenring_2018_%2830094664128%29.jpg/330px-MotoGP_-_Sachsenring_2018_%2830094664128%29.jpg",
+    "status": "ok"
+  },
+  {
+    "id": "app-gamee-squares",
+    "topic": "Tic-tac-toe",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/Tic_tac_toe.svg/330px-Tic_tac_toe.svg.png",
+    "status": "ok"
+  },
+  {
+    "id": "app-gamee-shoe-lover",
+    "topic": "Running_shoe",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Air_Jordan_1_Banned.jpg/330px-Air_Jordan_1_Banned.jpg",
+    "status": "ok"
+  },
+  {
+    "id": "app-gamee-hey-captain",
+    "topic": "Ship",
+    "status": "fail",
+    "error": "Image HTTP 429"
+  },
+  {
+    "id": "app-gamee-quick-ghost",
+    "topic": "Ghost",
+    "image": "https://upload.wikimedia.org/wikipedia/en/thumb/0/02/Hammersmith_Ghost.PNG/330px-Hammersmith_Ghost.PNG",
+    "status": "ok"
+  },
+  {
+    "id": "app-gamee-hausschwein-run",
+    "topic": "Pig",
+    "status": "fail",
+    "error": "Image HTTP 429"
+  },
+  {
+    "id": "app-gamee-mr-muscle",
+    "topic": "Bodybuilding",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Arnold_Schwarzenegger_1974.jpg/330px-Arnold_Schwarzenegger_1974.jpg",
+    "status": "ok"
+  },
+  {
+    "id": "app-gamee-snake",
+    "topic": "Snake_(video_game)",
+    "status": "fail",
+    "error": "No thumbnail/originalimage in summary"
+  },
+  {
+    "id": "app-gamee-three-plus-three",
+    "topic": "2048_(video_game)",
+    "status": "fail",
+    "error": "Image HTTP 429"
+  },
+  {
+    "id": "app-gamee-space-orbit",
+    "topic": "Outer_space",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Webb%27s_First_Deep_Field.jpg/330px-Webb%27s_First_Deep_Field.jpg",
+    "status": "ok"
+  },
+  {
+    "id": "app-gamee-aerial-dogfight",
+    "topic": "Dogfight",
+    "status": "fail",
+    "error": "Image HTTP 429"
+  },
+  {
+    "id": "app-gamee-football-star",
+    "topic": "Association_football",
+    "status": "fail",
+    "error": "Image HTTP 429"
+  },
+  {
+    "id": "app-gamee-gravity-ninja",
+    "topic": "Ninja",
+    "status": "fail",
+    "error": "Image HTTP 429"
+  },
+  {
+    "id": "app-gamee-hexatrion",
+    "topic": "Hexagon",
+    "status": "fail",
+    "error": "Image HTTP 429"
+  },
+  {
+    "id": "app-gamee-karate-kido",
+    "topic": "Karate",
+    "status": "fail",
+    "error": "Image HTTP 429"
+  },
+  {
+    "id": "app-gamee-kung-fu-inc",
+    "topic": "Kung_fu",
+    "status": "fail",
+    "error": "Image HTTP 429"
+  },
+  {
+    "id": "app-gamee-mars-rover",
+    "topic": "Mars_rover",
+    "status": "fail",
+    "error": "Image HTTP 429"
+  },
+  {
+    "id": "app-gamee-qubo",
+    "topic": "Cube",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Cube-h.svg/330px-Cube-h.svg.png",
+    "status": "ok"
+  },
+  {
+    "id": "app-gamee-rio-sprint",
+    "topic": "Sprint_(running)",
+    "status": "fail",
+    "error": "Image HTTP 429"
+  }
+]

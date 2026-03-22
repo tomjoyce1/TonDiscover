@@ -120,6 +120,29 @@ npm run public-app
 
 Share the ngrok app URL with your friend. Because `VITE_SHARED_FEED_URL=/shared-feed`, both users hit the same public app host and the same shared backend data.
 
+## Telegram scraper (demo data pull)
+
+Use a lightweight scraper to pull public Telegram metadata/posts and map them into `server/shared-feed.json`.
+
+Default run (uses `server/telegram-targets.json`):
+
+```bash
+npm run scrape:telegram
+```
+
+Custom handles:
+
+```bash
+npm run scrape:telegram -- toncoin telegram wallet
+```
+
+Useful flags:
+
+```bash
+npm run scrape:telegram -- --replace
+npm run scrape:telegram -- --targets server/telegram-targets.json --out server/shared-feed.json
+```
+
 ## Local run
 
 Install dependencies:

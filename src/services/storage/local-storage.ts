@@ -10,6 +10,7 @@ export const STORAGE_KEYS = {
   featuredOverrides: 'tondiscover:featuredOverrides',
   ownedBoostEntityIds: 'tondiscover:ownedBoostEntityIds',
   deletedEntityIds: 'tondiscover:deletedEntityIds',
+  deletedFeaturedIds: 'tondiscover:deletedFeaturedIds',
 } as const;
 
 export const readJSON = <T>(key: string, fallbackValue: T): T => {

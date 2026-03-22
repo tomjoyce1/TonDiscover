@@ -1,6 +1,50 @@
 {
   "featuredOverrides": [
     {
+      "id": "featured-custom-1774172160151-1774172186916",
+      "entityId": "custom-1774172160151",
+      "mode": "manual",
+      "contentType": "image",
+      "title": "UEFA Champions League",
+      "text": "Post to promote our football channel",
+      "mediaUrl": "https://cdn.pixabay.com/photo/2016/11/29/02/05/audience-1866738_1280.jpg"
+    },
+    {
+      "id": "featured-custom-1774171292627-1774171454224",
+      "entityId": "custom-1774171292627",
+      "mode": "manual",
+      "contentType": "video",
+      "title": "News about Google",
+      "text": "Come in this channel to see News about google tech",
+      "mediaUrl": "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4"
+    },
+    {
+      "id": "featured-custom-1774171210553-1774171225559",
+      "entityId": "custom-1774171210553",
+      "mode": "manual",
+      "contentType": "video",
+      "title": "ddjhd",
+      "text": "testpost",
+      "mediaUrl": "https://samplelib.com/lib/preview/mp4/sample-10s.mp4"
+    },
+    {
+      "id": "featured-custom-1774169402859-1774170027620",
+      "entityId": "custom-1774169402859",
+      "mode": "manual",
+      "contentType": "text",
+      "title": "placeholder",
+      "text": "test in image test in image test in image test in image test in image test in image test in image test in image test in image test in image test in image test in image test in image test in image test in image test in image test in image test in image test in image test in image"
+    },
+    {
+      "id": "featured-custom-1774169239210-1774169333557",
+      "entityId": "custom-1774169239210",
+      "mode": "manual",
+      "contentType": "video",
+      "title": "Champions League",
+      "text": "Channel about UEFA Champions League",
+      "mediaUrl": "https://youtu.be/2rHRrHzQcXA"
+    },
+    {
       "id": "featured-custom-1774108323120-1774108343099",
       "entityId": "custom-1774108323120",
       "mode": "manual",
@@ -65,23 +109,156 @@
       "title": "Ttttt",
       "text": "AAAAAAAAAAA",
       "mediaUrl": "F.bi"
+    },
+    {
+      "id": "featured-custom-1774164818432-1774164831117",
+      "entityId": "custom-1774164818432",
+      "mode": "manual",
+      "contentType": "text",
+      "title": "testpost",
+      "text": "test"
+    },
+    {
+      "id": "featured-tg-channel-toncoin",
+      "entityId": "tg-channel-toncoin",
+      "mode": "manual",
+      "contentType": "video",
+      "title": "🎬 Tech Updates EP2 | Roman Nguyen Yesterday we announced TON Rust Node. Today,...",
+      "mediaUrl": "https://cdn4.telesco.pe/file/97149a5990.mp4?token=kV6XknW-wALsuaZ5EIuIpKGVYRUP_gPOGjHlF2l2n6_JMm33vB7dXkm7eFReqL17edstyMiYdpDWxIcJRZWam7Eq_FLILN2LXd_6YnOTsm5QUX7lAu1ytmwJg9m5uZWV9AxFRaVZnWtWH-7hQSVNpTMrAXLAptBi9zuEsEWom7dS5HYZyD3s3Zvgrcjl_XdKMaZepJRPcIE59yYwqgFUNnSVlcfvO2sZpkFggvkNH9oKLxlNmP5mMJ1OPW7Fb8-FKpaG6qSETfq0ufmHbSVnsqw6pKsLTqUx9gxN6qsLLKqwbDJ5Ji7Pn6gyWN2kvifeAEnqlq0zCu6xU4cwX8h7TqBWjQylwUqANix9hM0jMWxt-mDiKxX-AepTq8wNDo9vuxuVUvWLc1nYIjTNoLnnCQUuZf1vohITX54vTGxVG33JWjzWtKf2NYmNhxbc3UPUJR3srImiZhEC_aC_IevFNqoF1unHIr7GGhHXZQkXWCeqr1LT_Gt-f7B1J_WhO1Tyqr03OEGLCfYJTUqJ6Vpe-j2CoE8nuw8_gKCg8suD71falkxa2RyfxAUPiTzHukAuxUI3o2OxPuTQ_-eRGGkcfYocdKvCXGCY0_yay2EWXqiezH-5Z_VckLu2_uNXUg2sldnU3w7-8Aa0pCn6lryPbP5-CGDX7A6qHIHeGt7lQ58"
+    },
+    {
+      "id": "featured-tg-channel-tonblockchain",
+      "entityId": "tg-channel-tonblockchain",
+      "mode": "manual",
+      "contentType": "video",
+      "title": "Meet the long awaited TVM update in mainnet It has undergone months of testing ...",
+      "mediaUrl": "https://cdn4.telesco.pe/file/5e54434b20.mp4?token=qw2GBIBH7rtHDZw-mik9Z4bei0pt-zmAHGlRsUnrvusHaW4BTucAOgzrQrCL44i5Fdk-PRD4h3bKcveAm4WPtkdMyOnS-KRPVov_cCY_Q9eXHNFGLIrsBZKcsij6O4-8IHqgZC66Fb5h2otTgRA_vHRVAjM9zte7pDvG5fpF-zmB12UGG4sEHhZ1XTg9_OPp6mXDhpFHWAIibhQnWYlq0i2c4YINLz0TQlYxtEsYeMn7x5pLqc-8eVnHMSaWCGpi6MDXwEWHV9WTCVrlD44HiG8sCVWywZg__7cnnZnSWdMdxXLrIuLHXbChZvPN2U7slzFIVCkWrESZiLGZLBBBPg"
+    },
+    {
+      "id": "featured-tg-channel-telegram",
+      "entityId": "tg-channel-telegram",
+      "mode": "manual",
+      "contentType": "video",
+      "title": "Gift Auctions. New collections of Telegram Gifts are now released in an auction...",
+      "mediaUrl": "https://cdn1.telesco.pe/file/7b19003140.mp4?token=lQTnP8hENJgiPHY1mdGfzWu2ifxKqPw7lbUIYpxHcrQwdYBVqatcxUtXEFNtEZN7x7UP-D8U0pcXYCHgm48ixy2oDyQWSsbCp8DP6macADEKcsq8U7xPV6YykSHgNZGGj6yUXaBRU18tMUYn18NSZceBKEb38ejLrD3bsShnguIhn-2MP4j1cZ85GZH8mrC3taqXiuPduO7qj4lIytoPNbDSLaBe6Pz_E4JgAEqSIxv_KmzZoPOuE9JGcpZ5usglud7aNcCNWAWVV8aHw6LtlvELpff9SLJZBsuTOo2iebQBkaGWR-srhwZnBz8HgY4TGMnG4A8356IwwfRA5EP_9g"
+    },
+    {
+      "id": "featured-tg-app-wallet",
+      "entityId": "tg-app-wallet",
+      "mode": "manual",
+      "contentType": "image",
+      "title": "💎 Buy and send USDT, Gold, Bitcoin, TON and other crypto.\n🌏 Trusted by 150M u...",
+      "mediaUrl": "https://cdn4.telesco.pe/file/DDtypsqsqDWBhr4Rp7pGY1p2SAqbJlcDqclBKQlbZUbuHxOfB14MO1E5A37-jSlnf90VLtn9SOwRgnmFyY4-xagu0hZ1QId7P4Yo2xKJLp2zCdCx8PwxAcUMlfJ_Gi9ZLcSGS4yttSIP7Oida3-Pogb8kNG196GwD5dVS2tA9RyRQdCDa7Y0S2DJHa30L8WLLwsQn1MlHQmqHfksHOtbCarQXrX6wpxVo1kLrMLV87TDudOgqT9Iq24KscWXUZvzmNgq8ZRZw-za8I0vsAGI92mtYrT2h_XLslIg1dzGHUnkwobaHvJnLGeAcd7i-Seh09jnZVk-2WWuVGrF-7J1kA.jpg"
+    },
+    {
+      "id": "featured-tg-app-gamee",
+      "entityId": "tg-app-gamee",
+      "mode": "manual",
+      "contentType": "image",
+      "title": "🎮 The biggest gaming platform on Telegram! 🔥\nJoin the community 👉 @gameechan...",
+      "mediaUrl": "https://cdn4.telesco.pe/file/Z4UNIcIpc6XfZLks6MwhvQ0H2BpYQcFdEfxr8oPDaKXbBem9uaVY8wu3tZqhjT7b1EmEm5rDPhKPWP6I7q2X-YkwU-CWbRnIy6_9nkYt82lLZQxNqSen7wdvQJSggSd39oO2R_Rs2hCaWQidgjIpPaRPFD4NUpZ433xvaGAUjFSB8YPXE-d6TsO0QFOCwRrSmSXLi62svU9c92ZKtyJTerElXcY5_dCQJs8PA9PMzHwZV2Qf_iHcgmcmtnQQK7ACZYwl_7RV5o8X9ztFzujE6xdASZu1aXsj6pHxdi8t3styn5EIfA4oOa5SgdPUTiTGGhO1yridoymvV3OZB-mMzw.jpg"
+    },
+    {
+      "id": "featured-custom-1774169871651-1774171029959",
+      "entityId": "custom-1774169871651",
+      "mode": "manual",
+      "contentType": "video",
+      "title": "Testing Garage",
+      "mediaUrl": "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4"
+    },
+    {
+      "id": "featured-custom-1774169871651-1774170930705",
+      "entityId": "custom-1774169871651",
+      "mode": "manual",
+      "contentType": "image",
+      "title": "Champions League Post",
+      "mediaUrl": "http://www.thebowlersarms.co.uk/sky-bt-sport-fixtures/attachment/uefa-champions-league-logo-wallpaper-3/"
+    },
+    {
+      "id": "featured-custom-1774169871651-1774170329961",
+      "entityId": "custom-1774169871651",
+      "mode": "manual",
+      "contentType": "video",
+      "title": "UEFA Champions League",
+      "text": "Channel about Champions League",
+      "mediaUrl": "https://logoeps.com/wp-content/uploads/2013/06/uefa-champions-league-eps-vector-logo.png"
+    },
+    {
+      "id": "featured-custom-1774171572079-1774171633441",
+      "entityId": "custom-1774171572079",
+      "mode": "manual",
+      "contentType": "video",
+      "title": "UEFA Champions League Post",
+      "text": "New post about Champions League",
+      "mediaUrl": "https://upload.wikimedia.org/wikipedia/commons/transcoded/d/d1/Arsenal-Tottenham_Carling_Cup_Second_Leg_End.ogv/Arsenal-Tottenham_Carling_Cup_Second_Leg_End.ogv.480p.vp9.webm"
+    },
+    {
+      "id": "featured-custom-1774175931950-1774175995765",
+      "entityId": "custom-1774175931950",
+      "mode": "manual",
+      "contentType": "text",
+      "title": "test",
+      "text": "test"
+    },
+    {
+      "id": "featured-custom-1774175931950-1774176183814",
+      "entityId": "custom-1774175931950",
+      "mode": "manual",
+      "contentType": "text",
+      "title": "testtest",
+      "text": "testtest"
     }
   ],
   "registeredEntities": [
     {
-      "id": "custom-1774122152747",
+      "id": "custom-1774175931950",
       "type": "channel",
-      "name": "Tom's Channel Hack",
+      "name": "test",
       "category": "DeFi",
       "tags": [
-        "toncoin"
+        "test"
       ],
-      "shortDescription": "Toncoin channel to learn, share info and have fun.",
-      "telegramUrl": "https://t.me/toncoin",
-      "contentType": "text",
+      "shortDescription": "tes",
+      "telegramUrl": "test",
+      "contentType": "image",
+      "previewMediaUrl": "test",
+      "editorialScore": 55,
+      "activityScore": 30,
+      "engagementScore": 25
+    },
+    {
+      "id": "custom-1774176173192",
+      "type": "channel",
+      "name": "test test",
+      "category": "DeFi",
+      "tags": [
+        "test"
+      ],
+      "shortDescription": "test",
+      "telegramUrl": "test",
+      "contentType": "image",
+      "previewMediaUrl": "test",
       "editorialScore": 55,
       "activityScore": 30,
       "engagementScore": 25
     }
+  ],
+  "boosts": {
+    "custom-1774175931950": {
+      "entityId": "custom-1774175931950",
+      "status": "active",
+      "startedAt": "2026-03-22T10:43:19.630Z",
+      "expiresAt": "2026-03-22T16:43:19.630Z",
+      "source": "mock"
+    }
+  },
+  "deletedFeaturedIds": [
+    "featured-custom-1774174257475-1774174383370",
+    "featured-custom-1774175241878-1774175328803"
+  ],
+  "deletedEntityIds": [
+    "custom-1774173646049",
+    "custom-1774175241878",
+    "custom-1774174257475"
   ]
 }

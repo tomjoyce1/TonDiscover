@@ -53,7 +53,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Token Map",
     "text": "Token Map publishes crypto and TON ecosystem updates for Telegram users.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/55738493"
+    "mediaUrl": "/seed-media/entities-real/ch-maptoken.jpg"
   },
   {
     "id": "ft-ch-toncoin",
@@ -80,7 +80,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: ICO Analytics (StandWithUkraine 🇺🇦)",
     "text": "ICO Analytics (StandWithUkraine 🇺🇦) publishes crypto and TON ecosystem updates for Telegram users.",
-    "mediaUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/1.png"
+    "mediaUrl": "/seed-media/entities-real/ch-ico_analytic.jpg"
   },
   {
     "id": "ft-ch-cryptoboten",
@@ -107,7 +107,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: OKX Announcements",
     "text": "OKX Announcements publishes crypto and TON ecosystem updates for Telegram users.",
-    "mediaUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/1.png"
+    "mediaUrl": "/seed-media/entities-real/ch-okxannouncements.jpg"
   },
   {
     "id": "ft-ch-cryptoworldnews",
@@ -125,7 +125,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: TON Diamonds NFT",
     "text": "TON Diamonds NFT publishes crypto and TON ecosystem updates for Telegram users.",
-    "mediaUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/11419.png"
+    "mediaUrl": "/seed-media/entities-real/ch-tondiamonds.jpg"
   },
   {
     "id": "ft-ch-decenterorg",
@@ -134,7 +134,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: DeCenter – Blockchain and Bitcoin",
     "text": "DeCenter – Blockchain and Bitcoin publishes crypto and TON ecosystem updates for Telegram users.",
-    "mediaUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/11419.png"
+    "mediaUrl": "/seed-media/entities-real/ch-decenterorg.jpg"
   },
   {
     "id": "ft-ch-crypto_scalp_signals",
@@ -143,7 +143,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Crypto Scalp Signals",
     "text": "Crypto Scalp Signals publishes crypto and TON ecosystem updates for Telegram users.",
-    "mediaUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png"
+    "mediaUrl": "/seed-media/entities-real/ch-crypto_scalp_signals.jpg"
   },
   {
     "id": "ft-ch-oneinchnetworknews",
@@ -152,7 +152,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: 1inch",
     "text": "1inch publishes crypto and TON ecosystem updates for Telegram users.",
-    "mediaUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/1.png"
+    "mediaUrl": "/seed-media/entities-real/ch-oneinchnetworknews.jpg"
   },
   {
     "id": "ft-ch-changelly",
@@ -161,7 +161,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Changelly",
     "text": "Changelly publishes crypto and TON ecosystem updates for Telegram users.",
-    "mediaUrl": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/269.png"
+    "mediaUrl": "/seed-media/entities-real/ch-changelly.svg"
   },
   {
     "id": "ft-ch-wavesnews",
@@ -170,7 +170,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Waves 🌊",
     "text": "Waves 🌊 publishes crypto and TON ecosystem updates for Telegram users.",
-    "mediaUrl": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/294.png"
+    "mediaUrl": "/seed-media/entities-real/ch-wavesnews.jpg"
   },
   {
     "id": "ft-ch-www_bitcoin_com",
@@ -179,7 +179,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Bitcoin.com News",
     "text": "Bitcoin.com News publishes crypto and TON ecosystem updates for Telegram users.",
-    "mediaUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/1.png"
+    "mediaUrl": "/seed-media/entities-real/ch-www_bitcoin_com.jpg"
   },
   {
     "id": "ft-ch-xkcdchannel",
@@ -188,7 +188,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: xkcd",
     "text": "xkcd shares tech updates, tooling tips, and product releases.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/44036562"
+    "mediaUrl": "/seed-media/entities-real/ch-xkcdchannel.jpg"
   },
   {
     "id": "ft-ch-linuxgram",
@@ -197,7 +197,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Linuxgram 🐧",
     "text": "Linuxgram 🐧 shares tech updates, tooling tips, and product releases.",
-    "mediaUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/11419.png"
+    "mediaUrl": "/seed-media/entities-real/ch-linuxgram.jpg"
   },
   {
     "id": "ft-ch-androidmalware",
@@ -206,7 +206,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Android Security & Malware",
     "text": "Android Security & Malware shares tech updates, tooling tips, and product releases.",
-    "mediaUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/1.png"
+    "mediaUrl": "/seed-media/entities-real/ch-androidmalware.jpg"
   },
   {
     "id": "ft-ch-hacker_news_feed",
@@ -215,7 +215,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Hacker News",
     "text": "Hacker News shares tech updates, tooling tips, and product releases.",
-    "mediaUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/1031.png"
+    "mediaUrl": "/seed-media/entities-real/ch-hacker_news_feed.jpg"
   },
   {
     "id": "ft-ch-front_end_first",
@@ -224,7 +224,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Front End World",
     "text": "Front End World shares tech updates, tooling tips, and product releases.",
-    "mediaUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/8104.png"
+    "mediaUrl": "/seed-media/entities-real/ch-front_end_first.jpg"
   },
   {
     "id": "ft-ch-thedevs",
@@ -233,7 +233,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: The Devs",
     "text": "The Devs shares tech updates, tooling tips, and product releases.",
-    "mediaUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/1274.png"
+    "mediaUrl": "/seed-media/entities-real/ch-thedevs.jpg"
   },
   {
     "id": "ft-ch-telegram",
@@ -242,7 +242,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Telegram News",
     "text": "Telegram News shares tech updates, tooling tips, and product releases.",
-    "mediaUrl": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/269.png"
+    "mediaUrl": "/seed-media/entities-real/ch-telegram.jpg"
   },
   {
     "id": "ft-ch-computer_science_and_programming",
@@ -251,7 +251,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Computer Science and Programming",
     "text": "Computer Science and Programming shares tech updates, tooling tips, and product releases.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/1728152"
+    "mediaUrl": "/seed-media/entities-real/ch-computer_science_and_programming.jpg"
   },
   {
     "id": "ft-ch-programmingtip",
@@ -260,7 +260,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Programming Tips 💡",
     "text": "Programming Tips 💡 shares tech updates, tooling tips, and product releases.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/32131462"
+    "mediaUrl": "/seed-media/entities-real/ch-programmingtip.jpg"
   },
   {
     "id": "ft-ch-telegramtips",
@@ -269,7 +269,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Telegram Tips",
     "text": "Telegram Tips shares tech updates, tooling tips, and product releases.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/9919"
+    "mediaUrl": "/seed-media/entities-real/ch-telegramtips.jpg"
   },
   {
     "id": "ft-ch-botnews",
@@ -278,7 +278,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: BotNews",
     "text": "BotNews shares tech updates, tooling tips, and product releases.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/6154722"
+    "mediaUrl": "/seed-media/entities-real/ch-botnews.jpg"
   },
   {
     "id": "ft-ch-sysadm_in_channel",
@@ -287,7 +287,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Sys-Admin InfoSec",
     "text": "Sys-Admin InfoSec shares tech updates, tooling tips, and product releases.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/9919"
+    "mediaUrl": "/seed-media/entities-real/ch-sysadm_in_channel.jpg"
   },
   {
     "id": "ft-ch-androiddeveu",
@@ -296,7 +296,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Android Developers",
     "text": "Android Developers shares tech updates, tooling tips, and product releases.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/40567308"
+    "mediaUrl": "/seed-media/entities-real/ch-androiddeveu.jpg"
   },
   {
     "id": "ft-ch-techsafrica",
@@ -305,7 +305,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Techspace Africa",
     "text": "Techspace Africa shares tech updates, tooling tips, and product releases.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/22929955"
+    "mediaUrl": "/seed-media/entities-real/ch-techsafrica.jpg"
   },
   {
     "id": "ft-ch-ml_world",
@@ -314,7 +314,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Machine Learning World",
     "text": "Machine Learning World shares tech updates, tooling tips, and product releases.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/22929955"
+    "mediaUrl": "/seed-media/entities-real/ch-ml_world.jpg"
   },
   {
     "id": "ft-ch-ramikrispinds",
@@ -323,7 +323,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Rami Krispin's Data Science Channel",
     "text": "Rami Krispin's Data Science Channel shares tech updates, tooling tips, and product releases.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/40567308"
+    "mediaUrl": "/seed-media/entities-real/ch-ramikrispinds.jpg"
   },
   {
     "id": "ft-ch-fosspost",
@@ -332,7 +332,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: FOSS Post",
     "text": "FOSS Post shares tech updates, tooling tips, and product releases.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/40567308"
+    "mediaUrl": "/seed-media/entities-real/ch-fosspost.jpg"
   },
   {
     "id": "ft-ch-androidut",
@@ -341,7 +341,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Android Update Tracker",
     "text": "Android Update Tracker shares tech updates, tooling tips, and product releases.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/1728152"
+    "mediaUrl": "/seed-media/entities-real/ch-androidut.jpg"
   },
   {
     "id": "ft-ch-whatstechblog",
@@ -350,7 +350,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: WhatsTech | La tecnologia con te",
     "text": "WhatsTech | La tecnologia con te shares tech updates, tooling tips, and product releases.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/32131462"
+    "mediaUrl": "/seed-media/entities-real/ch-whatstechblog.jpg"
   },
   {
     "id": "ft-ch-dev_useful_stuff",
@@ -359,7 +359,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Dev Useful Stuff",
     "text": "Dev Useful Stuff shares tech updates, tooling tips, and product releases.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/9919"
+    "mediaUrl": "/seed-media/entities-real/ch-dev_useful_stuff.jpg"
   },
   {
     "id": "ft-ch-plusmsgr",
@@ -368,7 +368,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Plus Messenger official",
     "text": "Plus Messenger official highlights community conversations and trending posts.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/26109788"
+    "mediaUrl": "/seed-media/entities-real/ch-plusmsgr.jpg"
   },
   {
     "id": "ft-ch-snakers4",
@@ -377,7 +377,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Spark in me",
     "text": "Spark in me highlights community conversations and trending posts.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/22929955"
+    "mediaUrl": "/seed-media/entities-real/ch-snakers4.jpg"
   },
   {
     "id": "ft-ch-star_citizen",
@@ -386,7 +386,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Star Citizen",
     "text": "Star Citizen highlights community conversations and trending posts.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/60309326"
+    "mediaUrl": "/seed-media/entities-real/ch-star_citizen.jpg"
   },
   {
     "id": "ft-ch-appstoredeals",
@@ -395,7 +395,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: App Store Deals",
     "text": "App Store Deals highlights community conversations and trending posts.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/44036562"
+    "mediaUrl": "/seed-media/entities-real/ch-appstoredeals.jpg"
   },
   {
     "id": "ft-ch-stablegram",
@@ -404,7 +404,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Stablegram — Web3 Jobs",
     "text": "Stablegram — Web3 Jobs highlights community conversations and trending posts.",
-    "mediaUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/11419.png"
+    "mediaUrl": "/seed-media/entities-real/ch-stablegram.jpg"
   },
   {
     "id": "ft-ch-investofeedsignal",
@@ -413,7 +413,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: InvestoFeeds Community",
     "text": "InvestoFeeds Community highlights community conversations and trending posts.",
-    "mediaUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/1.png"
+    "mediaUrl": "/seed-media/entities-real/ch-investofeedsignal.jpg"
   },
   {
     "id": "ft-ch-hashexannouncements",
@@ -422,7 +422,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: HashEx Blockchain Security Announcements",
     "text": "HashEx Blockchain Security Announcements highlights community conversations and trending posts.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/1728152"
+    "mediaUrl": "/seed-media/entities-real/ch-hashexannouncements.jpg"
   },
   {
     "id": "ft-ch-catchain",
@@ -431,7 +431,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: CAT — TON Validator, Apps and News",
     "text": "CAT — TON Validator, Apps and News highlights community conversations and trending posts.",
-    "mediaUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/11419.png"
+    "mediaUrl": "/seed-media/entities-real/ch-catchain.jpg"
   },
   {
     "id": "ft-ch-web_3_pulse",
@@ -440,7 +440,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Web3 Pulse",
     "text": "Web3 Pulse highlights community conversations and trending posts.",
-    "mediaUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/11419.png"
+    "mediaUrl": "/seed-media/entities-real/ch-web_3_pulse.jpg"
   },
   {
     "id": "ft-ch-ptpatriots",
@@ -449,7 +449,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Prime Time Patriots",
     "text": "Prime Time Patriots highlights community conversations and trending posts.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/32131462"
+    "mediaUrl": "/seed-media/entities-real/ch-ptpatriots.jpg"
   },
   {
     "id": "ft-ch-theijr",
@@ -458,7 +458,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Independent Journal Review",
     "text": "Independent Journal Review highlights community conversations and trending posts.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/6154722"
+    "mediaUrl": "/seed-media/entities-real/ch-theijr.jpg"
   },
   {
     "id": "ft-ch-notboring_riga",
@@ -467,7 +467,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: not boring → Riga",
     "text": "not boring → Riga highlights community conversations and trending posts.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/2931827"
+    "mediaUrl": "/seed-media/entities-real/ch-notboring_riga.jpg"
   },
   {
     "id": "ft-ch-insidekonstantinsrussia",
@@ -476,7 +476,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: INSIDE RUSSIA",
     "text": "INSIDE RUSSIA highlights community conversations and trending posts.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/2931827"
+    "mediaUrl": "/seed-media/entities-real/ch-insidekonstantinsrussia.jpg"
   },
   {
     "id": "ft-ch-uinhurricane",
@@ -485,7 +485,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: U In Hurricane [EN]",
     "text": "U In Hurricane [EN] highlights community conversations and trending posts.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/9919"
+    "mediaUrl": "/seed-media/entities-real/ch-uinhurricane.jpg"
   },
   {
     "id": "ft-ch-midnightriderchannel",
@@ -494,7 +494,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Midnight Rider Channel 🇺🇲",
     "text": "Midnight Rider Channel 🇺🇲 highlights community conversations and trending posts.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/2931827"
+    "mediaUrl": "/seed-media/entities-real/ch-midnightriderchannel.jpg"
   },
   {
     "id": "ft-ch-neuralfan",
@@ -503,7 +503,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Neuralfan",
     "text": "Neuralfan highlights community conversations and trending posts.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/60309326"
+    "mediaUrl": "/seed-media/entities-real/ch-neuralfan.jpg"
   },
   {
     "id": "ft-ch-artificial_intelligence_media",
@@ -512,7 +512,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: AI News & Trends",
     "text": "AI News & Trends highlights community conversations and trending posts.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/40567308"
+    "mediaUrl": "/seed-media/entities-real/ch-artificial_intelligence_media.jpg"
   },
   {
     "id": "ft-ch-fxtmglobal",
@@ -521,7 +521,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: FXTM",
     "text": "FXTM highlights community conversations and trending posts.",
-    "mediaUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/1.png"
+    "mediaUrl": "/seed-media/entities-real/ch-fxtmglobal.jpg"
   },
   {
     "id": "ft-ch-sgcareers",
@@ -530,7 +530,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Singapore Careers and Job Opportunities - sgCareers",
     "text": "Singapore Careers and Job Opportunities - sgCareers highlights community conversations and trending posts.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/526301"
+    "mediaUrl": "/seed-media/entities-real/ch-sgcareers.jpg"
   },
   {
     "id": "ft-ch-scanfinjapanesecandlestick",
@@ -539,7 +539,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: ScanFin - Japanese Candlestick Scanner",
     "text": "ScanFin - Japanese Candlestick Scanner highlights community conversations and trending posts.",
-    "mediaUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/3408.png"
+    "mediaUrl": "/seed-media/entities-real/ch-scanfinjapanesecandlestick.jpg"
   },
   {
     "id": "ft-ch-quote",
@@ -548,7 +548,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Quote — motivation, wisdom, inspiration",
     "text": "Quote — motivation, wisdom, inspiration publishes educational resources and explainers for learners.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/33657091"
+    "mediaUrl": "/seed-media/entities-real/ch-quote.jpg"
   },
   {
     "id": "ft-ch-physics",
@@ -557,7 +557,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Physics",
     "text": "Physics publishes educational resources and explainers for learners.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/9287040"
+    "mediaUrl": "/seed-media/entities-real/ch-physics.jpg"
   },
   {
     "id": "ft-ch-physicsonfingers",
@@ -566,7 +566,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Physics on fingers",
     "text": "Physics on fingers publishes educational resources and explainers for learners.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/3260308"
+    "mediaUrl": "/seed-media/entities-real/ch-physicsonfingers.jpg"
   },
   {
     "id": "ft-ch-discudemy_com",
@@ -575,7 +575,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: CouponAmI - Free Premium Udemy Courses",
     "text": "CouponAmI - Free Premium Udemy Courses publishes educational resources and explainers for learners.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/19177628"
+    "mediaUrl": "/seed-media/entities-real/ch-discudemy_com.jpg"
   },
   {
     "id": "ft-ch-sgtuitions",
@@ -584,7 +584,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: 🏆 Singapore Tuition Assignments Jobs - sgTuitions",
     "text": "🏆 Singapore Tuition Assignments Jobs - sgTuitions publishes educational resources and explainers for learners.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/26109788"
+    "mediaUrl": "/seed-media/entities-real/ch-sgtuitions.jpg"
   },
   {
     "id": "ft-ch-internationalgeographic",
@@ -593,7 +593,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: International Geographic",
     "text": "International Geographic publishes educational resources and explainers for learners.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/9287040"
+    "mediaUrl": "/seed-media/entities-real/ch-internationalgeographic.jpg"
   },
   {
     "id": "ft-ch-interesting",
@@ -602,7 +602,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Interesting 💡😍",
     "text": "Interesting 💡😍 publishes educational resources and explainers for learners.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/44036562"
+    "mediaUrl": "/seed-media/entities-real/ch-interesting.jpg"
   },
   {
     "id": "ft-ch-studyqacom",
@@ -611,7 +611,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: StudyQA.com",
     "text": "StudyQA.com publishes educational resources and explainers for learners.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/41793228"
+    "mediaUrl": "/seed-media/entities-real/ch-studyqacom.jpg"
   },
   {
     "id": "ft-ch-amenglish",
@@ -620,7 +620,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: American English",
     "text": "American English publishes educational resources and explainers for learners.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/41793228"
+    "mediaUrl": "/seed-media/entities-real/ch-amenglish.jpg"
   },
   {
     "id": "ft-ch-learnrcrussian",
@@ -629,7 +629,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Learn RCRussian🤍💙❤️",
     "text": "Learn RCRussian🤍💙❤️ publishes educational resources and explainers for learners.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/25722468"
+    "mediaUrl": "/seed-media/entities-real/ch-learnrcrussian.jpg"
   },
   {
     "id": "ft-ch-tandroidapk",
@@ -638,7 +638,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Telegram APKs for Android",
     "text": "Telegram APKs for Android publishes educational resources and explainers for learners.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/25722468"
+    "mediaUrl": "/seed-media/entities-real/ch-tandroidapk.jpg"
   },
   {
     "id": "ft-ch-wall_e",
@@ -647,7 +647,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: WALL-E 🤖 | AI News & Robots",
     "text": "WALL-E 🤖 | AI News & Robots publishes educational resources and explainers for learners.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/9287040"
+    "mediaUrl": "/seed-media/entities-real/ch-wall_e.jpg"
   },
   {
     "id": "ft-ch-mytonwalleten",
@@ -656,7 +656,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: MyTonWallet · News",
     "text": "MyTonWallet · News publishes educational resources and explainers for learners.",
-    "mediaUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/11419.png"
+    "mediaUrl": "/seed-media/entities-real/ch-mytonwalleten.jpg"
   },
   {
     "id": "ft-ch-thedailyton",
@@ -665,7 +665,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: The Daily TON | News",
     "text": "The Daily TON | News publishes educational resources and explainers for learners.",
-    "mediaUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/11419.png"
+    "mediaUrl": "/seed-media/entities-real/ch-thedailyton.jpg"
   },
   {
     "id": "ft-ch-mexcofficialnews",
@@ -674,7 +674,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: MEXC Community Channel",
     "text": "MEXC Community Channel publishes educational resources and explainers for learners.",
-    "mediaUrl": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/544.png"
+    "mediaUrl": "/seed-media/entities-real/ch-mexcofficialnews.svg"
   },
   {
     "id": "ft-ch-cryptocurrency_btc",
@@ -683,7 +683,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Cryptocurrency Bitcoin NEWS",
     "text": "Cryptocurrency Bitcoin NEWS publishes educational resources and explainers for learners.",
-    "mediaUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/1.png"
+    "mediaUrl": "/seed-media/entities-real/ch-cryptocurrency_btc.jpg"
   },
   {
     "id": "ft-ch-whitebit",
@@ -692,7 +692,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: WhiteBIT News",
     "text": "WhiteBIT News publishes educational resources and explainers for learners.",
-    "mediaUrl": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/425.png"
+    "mediaUrl": "/seed-media/entities-real/ch-whitebit.jpg"
   },
   {
     "id": "ft-ch-ntdnews",
@@ -701,7 +701,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: NTD",
     "text": "NTD publishes educational resources and explainers for learners.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/41793228"
+    "mediaUrl": "/seed-media/entities-real/ch-ntdnews.jpg"
   },
   {
     "id": "ft-ch-tommyrobinsonnews",
@@ -710,7 +710,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Tommy Robinson News",
     "text": "Tommy Robinson News publishes educational resources and explainers for learners.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/41793228"
+    "mediaUrl": "/seed-media/entities-real/ch-tommyrobinsonnews.jpg"
   },
   {
     "id": "ft-ch-sgtnewsnetwork",
@@ -719,7 +719,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Sergeant News Network 🇺🇸",
     "text": "Sergeant News Network 🇺🇸 publishes educational resources and explainers for learners.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/25722468"
+    "mediaUrl": "/seed-media/entities-real/ch-sgtnewsnetwork.jpg"
   },
   {
     "id": "ft-ch-yegor256news",
@@ -728,7 +728,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: @yegor256 news",
     "text": "@yegor256 news delivers regular news updates and key headlines.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/44036562"
+    "mediaUrl": "/seed-media/entities-real/ch-yegor256news.jpg"
   },
   {
     "id": "ft-ch-insiderpaper",
@@ -737,7 +737,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Insider Paper",
     "text": "Insider Paper delivers regular news updates and key headlines.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/44036562"
+    "mediaUrl": "/seed-media/entities-real/ch-insiderpaper.jpg"
   },
   {
     "id": "ft-ch-warmonitors",
@@ -746,7 +746,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: War Monitor",
     "text": "War Monitor delivers regular news updates and key headlines.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/32131462"
+    "mediaUrl": "/seed-media/entities-real/ch-warmonitors.jpg"
   },
   {
     "id": "ft-ch-govsg",
@@ -755,7 +755,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: gov.sg",
     "text": "gov.sg delivers regular news updates and key headlines.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/3260308"
+    "mediaUrl": "/seed-media/entities-real/ch-govsg.jpg"
   },
   {
     "id": "ft-ch-disclosetv",
@@ -764,7 +764,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Disclose.tv",
     "text": "Disclose.tv delivers regular news updates and key headlines.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/3260308"
+    "mediaUrl": "/seed-media/entities-real/ch-disclosetv.jpg"
   },
   {
     "id": "ft-ch-tuckercarlsonnetwork",
@@ -773,7 +773,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Tucker Carlson",
     "text": "Tucker Carlson delivers regular news updates and key headlines.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/526301"
+    "mediaUrl": "/seed-media/entities-real/ch-tuckercarlsonnetwork.jpg"
   },
   {
     "id": "ft-ch-bricsnews",
@@ -782,7 +782,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: BRICS News",
     "text": "BRICS News delivers regular news updates and key headlines.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/3260308"
+    "mediaUrl": "/seed-media/entities-real/ch-bricsnews.jpg"
   },
   {
     "id": "ft-ch-project_veritas",
@@ -791,7 +791,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Project Veritas",
     "text": "Project Veritas delivers regular news updates and key headlines.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/3260308"
+    "mediaUrl": "/seed-media/entities-real/ch-project_veritas.jpg"
   },
   {
     "id": "ft-ch-wethemedia",
@@ -800,7 +800,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: We The Media",
     "text": "We The Media delivers regular news updates and key headlines.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/9287040"
+    "mediaUrl": "/seed-media/entities-real/ch-wethemedia.jpg"
   },
   {
     "id": "ft-ch-oanntv",
@@ -809,7 +809,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: One America News Network",
     "text": "One America News Network delivers regular news updates and key headlines.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/3260308"
+    "mediaUrl": "/seed-media/entities-real/ch-oanntv.jpg"
   },
   {
     "id": "ft-ch-hnaftali",
@@ -818,7 +818,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Hananya Naftali - Israel News",
     "text": "Hananya Naftali - Israel News delivers regular news updates and key headlines.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/3260308"
+    "mediaUrl": "/seed-media/entities-real/ch-hnaftali.jpg"
   },
   {
     "id": "ft-ch-gatewaypunditofficial",
@@ -827,7 +827,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Gateway Pundit",
     "text": "Gateway Pundit delivers regular news updates and key headlines.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/3260308"
+    "mediaUrl": "/seed-media/entities-real/ch-gatewaypunditofficial.jpg"
   },
   {
     "id": "ft-ch-intelslava",
@@ -836,7 +836,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Intel Slava",
     "text": "Intel Slava delivers regular news updates and key headlines.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/3260308"
+    "mediaUrl": "/seed-media/entities-real/ch-intelslava.jpg"
   },
   {
     "id": "ft-ch-nytimes",
@@ -845,7 +845,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: The New York Times",
     "text": "The New York Times delivers regular news updates and key headlines.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/19177628"
+    "mediaUrl": "/seed-media/entities-real/ch-nytimes.jpg"
   },
   {
     "id": "ft-ch-worldnews",
@@ -854,7 +854,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: World News [Breaking News]",
     "text": "World News [Breaking News] delivers regular news updates and key headlines.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/3260308"
+    "mediaUrl": "/seed-media/entities-real/ch-worldnews.jpg"
   },
   {
     "id": "ft-ch-westernjournal",
@@ -863,7 +863,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: The Western Journal",
     "text": "The Western Journal delivers regular news updates and key headlines.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/16956787"
+    "mediaUrl": "/seed-media/entities-real/ch-westernjournal.jpg"
   },
   {
     "id": "ft-ch-epochtimes",
@@ -872,7 +872,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: The Epoch Times",
     "text": "The Epoch Times delivers regular news updates and key headlines.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/3260308"
+    "mediaUrl": "/seed-media/entities-real/ch-epochtimes.jpg"
   },
   {
     "id": "ft-ch-daily_caller",
@@ -881,7 +881,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Daily Caller",
     "text": "Daily Caller delivers regular news updates and key headlines.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/3260308"
+    "mediaUrl": "/seed-media/entities-real/ch-daily_caller.jpg"
   },
   {
     "id": "ft-ch-infodefengland",
@@ -890,7 +890,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: InfoDefenseENGLISH",
     "text": "InfoDefenseENGLISH delivers regular news updates and key headlines.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/3260308"
+    "mediaUrl": "/seed-media/entities-real/ch-infodefengland.jpg"
   },
   {
     "id": "ft-ch-realdailywire",
@@ -899,7 +899,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Daily Wire Junkies",
     "text": "Daily Wire Junkies delivers regular news updates and key headlines.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/3260308"
+    "mediaUrl": "/seed-media/entities-real/ch-realdailywire.jpg"
   },
   {
     "id": "ft-app-gamee-f1-racer",
@@ -908,7 +908,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: F1 Racer",
     "text": "F1 Racer is a racing Telegram game playable in-app.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/3260308"
+    "mediaUrl": "/seed-media/entities-real/app-gamee-f1-racer.jpg"
   },
   {
     "id": "ft-app-gamee-moto-fx",
@@ -917,7 +917,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Moto FX",
     "text": "Moto FX is a arcades Telegram game playable in-app.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/3260308"
+    "mediaUrl": "/seed-media/entities-real/app-gamee-moto-fx.jpg"
   },
   {
     "id": "ft-app-gamee-squares",
@@ -926,7 +926,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Squares",
     "text": "Squares is a three in a row Telegram game playable in-app.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/3260308"
+    "mediaUrl": "/seed-media/entities-real/app-gamee-squares.jpg"
   },
   {
     "id": "ft-app-gamee-shoe-lover",
@@ -935,7 +935,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Shoe Lover",
     "text": "Shoe Lover is a jump and run Telegram game playable in-app.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/3260308"
+    "mediaUrl": "/seed-media/entities-real/app-gamee-shoe-lover.jpg"
   },
   {
     "id": "ft-app-gamee-hey-captain",
@@ -944,7 +944,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Hey Captain!",
     "text": "Hey Captain! is a arcades Telegram game playable in-app.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/3260308"
+    "mediaUrl": "/seed-media/entities-real/app-gamee-hey-captain.jpg"
   },
   {
     "id": "ft-app-gamee-quick-ghost",
@@ -953,7 +953,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Quick Ghost",
     "text": "Quick Ghost is a arcades Telegram game playable in-app.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/3260308"
+    "mediaUrl": "/seed-media/entities-real/app-gamee-quick-ghost.jpg"
   },
   {
     "id": "ft-app-gamee-hausschwein-run",
@@ -962,7 +962,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Hausschwein Run",
     "text": "Hausschwein Run is a arcades Telegram game playable in-app.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/9950313"
+    "mediaUrl": "/seed-media/entities-real/app-gamee-hausschwein-run.jpg"
   },
   {
     "id": "ft-app-gamee-mr-muscle",
@@ -971,7 +971,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Mr. Muscle",
     "text": "Mr. Muscle is a arcades Telegram game playable in-app.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/9950313"
+    "mediaUrl": "/seed-media/entities-real/app-gamee-mr-muscle.jpg"
   },
   {
     "id": "ft-app-gamee-snake",
@@ -980,7 +980,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Snake",
     "text": "Snake is a arcades Telegram game playable in-app.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/9950313"
+    "mediaUrl": "/seed-media/entities-real/app-gamee-snake.jpg"
   },
   {
     "id": "ft-app-gamee-three-plus-three",
@@ -989,7 +989,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: 3+3",
     "text": "3+3 is a puzzles and logic Telegram game playable in-app.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/9950313"
+    "mediaUrl": "/seed-media/entities-real/app-gamee-three-plus-three.jpg"
   },
   {
     "id": "ft-app-gamee-space-orbit",
@@ -998,7 +998,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Space Orbit",
     "text": "Space Orbit is a arcades Telegram game playable in-app.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/9950313"
+    "mediaUrl": "/seed-media/entities-real/app-gamee-space-orbit.jpg"
   },
   {
     "id": "ft-app-gamee-aerial-dogfight",
@@ -1007,7 +1007,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Aerial Dogfight",
     "text": "Aerial Dogfight is a jump and run Telegram game playable in-app.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/9950313"
+    "mediaUrl": "/seed-media/entities-real/app-gamee-aerial-dogfight.jpg"
   },
   {
     "id": "ft-app-gamee-football-star",
@@ -1016,7 +1016,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Football Star",
     "text": "Football Star is a sports Telegram game playable in-app.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/9950313"
+    "mediaUrl": "/seed-media/entities-real/app-gamee-football-star.svg"
   },
   {
     "id": "ft-app-gamee-gravity-ninja",
@@ -1025,7 +1025,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Gravity Ninja",
     "text": "Gravity Ninja is a jump and run Telegram game playable in-app.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/9950313"
+    "mediaUrl": "/seed-media/entities-real/app-gamee-gravity-ninja.jpg"
   },
   {
     "id": "ft-app-gamee-hexatrion",
@@ -1034,7 +1034,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Hexatrion",
     "text": "Hexatrion is a puzzles and logic Telegram game playable in-app.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/9950313"
+    "mediaUrl": "/seed-media/entities-real/app-gamee-hexatrion.jpg"
   },
   {
     "id": "ft-app-gamee-karate-kido",
@@ -1043,7 +1043,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Karate Kido",
     "text": "Karate Kido is a arcades Telegram game playable in-app.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/9950313"
+    "mediaUrl": "/seed-media/entities-real/app-gamee-karate-kido.jpg"
   },
   {
     "id": "ft-app-gamee-kung-fu-inc",
@@ -1052,7 +1052,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Kung Fu Inc.",
     "text": "Kung Fu Inc. is a arcades Telegram game playable in-app.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/9950313"
+    "mediaUrl": "/seed-media/entities-real/app-gamee-kung-fu-inc.jpg"
   },
   {
     "id": "ft-app-gamee-mars-rover",
@@ -1061,7 +1061,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Mars Rover",
     "text": "Mars Rover is a jump and run Telegram game playable in-app.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/9950313"
+    "mediaUrl": "/seed-media/entities-real/app-gamee-mars-rover.jpg"
   },
   {
     "id": "ft-app-gamee-qubo",
@@ -1070,7 +1070,7 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Qubo",
     "text": "Qubo is a jump and run Telegram game playable in-app.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/9950313"
+    "mediaUrl": "/seed-media/entities-real/app-gamee-qubo.jpg"
   },
   {
     "id": "ft-app-gamee-rio-sprint",
@@ -1079,6 +1079,60 @@ export const seededFeaturedContent: FeaturedContent[] = [
     "contentType": "image",
     "title": "Spotlight: Rio Sprint",
     "text": "Rio Sprint is a sports Telegram game playable in-app.",
-    "mediaUrl": "https://avatars.githubusercontent.com/u/9950313"
+    "mediaUrl": "/seed-media/entities-real/app-gamee-rio-sprint.jpg"
+  },
+  {
+    "id": "ft-ch-football-matchday-live-derby-preview",
+    "entityId": "ch-football-matchday-live",
+    "mode": "latest",
+    "contentType": "image",
+    "title": "Match Focus: Haaland Finishing Run",
+    "text": "Premier League talking point: Haaland's movement keeps stretching deep blocks.",
+    "mediaUrl": "/seed-media/football/player-erling-haaland.jpg"
+  },
+  {
+    "id": "ft-ch-football-matchday-live-lineup-drop",
+    "entityId": "ch-football-matchday-live",
+    "mode": "pinned",
+    "contentType": "image",
+    "title": "Lineup Spotlight: Jude in Midfield",
+    "text": "Jude Bellingham's role between the lines is shaping this weekend's build-up.",
+    "mediaUrl": "/seed-media/football/player-jude-bellingham.jpg"
+  },
+  {
+    "id": "ft-ch-football-transfer-wire-alert",
+    "entityId": "ch-football-transfer-wire",
+    "mode": "specific",
+    "contentType": "image",
+    "title": "Global Star: Mbappe Headlines",
+    "text": "FIFA feed spotlight: Mbappe remains central to the international football narrative.",
+    "mediaUrl": "/seed-media/football/player-kylian-mbappe.jpg"
+  },
+  {
+    "id": "ft-ch-football-transfer-wire-medical",
+    "entityId": "ch-football-transfer-wire",
+    "mode": "manual",
+    "contentType": "image",
+    "title": "Icon Watch: Messi Storyline",
+    "text": "FIFA coverage includes Messi's ongoing impact in global competitions.",
+    "mediaUrl": "/seed-media/football/player-lionel-messi.jpg"
+  },
+  {
+    "id": "ft-ch-football-tactics-board-pressing-map",
+    "entityId": "ch-football-tactics-board",
+    "mode": "latest",
+    "contentType": "image",
+    "title": "Club Radar: Ronaldo Reaction",
+    "text": "Fan conversations track Ronaldo's influence and finishing efficiency.",
+    "mediaUrl": "/seed-media/football/player-cristiano-ronaldo.jpg"
+  },
+  {
+    "id": "ft-ch-football-tactics-board-set-piece-lab",
+    "entityId": "ch-football-tactics-board",
+    "mode": "pinned",
+    "contentType": "image",
+    "title": "Forward Watch: Lautaro Form",
+    "text": "Current post tracks Lautaro's pressing intensity and final-third decisions.",
+    "mediaUrl": "/seed-media/football/player-lautaro-martinez.jpg"
   }
 ];

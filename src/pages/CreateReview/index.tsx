@@ -9,6 +9,7 @@ import { useAppState } from '@/context/app-context.tsx';
 const DRAFT_KEY = 'tondiscover:create-post-draft';
 
 type Draft = {
+  postId?: string;
   entityId: string;
   contentType: 'text' | 'image' | 'video';
   title: string;
@@ -41,6 +42,7 @@ const CreateReview = () => {
     }
 
     setFeaturedContent({
+      id: draft.postId,
       entityId: draft.entityId,
       mode: 'manual',
       contentType: draft.contentType,

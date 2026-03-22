@@ -95,6 +95,7 @@ export interface RegisterEntityInput {
 }
 
 export interface FeaturedContentInput {
+  id?: string;
   entityId: string;
   mode: FeaturedContent['mode'];
   contentType: ContentType;

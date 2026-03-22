@@ -14,7 +14,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/tonblockchain",
     "contentType": "image",
     "previewText": "The Open Network publishes crypto and TON ecosystem updates for Telegram users.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/55738493",
+    "previewMediaUrl": "/seed-media/entities-real/ch-tonblockchain.jpg",
     "editorialScore": 62,
     "activityScore": 50,
     "engagementScore": 46
@@ -32,7 +32,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/iceblockchain",
     "contentType": "image",
     "previewText": "Ice Open Network publishes crypto and TON ecosystem updates for Telegram users.",
-    "previewMediaUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/11092.png",
+    "previewMediaUrl": "/seed-media/entities-real/ch-iceblockchain.jpg",
     "editorialScore": 63,
     "activityScore": 51,
     "engagementScore": 47
@@ -50,7 +50,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/socryptoland",
     "contentType": "image",
     "previewText": "Crypto Land publishes crypto and TON ecosystem updates for Telegram users.",
-    "previewMediaUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/1.png",
+    "previewMediaUrl": "/seed-media/entities-real/ch-socryptoland.jpg",
     "editorialScore": 64,
     "activityScore": 52,
     "engagementScore": 48
@@ -68,7 +68,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/forexsignals",
     "contentType": "image",
     "previewText": "ForexSignals publishes crypto and TON ecosystem updates for Telegram users.",
-    "previewMediaUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/1.png",
+    "previewMediaUrl": "/seed-media/entities-real/ch-forexsignals.jpg",
     "editorialScore": 65,
     "activityScore": 53,
     "engagementScore": 49
@@ -86,7 +86,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/watcherguru",
     "contentType": "image",
     "previewText": "Watcher Guru publishes crypto and TON ecosystem updates for Telegram users.",
-    "previewMediaUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png",
+    "previewMediaUrl": "/seed-media/entities-real/ch-watcherguru.jpg",
     "editorialScore": 66,
     "activityScore": 54,
     "engagementScore": 50
@@ -104,7 +104,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/maptoken",
     "contentType": "image",
     "previewText": "Token Map publishes crypto and TON ecosystem updates for Telegram users.",
-    "previewMediaUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/11419.png",
+    "previewMediaUrl": "/seed-media/entities-real/ch-maptoken.jpg",
     "editorialScore": 67,
     "activityScore": 55,
     "engagementScore": 51
@@ -122,7 +122,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/toncoin",
     "contentType": "image",
     "previewText": "Toncoin publishes crypto and TON ecosystem updates for Telegram users.",
-    "previewMediaUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/11419.png",
+    "previewMediaUrl": "/seed-media/entities-real/ch-toncoin.jpg",
     "editorialScore": 68,
     "activityScore": 56,
     "engagementScore": 52
@@ -140,7 +140,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/theincomegrowthofficial",
     "contentType": "image",
     "previewText": "TIG OFFICIAL® publishes crypto and TON ecosystem updates for Telegram users.",
-    "previewMediaUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/2010.png",
+    "previewMediaUrl": "/seed-media/entities-real/ch-theincomegrowthofficial.jpg",
     "editorialScore": 69,
     "activityScore": 57,
     "engagementScore": 53
@@ -158,7 +158,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/ico_analytic",
     "contentType": "image",
     "previewText": "ICO Analytics (StandWithUkraine 🇺🇦) publishes crypto and TON ecosystem updates for Telegram users.",
-    "previewMediaUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png",
+    "previewMediaUrl": "/seed-media/entities-real/ch-ico_analytic.jpg",
     "editorialScore": 70,
     "activityScore": 58,
     "engagementScore": 54
@@ -176,7 +176,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/CryptoBotEN",
     "contentType": "image",
     "previewText": "Crypto Bot News publishes crypto and TON ecosystem updates for Telegram users.",
-    "previewMediaUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/1.png",
+    "previewMediaUrl": "/seed-media/entities-real/ch-cryptoboten.jpg",
     "editorialScore": 71,
     "activityScore": 59,
     "engagementScore": 55
@@ -194,7 +194,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/crypto_analysis_news",
     "contentType": "image",
     "previewText": "Crypto Analysis News publishes crypto and TON ecosystem updates for Telegram users.",
-    "previewMediaUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/5426.png",
+    "previewMediaUrl": "/seed-media/entities-real/ch-crypto_analysis_news.jpg",
     "editorialScore": 72,
     "activityScore": 60,
     "engagementScore": 56
@@ -212,7 +212,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/OKXAnnouncements",
     "contentType": "image",
     "previewText": "OKX Announcements publishes crypto and TON ecosystem updates for Telegram users.",
-    "previewMediaUrl": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/294.png",
+    "previewMediaUrl": "/seed-media/entities-real/ch-okxannouncements.jpg",
     "editorialScore": 73,
     "activityScore": 61,
     "engagementScore": 57
@@ -230,7 +230,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/CryptoWorldNews",
     "contentType": "image",
     "previewText": "CryptoWorldNews publishes crypto and TON ecosystem updates for Telegram users.",
-    "previewMediaUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/74.png",
+    "previewMediaUrl": "/seed-media/entities-real/ch-cryptoworldnews.jpg",
     "editorialScore": 74,
     "activityScore": 62,
     "engagementScore": 58
@@ -248,7 +248,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/tondiamonds",
     "contentType": "image",
     "previewText": "TON Diamonds NFT publishes crypto and TON ecosystem updates for Telegram users.",
-    "previewMediaUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/11419.png",
+    "previewMediaUrl": "/seed-media/entities-real/ch-tondiamonds.jpg",
     "editorialScore": 75,
     "activityScore": 63,
     "engagementScore": 59
@@ -266,7 +266,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/DeCenterOrg",
     "contentType": "image",
     "previewText": "DeCenter – Blockchain and Bitcoin publishes crypto and TON ecosystem updates for Telegram users.",
-    "previewMediaUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/1.png",
+    "previewMediaUrl": "/seed-media/entities-real/ch-decenterorg.jpg",
     "editorialScore": 76,
     "activityScore": 64,
     "engagementScore": 60
@@ -284,7 +284,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/crypto_scalp_signals",
     "contentType": "image",
     "previewText": "Crypto Scalp Signals publishes crypto and TON ecosystem updates for Telegram users.",
-    "previewMediaUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/1031.png",
+    "previewMediaUrl": "/seed-media/entities-real/ch-crypto_scalp_signals.jpg",
     "editorialScore": 77,
     "activityScore": 65,
     "engagementScore": 61
@@ -302,7 +302,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/OneInchNetworkNews",
     "contentType": "image",
     "previewText": "1inch publishes crypto and TON ecosystem updates for Telegram users.",
-    "previewMediaUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/8104.png",
+    "previewMediaUrl": "/seed-media/entities-real/ch-oneinchnetworknews.jpg",
     "editorialScore": 78,
     "activityScore": 66,
     "engagementScore": 62
@@ -320,7 +320,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/changelly",
     "contentType": "image",
     "previewText": "Changelly publishes crypto and TON ecosystem updates for Telegram users.",
-    "previewMediaUrl": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/269.png",
+    "previewMediaUrl": "/seed-media/entities-real/ch-changelly.svg",
     "editorialScore": 79,
     "activityScore": 67,
     "engagementScore": 63
@@ -338,7 +338,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/wavesnews",
     "contentType": "image",
     "previewText": "Waves 🌊 publishes crypto and TON ecosystem updates for Telegram users.",
-    "previewMediaUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/8104.png",
+    "previewMediaUrl": "/seed-media/entities-real/ch-wavesnews.jpg",
     "editorialScore": 80,
     "activityScore": 68,
     "engagementScore": 64
@@ -356,7 +356,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/www_Bitcoin_com",
     "contentType": "image",
     "previewText": "Bitcoin.com News publishes crypto and TON ecosystem updates for Telegram users.",
-    "previewMediaUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/1.png",
+    "previewMediaUrl": "/seed-media/entities-real/ch-www_bitcoin_com.jpg",
     "editorialScore": 81,
     "activityScore": 69,
     "engagementScore": 65
@@ -374,7 +374,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/xkcdchannel",
     "contentType": "image",
     "previewText": "xkcd shares tech updates, tooling tips, and product releases.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/44036562",
+    "previewMediaUrl": "/seed-media/entities-real/ch-xkcdchannel.jpg",
     "editorialScore": 82,
     "activityScore": 70,
     "engagementScore": 66
@@ -392,7 +392,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/linuxgram",
     "contentType": "image",
     "previewText": "Linuxgram 🐧 shares tech updates, tooling tips, and product releases.",
-    "previewMediaUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/1274.png",
+    "previewMediaUrl": "/seed-media/entities-real/ch-linuxgram.jpg",
     "editorialScore": 83,
     "activityScore": 71,
     "engagementScore": 67
@@ -410,7 +410,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/androidMalware",
     "contentType": "image",
     "previewText": "Android Security & Malware shares tech updates, tooling tips, and product releases.",
-    "previewMediaUrl": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/269.png",
+    "previewMediaUrl": "/seed-media/entities-real/ch-androidmalware.jpg",
     "editorialScore": 84,
     "activityScore": 72,
     "engagementScore": 46
@@ -428,7 +428,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/hacker_news_feed",
     "contentType": "image",
     "previewText": "Hacker News shares tech updates, tooling tips, and product releases.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/1728152",
+    "previewMediaUrl": "/seed-media/entities-real/ch-hacker_news_feed.jpg",
     "editorialScore": 85,
     "activityScore": 73,
     "engagementScore": 47
@@ -446,7 +446,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/front_end_first",
     "contentType": "image",
     "previewText": "Front End World shares tech updates, tooling tips, and product releases.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/32131462",
+    "previewMediaUrl": "/seed-media/entities-real/ch-front_end_first.jpg",
     "editorialScore": 86,
     "activityScore": 74,
     "engagementScore": 48
@@ -464,7 +464,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/thedevs",
     "contentType": "image",
     "previewText": "The Devs shares tech updates, tooling tips, and product releases.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/9919",
+    "previewMediaUrl": "/seed-media/entities-real/ch-thedevs.jpg",
     "editorialScore": 87,
     "activityScore": 50,
     "engagementScore": 49
@@ -482,7 +482,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/telegram",
     "contentType": "image",
     "previewText": "Telegram News shares tech updates, tooling tips, and product releases.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/6154722",
+    "previewMediaUrl": "/seed-media/entities-real/ch-telegram.jpg",
     "editorialScore": 88,
     "activityScore": 51,
     "engagementScore": 50
@@ -500,7 +500,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/computer_science_and_programming",
     "contentType": "image",
     "previewText": "Computer Science and Programming shares tech updates, tooling tips, and product releases.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/9919",
+    "previewMediaUrl": "/seed-media/entities-real/ch-computer_science_and_programming.jpg",
     "editorialScore": 89,
     "activityScore": 52,
     "engagementScore": 51
@@ -518,7 +518,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/ProgrammingTip",
     "contentType": "image",
     "previewText": "Programming Tips 💡 shares tech updates, tooling tips, and product releases.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/40567308",
+    "previewMediaUrl": "/seed-media/entities-real/ch-programmingtip.jpg",
     "editorialScore": 62,
     "activityScore": 53,
     "engagementScore": 52
@@ -536,7 +536,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/TelegramTips",
     "contentType": "image",
     "previewText": "Telegram Tips shares tech updates, tooling tips, and product releases.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/22929955",
+    "previewMediaUrl": "/seed-media/entities-real/ch-telegramtips.jpg",
     "editorialScore": 63,
     "activityScore": 54,
     "engagementScore": 53
@@ -554,7 +554,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/BotNews",
     "contentType": "image",
     "previewText": "BotNews shares tech updates, tooling tips, and product releases.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/22929955",
+    "previewMediaUrl": "/seed-media/entities-real/ch-botnews.jpg",
     "editorialScore": 64,
     "activityScore": 55,
     "engagementScore": 54
@@ -572,7 +572,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/sysadm_in_channel",
     "contentType": "image",
     "previewText": "Sys-Admin InfoSec shares tech updates, tooling tips, and product releases.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/44036562",
+    "previewMediaUrl": "/seed-media/entities-real/ch-sysadm_in_channel.jpg",
     "editorialScore": 65,
     "activityScore": 56,
     "engagementScore": 55
@@ -590,7 +590,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/androiddeveu",
     "contentType": "image",
     "previewText": "Android Developers shares tech updates, tooling tips, and product releases.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/32689599",
+    "previewMediaUrl": "/seed-media/entities-real/ch-androiddeveu.jpg",
     "editorialScore": 66,
     "activityScore": 57,
     "engagementScore": 56
@@ -608,7 +608,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/TechsAfrica",
     "contentType": "image",
     "previewText": "Techspace Africa shares tech updates, tooling tips, and product releases.",
-    "previewMediaUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/6535.png",
+    "previewMediaUrl": "/seed-media/entities-real/ch-techsafrica.jpg",
     "editorialScore": 67,
     "activityScore": 58,
     "engagementScore": 57
@@ -626,7 +626,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/ml_world",
     "contentType": "image",
     "previewText": "Machine Learning World shares tech updates, tooling tips, and product releases.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/40567308",
+    "previewMediaUrl": "/seed-media/entities-real/ch-ml_world.jpg",
     "editorialScore": 68,
     "activityScore": 59,
     "engagementScore": 58
@@ -644,7 +644,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/ramikrispinds",
     "contentType": "image",
     "previewText": "Rami Krispin's Data Science Channel shares tech updates, tooling tips, and product releases.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/7802525",
+    "previewMediaUrl": "/seed-media/entities-real/ch-ramikrispinds.jpg",
     "editorialScore": 69,
     "activityScore": 60,
     "engagementScore": 59
@@ -662,7 +662,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/fosspost",
     "contentType": "image",
     "previewText": "FOSS Post shares tech updates, tooling tips, and product releases.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/40567308",
+    "previewMediaUrl": "/seed-media/entities-real/ch-fosspost.jpg",
     "editorialScore": 70,
     "activityScore": 61,
     "engagementScore": 60
@@ -680,7 +680,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/AndroidUT",
     "contentType": "image",
     "previewText": "Android Update Tracker shares tech updates, tooling tips, and product releases.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/32689599",
+    "previewMediaUrl": "/seed-media/entities-real/ch-androidut.jpg",
     "editorialScore": 71,
     "activityScore": 62,
     "engagementScore": 61
@@ -698,7 +698,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/whatstechblog",
     "contentType": "image",
     "previewText": "WhatsTech | La tecnologia con te shares tech updates, tooling tips, and product releases.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/1728152",
+    "previewMediaUrl": "/seed-media/entities-real/ch-whatstechblog.jpg",
     "editorialScore": 72,
     "activityScore": 63,
     "engagementScore": 62
@@ -716,7 +716,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/dev_useful_stuff",
     "contentType": "image",
     "previewText": "Dev Useful Stuff shares tech updates, tooling tips, and product releases.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/7802525",
+    "previewMediaUrl": "/seed-media/entities-real/ch-dev_useful_stuff.jpg",
     "editorialScore": 73,
     "activityScore": 64,
     "engagementScore": 63
@@ -734,7 +734,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/plusmsgr",
     "contentType": "image",
     "previewText": "Plus Messenger official highlights community conversations and trending posts.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/32131462",
+    "previewMediaUrl": "/seed-media/entities-real/ch-plusmsgr.jpg",
     "editorialScore": 74,
     "activityScore": 65,
     "engagementScore": 64
@@ -752,7 +752,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/snakers4",
     "contentType": "image",
     "previewText": "Spark in me highlights community conversations and trending posts.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/9919",
+    "previewMediaUrl": "/seed-media/entities-real/ch-snakers4.jpg",
     "editorialScore": 75,
     "activityScore": 66,
     "engagementScore": 65
@@ -770,7 +770,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/Star_Citizen",
     "contentType": "image",
     "previewText": "Star Citizen highlights community conversations and trending posts.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/60309326",
+    "previewMediaUrl": "/seed-media/entities-real/ch-star_citizen.jpg",
     "editorialScore": 76,
     "activityScore": 67,
     "engagementScore": 66
@@ -788,7 +788,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/AppStoreDeals",
     "contentType": "image",
     "previewText": "App Store Deals highlights community conversations and trending posts.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/44036562",
+    "previewMediaUrl": "/seed-media/entities-real/ch-appstoredeals.jpg",
     "editorialScore": 77,
     "activityScore": 68,
     "engagementScore": 67
@@ -806,7 +806,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/stablegram",
     "contentType": "image",
     "previewText": "Stablegram — Web3 Jobs highlights community conversations and trending posts.",
-    "previewMediaUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/11419.png",
+    "previewMediaUrl": "/seed-media/entities-real/ch-stablegram.jpg",
     "editorialScore": 78,
     "activityScore": 69,
     "engagementScore": 46
@@ -824,7 +824,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/investofeedsignal",
     "contentType": "image",
     "previewText": "InvestoFeeds Community highlights community conversations and trending posts.",
-    "previewMediaUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/1.png",
+    "previewMediaUrl": "/seed-media/entities-real/ch-investofeedsignal.jpg",
     "editorialScore": 79,
     "activityScore": 70,
     "engagementScore": 47
@@ -842,7 +842,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/HashExAnnouncements",
     "contentType": "image",
     "previewText": "HashEx Blockchain Security Announcements highlights community conversations and trending posts.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/26109788",
+    "previewMediaUrl": "/seed-media/entities-real/ch-hashexannouncements.jpg",
     "editorialScore": 80,
     "activityScore": 71,
     "engagementScore": 48
@@ -860,7 +860,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/catchain",
     "contentType": "image",
     "previewText": "CAT — TON Validator, Apps and News highlights community conversations and trending posts.",
-    "previewMediaUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/11419.png",
+    "previewMediaUrl": "/seed-media/entities-real/ch-catchain.jpg",
     "editorialScore": 81,
     "activityScore": 72,
     "engagementScore": 49
@@ -878,7 +878,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/web_3_pulse",
     "contentType": "image",
     "previewText": "Web3 Pulse highlights community conversations and trending posts.",
-    "previewMediaUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/11419.png",
+    "previewMediaUrl": "/seed-media/entities-real/ch-web_3_pulse.jpg",
     "editorialScore": 82,
     "activityScore": 73,
     "engagementScore": 50
@@ -896,7 +896,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/Ptpatriots",
     "contentType": "image",
     "previewText": "Prime Time Patriots highlights community conversations and trending posts.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/22929955",
+    "previewMediaUrl": "/seed-media/entities-real/ch-ptpatriots.jpg",
     "editorialScore": 83,
     "activityScore": 74,
     "engagementScore": 51
@@ -914,7 +914,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/theIJR",
     "contentType": "image",
     "previewText": "Independent Journal Review highlights community conversations and trending posts.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/1728152",
+    "previewMediaUrl": "/seed-media/entities-real/ch-theijr.jpg",
     "editorialScore": 84,
     "activityScore": 50,
     "engagementScore": 52
@@ -932,7 +932,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/notboring_riga",
     "contentType": "image",
     "previewText": "not boring → Riga highlights community conversations and trending posts.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/2931827",
+    "previewMediaUrl": "/seed-media/entities-real/ch-notboring_riga.jpg",
     "editorialScore": 85,
     "activityScore": 51,
     "engagementScore": 53
@@ -950,7 +950,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/insidekonstantinsrussia",
     "contentType": "image",
     "previewText": "INSIDE RUSSIA highlights community conversations and trending posts.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/2931827",
+    "previewMediaUrl": "/seed-media/entities-real/ch-insidekonstantinsrussia.jpg",
     "editorialScore": 86,
     "activityScore": 52,
     "engagementScore": 54
@@ -968,7 +968,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/uinhurricane",
     "contentType": "image",
     "previewText": "U In Hurricane [EN] highlights community conversations and trending posts.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/32131462",
+    "previewMediaUrl": "/seed-media/entities-real/ch-uinhurricane.jpg",
     "editorialScore": 87,
     "activityScore": 53,
     "engagementScore": 55
@@ -986,7 +986,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/MidnightRiderChannel",
     "contentType": "image",
     "previewText": "Midnight Rider Channel 🇺🇲 highlights community conversations and trending posts.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/2931827",
+    "previewMediaUrl": "/seed-media/entities-real/ch-midnightriderchannel.jpg",
     "editorialScore": 88,
     "activityScore": 54,
     "engagementScore": 56
@@ -1004,7 +1004,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/neuralfan",
     "contentType": "image",
     "previewText": "Neuralfan highlights community conversations and trending posts.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/60309326",
+    "previewMediaUrl": "/seed-media/entities-real/ch-neuralfan.jpg",
     "editorialScore": 89,
     "activityScore": 55,
     "engagementScore": 57
@@ -1022,7 +1022,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/artificial_intelligence_media",
     "contentType": "image",
     "previewText": "AI News & Trends highlights community conversations and trending posts.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/6154722",
+    "previewMediaUrl": "/seed-media/entities-real/ch-artificial_intelligence_media.jpg",
     "editorialScore": 62,
     "activityScore": 56,
     "engagementScore": 58
@@ -1040,7 +1040,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/fxtmglobal",
     "contentType": "image",
     "previewText": "FXTM highlights community conversations and trending posts.",
-    "previewMediaUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/1.png",
+    "previewMediaUrl": "/seed-media/entities-real/ch-fxtmglobal.jpg",
     "editorialScore": 63,
     "activityScore": 57,
     "engagementScore": 59
@@ -1058,7 +1058,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/sgCareers",
     "contentType": "image",
     "previewText": "Singapore Careers and Job Opportunities - sgCareers highlights community conversations and trending posts.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/9919",
+    "previewMediaUrl": "/seed-media/entities-real/ch-sgcareers.jpg",
     "editorialScore": 64,
     "activityScore": 58,
     "engagementScore": 60
@@ -1076,7 +1076,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/ScanFinJapaneseCandlestick",
     "contentType": "image",
     "previewText": "ScanFin - Japanese Candlestick Scanner highlights community conversations and trending posts.",
-    "previewMediaUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/3408.png",
+    "previewMediaUrl": "/seed-media/entities-real/ch-scanfinjapanesecandlestick.jpg",
     "editorialScore": 65,
     "activityScore": 59,
     "engagementScore": 61
@@ -1094,7 +1094,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/quote",
     "contentType": "image",
     "previewText": "Quote — motivation, wisdom, inspiration publishes educational resources and explainers for learners.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/7802525",
+    "previewMediaUrl": "/seed-media/entities-real/ch-quote.jpg",
     "editorialScore": 66,
     "activityScore": 60,
     "engagementScore": 62
@@ -1112,7 +1112,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/Physics",
     "contentType": "image",
     "previewText": "Physics publishes educational resources and explainers for learners.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/40567308",
+    "previewMediaUrl": "/seed-media/entities-real/ch-physics.jpg",
     "editorialScore": 67,
     "activityScore": 61,
     "engagementScore": 63
@@ -1130,7 +1130,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/Physicsonfingers",
     "contentType": "image",
     "previewText": "Physics on fingers publishes educational resources and explainers for learners.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/44036562",
+    "previewMediaUrl": "/seed-media/entities-real/ch-physicsonfingers.jpg",
     "editorialScore": 68,
     "activityScore": 62,
     "engagementScore": 64
@@ -1148,7 +1148,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/discudemy_com",
     "contentType": "image",
     "previewText": "CouponAmI - Free Premium Udemy Courses publishes educational resources and explainers for learners.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/526301",
+    "previewMediaUrl": "/seed-media/entities-real/ch-discudemy_com.jpg",
     "editorialScore": 69,
     "activityScore": 63,
     "engagementScore": 65
@@ -1166,7 +1166,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/sgTuitions",
     "contentType": "image",
     "previewText": "🏆 Singapore Tuition Assignments Jobs - sgTuitions publishes educational resources and explainers for learners.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/44036562",
+    "previewMediaUrl": "/seed-media/entities-real/ch-sgtuitions.jpg",
     "editorialScore": 70,
     "activityScore": 64,
     "engagementScore": 66
@@ -1184,7 +1184,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/internationalgeographic",
     "contentType": "image",
     "previewText": "International Geographic publishes educational resources and explainers for learners.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/33657091",
+    "previewMediaUrl": "/seed-media/entities-real/ch-internationalgeographic.jpg",
     "editorialScore": 71,
     "activityScore": 65,
     "engagementScore": 67
@@ -1202,7 +1202,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/interesting",
     "contentType": "image",
     "previewText": "Interesting 💡😍 publishes educational resources and explainers for learners.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/2931827",
+    "previewMediaUrl": "/seed-media/entities-real/ch-interesting.jpg",
     "editorialScore": 72,
     "activityScore": 66,
     "engagementScore": 46
@@ -1220,7 +1220,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/studyqacom",
     "contentType": "image",
     "previewText": "StudyQA.com publishes educational resources and explainers for learners.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/7802525",
+    "previewMediaUrl": "/seed-media/entities-real/ch-studyqacom.jpg",
     "editorialScore": 73,
     "activityScore": 67,
     "engagementScore": 47
@@ -1238,7 +1238,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/AmEnglish",
     "contentType": "image",
     "previewText": "American English publishes educational resources and explainers for learners.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/2931827",
+    "previewMediaUrl": "/seed-media/entities-real/ch-amenglish.jpg",
     "editorialScore": 74,
     "activityScore": 68,
     "engagementScore": 48
@@ -1256,7 +1256,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/learnRCRussian",
     "contentType": "image",
     "previewText": "Learn RCRussian🤍💙❤️ publishes educational resources and explainers for learners.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/2931827",
+    "previewMediaUrl": "/seed-media/entities-real/ch-learnrcrussian.jpg",
     "editorialScore": 75,
     "activityScore": 69,
     "engagementScore": 49
@@ -1274,7 +1274,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/TAndroidAPK",
     "contentType": "image",
     "previewText": "Telegram APKs for Android publishes educational resources and explainers for learners.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/18133255",
+    "previewMediaUrl": "/seed-media/entities-real/ch-tandroidapk.jpg",
     "editorialScore": 76,
     "activityScore": 70,
     "engagementScore": 50
@@ -1292,7 +1292,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/WALL_E",
     "contentType": "image",
     "previewText": "WALL-E 🤖 | AI News & Robots publishes educational resources and explainers for learners.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/60309326",
+    "previewMediaUrl": "/seed-media/entities-real/ch-wall_e.jpg",
     "editorialScore": 77,
     "activityScore": 71,
     "engagementScore": 51
@@ -1310,7 +1310,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/MyTonWalletEn",
     "contentType": "image",
     "previewText": "MyTonWallet · News publishes educational resources and explainers for learners.",
-    "previewMediaUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/11419.png",
+    "previewMediaUrl": "/seed-media/entities-real/ch-mytonwalleten.jpg",
     "editorialScore": 78,
     "activityScore": 72,
     "engagementScore": 52
@@ -1328,7 +1328,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/thedailyton",
     "contentType": "image",
     "previewText": "The Daily TON | News publishes educational resources and explainers for learners.",
-    "previewMediaUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/11419.png",
+    "previewMediaUrl": "/seed-media/entities-real/ch-thedailyton.jpg",
     "editorialScore": 79,
     "activityScore": 73,
     "engagementScore": 53
@@ -1346,7 +1346,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/MEXCofficialNews",
     "contentType": "image",
     "previewText": "MEXC Community Channel publishes educational resources and explainers for learners.",
-    "previewMediaUrl": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/544.png",
+    "previewMediaUrl": "/seed-media/entities-real/ch-mexcofficialnews.svg",
     "editorialScore": 80,
     "activityScore": 74,
     "engagementScore": 54
@@ -1364,7 +1364,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/cryptocurrency_btc",
     "contentType": "image",
     "previewText": "Cryptocurrency Bitcoin NEWS publishes educational resources and explainers for learners.",
-    "previewMediaUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/1.png",
+    "previewMediaUrl": "/seed-media/entities-real/ch-cryptocurrency_btc.jpg",
     "editorialScore": 81,
     "activityScore": 50,
     "engagementScore": 55
@@ -1382,7 +1382,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/WhiteBIT",
     "contentType": "image",
     "previewText": "WhiteBIT News publishes educational resources and explainers for learners.",
-    "previewMediaUrl": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/400.png",
+    "previewMediaUrl": "/seed-media/entities-real/ch-whitebit.jpg",
     "editorialScore": 82,
     "activityScore": 51,
     "engagementScore": 56
@@ -1400,7 +1400,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/NTDNews",
     "contentType": "image",
     "previewText": "NTD publishes educational resources and explainers for learners.",
-    "previewMediaUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/1.png",
+    "previewMediaUrl": "/seed-media/entities-real/ch-ntdnews.jpg",
     "editorialScore": 83,
     "activityScore": 52,
     "engagementScore": 57
@@ -1418,7 +1418,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/TommyRobinsonNews",
     "contentType": "image",
     "previewText": "Tommy Robinson News publishes educational resources and explainers for learners.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/2931827",
+    "previewMediaUrl": "/seed-media/entities-real/ch-tommyrobinsonnews.jpg",
     "editorialScore": 84,
     "activityScore": 53,
     "engagementScore": 58
@@ -1436,7 +1436,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/SGTnewsNetwork",
     "contentType": "image",
     "previewText": "Sergeant News Network 🇺🇸 publishes educational resources and explainers for learners.",
-    "previewMediaUrl": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/425.png",
+    "previewMediaUrl": "/seed-media/entities-real/ch-sgtnewsnetwork.jpg",
     "editorialScore": 85,
     "activityScore": 54,
     "engagementScore": 59
@@ -1454,7 +1454,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/yegor256news",
     "contentType": "image",
     "previewText": "@yegor256 news delivers regular news updates and key headlines.",
-    "previewMediaUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/11419.png",
+    "previewMediaUrl": "/seed-media/entities-real/ch-yegor256news.jpg",
     "editorialScore": 86,
     "activityScore": 55,
     "engagementScore": 60
@@ -1472,7 +1472,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/insiderpaper",
     "contentType": "image",
     "previewText": "Insider Paper delivers regular news updates and key headlines.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/2931827",
+    "previewMediaUrl": "/seed-media/entities-real/ch-insiderpaper.jpg",
     "editorialScore": 87,
     "activityScore": 56,
     "engagementScore": 61
@@ -1490,7 +1490,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/WarMonitors",
     "contentType": "image",
     "previewText": "War Monitor delivers regular news updates and key headlines.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/2931827",
+    "previewMediaUrl": "/seed-media/entities-real/ch-warmonitors.jpg",
     "editorialScore": 88,
     "activityScore": 57,
     "engagementScore": 62
@@ -1508,7 +1508,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/Govsg",
     "contentType": "image",
     "previewText": "gov.sg delivers regular news updates and key headlines.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/44036562",
+    "previewMediaUrl": "/seed-media/entities-real/ch-govsg.jpg",
     "editorialScore": 89,
     "activityScore": 58,
     "engagementScore": 63
@@ -1526,7 +1526,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/disclosetv",
     "contentType": "image",
     "previewText": "Disclose.tv delivers regular news updates and key headlines.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/2931827",
+    "previewMediaUrl": "/seed-media/entities-real/ch-disclosetv.jpg",
     "editorialScore": 62,
     "activityScore": 59,
     "engagementScore": 64
@@ -1544,7 +1544,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/tuckercarlsonnetwork",
     "contentType": "image",
     "previewText": "Tucker Carlson delivers regular news updates and key headlines.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/2931827",
+    "previewMediaUrl": "/seed-media/entities-real/ch-tuckercarlsonnetwork.jpg",
     "editorialScore": 63,
     "activityScore": 60,
     "engagementScore": 65
@@ -1562,7 +1562,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/bricsnews",
     "contentType": "image",
     "previewText": "BRICS News delivers regular news updates and key headlines.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/9287040",
+    "previewMediaUrl": "/seed-media/entities-real/ch-bricsnews.jpg",
     "editorialScore": 64,
     "activityScore": 61,
     "engagementScore": 66
@@ -1580,7 +1580,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/Project_Veritas",
     "contentType": "image",
     "previewText": "Project Veritas delivers regular news updates and key headlines.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/3260308",
+    "previewMediaUrl": "/seed-media/entities-real/ch-project_veritas.jpg",
     "editorialScore": 65,
     "activityScore": 62,
     "engagementScore": 67
@@ -1598,7 +1598,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/WeTheMedia",
     "contentType": "image",
     "previewText": "We The Media delivers regular news updates and key headlines.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/19177628",
+    "previewMediaUrl": "/seed-media/entities-real/ch-wethemedia.jpg",
     "editorialScore": 66,
     "activityScore": 63,
     "engagementScore": 46
@@ -1616,7 +1616,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/OANNTV",
     "contentType": "image",
     "previewText": "One America News Network delivers regular news updates and key headlines.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/2931827",
+    "previewMediaUrl": "/seed-media/entities-real/ch-oanntv.jpg",
     "editorialScore": 67,
     "activityScore": 64,
     "engagementScore": 47
@@ -1634,7 +1634,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/hnaftali",
     "contentType": "image",
     "previewText": "Hananya Naftali - Israel News delivers regular news updates and key headlines.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/26109788",
+    "previewMediaUrl": "/seed-media/entities-real/ch-hnaftali.jpg",
     "editorialScore": 68,
     "activityScore": 65,
     "engagementScore": 48
@@ -1652,7 +1652,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/gatewaypunditofficial",
     "contentType": "image",
     "previewText": "Gateway Pundit delivers regular news updates and key headlines.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/9287040",
+    "previewMediaUrl": "/seed-media/entities-real/ch-gatewaypunditofficial.jpg",
     "editorialScore": 69,
     "activityScore": 66,
     "engagementScore": 49
@@ -1670,7 +1670,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/intelslava",
     "contentType": "image",
     "previewText": "Intel Slava delivers regular news updates and key headlines.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/44036562",
+    "previewMediaUrl": "/seed-media/entities-real/ch-intelslava.jpg",
     "editorialScore": 70,
     "activityScore": 67,
     "engagementScore": 50
@@ -1688,7 +1688,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/nytimes",
     "contentType": "image",
     "previewText": "The New York Times delivers regular news updates and key headlines.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/9287040",
+    "previewMediaUrl": "/seed-media/entities-real/ch-nytimes.jpg",
     "editorialScore": 71,
     "activityScore": 68,
     "engagementScore": 51
@@ -1706,7 +1706,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/WorldNews",
     "contentType": "image",
     "previewText": "World News [Breaking News] delivers regular news updates and key headlines.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/41793228",
+    "previewMediaUrl": "/seed-media/entities-real/ch-worldnews.jpg",
     "editorialScore": 72,
     "activityScore": 69,
     "engagementScore": 52
@@ -1724,7 +1724,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/WesternJournal",
     "contentType": "image",
     "previewText": "The Western Journal delivers regular news updates and key headlines.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/41793228",
+    "previewMediaUrl": "/seed-media/entities-real/ch-westernjournal.jpg",
     "editorialScore": 73,
     "activityScore": 70,
     "engagementScore": 53
@@ -1742,7 +1742,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/epochtimes",
     "contentType": "image",
     "previewText": "The Epoch Times delivers regular news updates and key headlines.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/25722468",
+    "previewMediaUrl": "/seed-media/entities-real/ch-epochtimes.jpg",
     "editorialScore": 74,
     "activityScore": 71,
     "engagementScore": 54
@@ -1760,7 +1760,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/Daily_Caller",
     "contentType": "image",
     "previewText": "Daily Caller delivers regular news updates and key headlines.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/2931827",
+    "previewMediaUrl": "/seed-media/entities-real/ch-daily_caller.jpg",
     "editorialScore": 75,
     "activityScore": 72,
     "engagementScore": 55
@@ -1778,7 +1778,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/infodefENGLAND",
     "contentType": "image",
     "previewText": "InfoDefenseENGLISH delivers regular news updates and key headlines.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/2931827",
+    "previewMediaUrl": "/seed-media/entities-real/ch-infodefengland.jpg",
     "editorialScore": 76,
     "activityScore": 73,
     "engagementScore": 56
@@ -1796,7 +1796,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/realDailyWire",
     "contentType": "image",
     "previewText": "Daily Wire Junkies delivers regular news updates and key headlines.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/2931827",
+    "previewMediaUrl": "/seed-media/entities-real/ch-realdailywire.jpg",
     "editorialScore": 77,
     "activityScore": 74,
     "engagementScore": 57
@@ -1814,7 +1814,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/gamee?game=F1Racer",
     "contentType": "image",
     "previewText": "Racing game playable through @gamee.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/25722468",
+    "previewMediaUrl": "/seed-media/entities-real/app-gamee-f1-racer.jpg",
     "editorialScore": 66,
     "activityScore": 55,
     "engagementScore": 52
@@ -1832,7 +1832,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/gamee?game=MotoFX",
     "contentType": "image",
     "previewText": "Arcades game playable through @gamee.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/41793228",
+    "previewMediaUrl": "/seed-media/entities-real/app-gamee-moto-fx.jpg",
     "editorialScore": 67,
     "activityScore": 56,
     "engagementScore": 53
@@ -1850,7 +1850,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/gamee?game=Squares",
     "contentType": "image",
     "previewText": "Three in a Row game playable through @gamee.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/41793228",
+    "previewMediaUrl": "/seed-media/entities-real/app-gamee-squares.jpg",
     "editorialScore": 68,
     "activityScore": 57,
     "engagementScore": 54
@@ -1868,7 +1868,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/gamee?game=ShoeLover",
     "contentType": "image",
     "previewText": "Jump and Run game playable through @gamee.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/25722468",
+    "previewMediaUrl": "/seed-media/entities-real/app-gamee-shoe-lover.jpg",
     "editorialScore": 69,
     "activityScore": 58,
     "engagementScore": 55
@@ -1886,7 +1886,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/gamee?game=HeyCaptain",
     "contentType": "image",
     "previewText": "Arcades game playable through @gamee.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/44036562",
+    "previewMediaUrl": "/seed-media/entities-real/app-gamee-hey-captain.jpg",
     "editorialScore": 70,
     "activityScore": 59,
     "engagementScore": 56
@@ -1904,7 +1904,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/gamee?game=QuickGhost",
     "contentType": "image",
     "previewText": "Arcades game playable through @gamee.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/44036562",
+    "previewMediaUrl": "/seed-media/entities-real/app-gamee-quick-ghost.jpg",
     "editorialScore": 71,
     "activityScore": 60,
     "engagementScore": 57
@@ -1922,7 +1922,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/gamee?game=HausschweinRun",
     "contentType": "image",
     "previewText": "Arcades game playable through @gamee.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/32131462",
+    "previewMediaUrl": "/seed-media/entities-real/app-gamee-hausschwein-run.jpg",
     "editorialScore": 72,
     "activityScore": 61,
     "engagementScore": 58
@@ -1940,7 +1940,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/gamee?game=MrMuscle",
     "contentType": "image",
     "previewText": "Arcades game playable through @gamee.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/3260308",
+    "previewMediaUrl": "/seed-media/entities-real/app-gamee-mr-muscle.jpg",
     "editorialScore": 73,
     "activityScore": 62,
     "engagementScore": 59
@@ -1958,7 +1958,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/gamee?game=Snake",
     "contentType": "image",
     "previewText": "Arcades game playable through @gamee.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/3260308",
+    "previewMediaUrl": "/seed-media/entities-real/app-gamee-snake.jpg",
     "editorialScore": 74,
     "activityScore": 63,
     "engagementScore": 60
@@ -1976,7 +1976,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/gamee?game=ThreePlusThree",
     "contentType": "image",
     "previewText": "Puzzles and Logic game playable through @gamee.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/526301",
+    "previewMediaUrl": "/seed-media/entities-real/app-gamee-three-plus-three.jpg",
     "editorialScore": 75,
     "activityScore": 64,
     "engagementScore": 61
@@ -1994,7 +1994,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/gamee?game=SpaceOrbit",
     "contentType": "image",
     "previewText": "Arcades game playable through @gamee.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/3260308",
+    "previewMediaUrl": "/seed-media/entities-real/app-gamee-space-orbit.jpg",
     "editorialScore": 76,
     "activityScore": 65,
     "engagementScore": 62
@@ -2012,7 +2012,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/gamee?game=AerialDogfight",
     "contentType": "image",
     "previewText": "Jump and Run game playable through @gamee.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/3260308",
+    "previewMediaUrl": "/seed-media/entities-real/app-gamee-aerial-dogfight.jpg",
     "editorialScore": 77,
     "activityScore": 66,
     "engagementScore": 63
@@ -2030,7 +2030,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/gamee?game=FootballStar",
     "contentType": "image",
     "previewText": "Sports game playable through @gamee.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/9287040",
+    "previewMediaUrl": "/seed-media/entities-real/app-gamee-football-star.svg",
     "editorialScore": 78,
     "activityScore": 67,
     "engagementScore": 64
@@ -2048,7 +2048,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/gamee?game=GravityNinja",
     "contentType": "image",
     "previewText": "Jump and Run game playable through @gamee.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/3260308",
+    "previewMediaUrl": "/seed-media/entities-real/app-gamee-gravity-ninja.jpg",
     "editorialScore": 79,
     "activityScore": 68,
     "engagementScore": 65
@@ -2066,7 +2066,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/gamee?game=Hexatrion",
     "contentType": "image",
     "previewText": "Puzzles and Logic game playable through @gamee.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/3260308",
+    "previewMediaUrl": "/seed-media/entities-real/app-gamee-hexatrion.jpg",
     "editorialScore": 80,
     "activityScore": 69,
     "engagementScore": 66
@@ -2084,7 +2084,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/gamee?game=KarateKido",
     "contentType": "image",
     "previewText": "Arcades game playable through @gamee.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/3260308",
+    "previewMediaUrl": "/seed-media/entities-real/app-gamee-karate-kido.jpg",
     "editorialScore": 81,
     "activityScore": 70,
     "engagementScore": 67
@@ -2102,7 +2102,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/gamee?game=KungFuInc",
     "contentType": "image",
     "previewText": "Arcades game playable through @gamee.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/3260308",
+    "previewMediaUrl": "/seed-media/entities-real/app-gamee-kung-fu-inc.jpg",
     "editorialScore": 82,
     "activityScore": 71,
     "engagementScore": 68
@@ -2120,7 +2120,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/gamee?game=MarsRover",
     "contentType": "image",
     "previewText": "Jump and Run game playable through @gamee.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/19177628",
+    "previewMediaUrl": "/seed-media/entities-real/app-gamee-mars-rover.jpg",
     "editorialScore": 83,
     "activityScore": 72,
     "engagementScore": 69
@@ -2138,7 +2138,7 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/gamee?game=Qubo",
     "contentType": "image",
     "previewText": "Jump and Run game playable through @gamee.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/3260308",
+    "previewMediaUrl": "/seed-media/entities-real/app-gamee-qubo.jpg",
     "editorialScore": 84,
     "activityScore": 73,
     "engagementScore": 70
@@ -2156,9 +2156,66 @@ export const seededEntities: Entity[] = [
     "telegramUrl": "https://t.me/gamee?game=RioSprint",
     "contentType": "image",
     "previewText": "Sports game playable through @gamee.",
-    "previewMediaUrl": "https://avatars.githubusercontent.com/u/16956787",
+    "previewMediaUrl": "/seed-media/entities-real/app-gamee-rio-sprint.jpg",
     "editorialScore": 85,
     "activityScore": 74,
     "engagementScore": 71
+  },
+  {
+    "id": "ch-football-matchday-live",
+    "type": "channel",
+    "name": "Premier League",
+    "category": "Sports",
+    "tags": [
+      "sports",
+      "football",
+      "league"
+    ],
+    "shortDescription": "Premier League updates, highlights, and key matchday stories.",
+    "telegramUrl": "https://t.me/premierleague",
+    "contentType": "image",
+    "previewText": "News and top moments from England's top-flight matches.",
+    "previewMediaUrl": "/seed-media/football/manager-pep-guardiola.jpg",
+    "editorialScore": 86,
+    "activityScore": 75,
+    "engagementScore": 72
+  },
+  {
+    "id": "ch-football-transfer-wire",
+    "type": "channel",
+    "name": "FIFA",
+    "category": "Sports",
+    "tags": [
+      "sports",
+      "football",
+      "international"
+    ],
+    "shortDescription": "Official FIFA updates covering world football tournaments and announcements.",
+    "telegramUrl": "https://t.me/FIFAcom",
+    "contentType": "image",
+    "previewText": "Global football updates, tournament news, and federation highlights.",
+    "previewMediaUrl": "/seed-media/football/manager-carlo-ancelotti.jpg",
+    "editorialScore": 87,
+    "activityScore": 76,
+    "engagementScore": 73
+  },
+  {
+    "id": "ch-football-tactics-board",
+    "type": "channel",
+    "name": "Atletico de Madrid",
+    "category": "Sports",
+    "tags": [
+      "sports",
+      "football",
+      "club"
+    ],
+    "shortDescription": "Official Atletico de Madrid channel with club updates and match content.",
+    "telegramUrl": "https://t.me/Atleti",
+    "contentType": "image",
+    "previewText": "Club announcements, match build-up, and post-game coverage.",
+    "previewMediaUrl": "/seed-media/football/manager-diego-simeone.jpg",
+    "editorialScore": 88,
+    "activityScore": 77,
+    "engagementScore": 74
   }
 ];

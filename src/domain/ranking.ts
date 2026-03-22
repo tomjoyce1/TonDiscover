@@ -4,13 +4,29 @@ type BoostMap = Record<string, BoostState>;
 
 const MAX_PERSONALIZATION_BONUS = 90;
 const MIN_PERSONALIZATION_BONUS = -25;
-const ACTIVE_BOOST_BONUS = 200;
+// Keep boosts clearly visible in the feed order for demo users.
+const ACTIVE_BOOST_BONUS = 1000;
+const RANDOM_JITTER_RANGE = 8;
 const ONBOARDING_MATCH_BONUS = 12;
 const NON_SELECTED_CATEGORY_PENALTY = 8;
 const CATEGORY_REPEAT_PENALTY = 12;
 const DIVERSITY_WINDOW = 3;
+const FEED_SESSION_SEED = Math.floor(Math.random() * 1_000_000_000).toString(36);
 
 const now = () => Date.now();
+
+const hashString = (value: string): number => {
+  let hash = 0;
+  for (let index = 0; index < value.length; index += 1) {
+    hash = (hash * 31 + value.charCodeAt(index)) >>> 0;
+  }
+  return hash;
+};
+
+const getSessionJitter = (entityId: string): number => {
+  const normalized = hashString(`${entityId}:${FEED_SESSION_SEED}`) / 0xffffffff;
+  return ((normalized * 2) - 1) * RANDOM_JITTER_RANGE;
+};
 
 export const isBoostActive = (boost?: BoostState): boolean => {
   if (!boost || boost.status !== 'active' || !boost.expiresAt) {
@@ -38,12 +54,14 @@ const getEntityScore = (
   prefs: UserPrefs,
   boosts: BoostMap,
 ): number => {
+  const boosted = isBoostActive(boosts[entity.id]);
   const baseScore = (entity.editorialScore * 0.45)
     + (entity.activityScore * 0.35)
     + (entity.engagementScore * 0.20);
-  const boostScore = isBoostActive(boosts[entity.id]) ? ACTIVE_BOOST_BONUS : 0;
+  const boostScore = boosted ? ACTIVE_BOOST_BONUS : 0;
   const personalizationBonus = getPersonalizationBonus(entity, prefs);
-  return baseScore + boostScore + personalizationBonus;
+  const jitterBonus = boosted ? 0 : getSessionJitter(entity.id);
+  return baseScore + boostScore + personalizationBonus + jitterBonus;
 };
 
 type ScoredEntity = {
@@ -88,6 +106,13 @@ export const getRankedEntities = (
   }));
 
   scoredEntities.sort((left, right) => {
+    const leftBoosted = isBoostActive(boosts[left.entity.id]);
+    const rightBoosted = isBoostActive(boosts[right.entity.id]);
+
+    if (leftBoosted !== rightBoosted) {
+      return rightBoosted ? 1 : -1;
+    }
+
     if (right.score !== left.score) {
       return right.score - left.score;
     }

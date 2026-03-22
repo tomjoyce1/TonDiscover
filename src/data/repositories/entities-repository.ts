@@ -16,6 +16,11 @@ export const getFeaturedByEntityId = (
   allFeatured: FeaturedContent[] = seededFeaturedContent,
 ): FeaturedContent | undefined => allFeatured.find((item) => item.entityId === entityId);
 
+const getFeaturedListByEntityId = (
+  entityId: string,
+  allFeatured: FeaturedContent[] = seededFeaturedContent,
+): FeaturedContent[] => allFeatured.filter((item) => item.entityId === entityId);
+
 export const searchEntities = (
   query: string,
   allEntities: Entity[] = seededEntities,
@@ -27,15 +32,15 @@ export const searchEntities = (
   }
 
   return allEntities.filter((entity) => {
-    const featured = getFeaturedByEntityId(entity.id, allFeatured);
+    const featuredItems = getFeaturedListByEntityId(entity.id, allFeatured);
+    const featuredFields = featuredItems.flatMap((item) => [item.title, item.text]);
     const fields = [
       entity.name,
       entity.shortDescription,
       entity.longDescription,
       entity.tags.join(' '),
       entity.previewText,
-      featured?.title,
-      featured?.text,
+      ...featuredFields,
     ]
       .filter((value): value is string => !!value)
       .map(normalize);

@@ -3,11 +3,14 @@ import { categories } from '@/data/seeds/categories.ts';
 import { getEntities, searchEntities } from '@/data/repositories/entities-repository.ts';
 import { seededFeaturedContent } from '@/data/seeds/featured-content.ts';
 import { getRankedEntities } from '@/domain/ranking.ts';
+import { normalizeMediaUrl } from '@/helpers/media-url.ts';
 import { useTonConnect } from '@/hooks/useTonConnect.ts';
 import { readJSON, STORAGE_KEYS, writeJSON } from '@/services/storage/local-storage.ts';
 import {
   isSharedFeedEnabled,
   readSharedFeedSnapshot,
+  subscribeSharedFeedUpdates,
+  writeSharedBoostStates,
   writeSharedFeaturedOverrides,
 } from '@/services/storage/shared-featured-feed.ts';
 import type {
@@ -48,9 +51,9 @@ type AppStateContextProviderValue = {
     payload: Partial<Pick<Entity, 'name' | 'category' | 'telegramUrl' | 'shortDescription' | 'tags' | 'previewMediaUrl'>>,
   ) => void;
   setFeaturedContent: (payload: FeaturedContentInput) => FeaturedContent;
-  deleteFeaturedContent: (entityId: string) => void;
+  deleteFeaturedContent: (postId: string) => void;
   setBoostState: (state: BoostState) => void;
-  getBoostState: (entityId: string) => BoostState;
+  getBoostState: (targetId: string) => BoostState;
   isOwnedEntity: (entityId: string) => boolean;
   resetProfile: () => void;
   search: (query: string) => Entity[];
@@ -74,14 +77,41 @@ const initialHistory: HistoryState = {
 };
 
 const MIN_CATEGORY_WEIGHT = 0;
-const MAX_CATEGORY_WEIGHT = 60;
+const MAX_CATEGORY_WEIGHT = 100;
 const DOMAIN_SELECTION_WEIGHT_DELTA = 5;
+const SHARED_FEED_POLL_INTERVAL_MS = 3_000;
+const EXPLICITLY_REMOVED_ENTITY_IDS = new Set<string>([
+  'custom-1774173646049',
+  'custom-1774175241878',
+]);
+
+const isExplicitlyRemovedEntity = (
+  entity: Pick<Entity, 'id'> | undefined,
+): boolean => {
+  if (!entity) {
+    return false;
+  }
+  return EXPLICITLY_REMOVED_ENTITY_IDS.has(entity.id);
+};
+
+const clampCategoryWeight = (value: number): number => {
+  return Math.max(MIN_CATEGORY_WEIGHT, Math.min(MAX_CATEGORY_WEIGHT, value));
+};
+
+const normalizeCategoryWeights = (weights: Record<string, number> | undefined): Record<string, number> => {
+  if (!weights) {
+    return {};
+  }
+
+  const normalizedEntries = Object.entries(weights)
+    .filter(([category]) => Boolean(category))
+    .map(([category, value]) => [category, clampCategoryWeight(Number(value) || 0)] as const);
+
+  return Object.fromEntries(normalizedEntries);
+};
 
 const adjustWeight = (weights: Record<string, number>, category: string, diff: number): Record<string, number> => {
-  const nextValue = Math.max(
-    MIN_CATEGORY_WEIGHT,
-    Math.min(MAX_CATEGORY_WEIGHT, (weights[category] ?? 0) + diff),
-  );
+  const nextValue = clampCategoryWeight((weights[category] ?? 0) + diff);
   return {
     ...weights,
     [category]: nextValue,
@@ -89,6 +119,14 @@ const adjustWeight = (weights: Record<string, number>, category: string, diff: n
 };
 
 const uniq = (items: string[]): string[] => Array.from(new Set(items));
+
+const isSameBoostState = (left: BoostState, right: BoostState): boolean => {
+  return left.entityId === right.entityId
+    && left.status === right.status
+    && left.startedAt === right.startedAt
+    && left.expiresAt === right.expiresAt
+    && left.source === right.source;
+};
 
 const initialContext: AppStateContextProviderValue = {
   categories,
@@ -119,7 +157,7 @@ const initialContext: AppStateContextProviderValue = {
   },
   deleteFeaturedContent: () => undefined,
   setBoostState: () => undefined,
-  getBoostState: (entityId: string) => ({ entityId, status: 'inactive', source: 'mock' }),
+  getBoostState: (targetId: string) => ({ entityId: targetId, status: 'inactive', source: 'mock' }),
   isOwnedEntity: () => false,
   resetProfile: () => undefined,
   search: () => [],
@@ -136,14 +174,17 @@ export const AppStateProvider = ({ children }: AppStateProviderProps) => {
   const seededEntities = useMemo(() => getEntities(), []);
   const { walletAddress } = useTonConnect();
   const [registeredEntities, setRegisteredEntities] = useState<Entity[]>(() => {
-    return readJSON(STORAGE_KEYS.registeredEntities, [] as Entity[]);
+    return readJSON(STORAGE_KEYS.registeredEntities, [] as Entity[])
+      .filter((entity) => !isExplicitlyRemovedEntity(entity));
   });
   const [sharedRegisteredEntities, setSharedRegisteredEntities] = useState<Entity[]>([]);
   const [featuredOverrides, setFeaturedOverrides] = useState<FeaturedContent[]>(() => {
-    return readJSON(STORAGE_KEYS.featuredOverrides, [] as FeaturedContent[]);
+    return readJSON(STORAGE_KEYS.featuredOverrides, [] as FeaturedContent[])
+      .filter((item) => !EXPLICITLY_REMOVED_ENTITY_IDS.has(item.entityId));
   });
   const [ownedBoostEntityIds, setOwnedBoostEntityIds] = useState<string[]>(() => {
-    return readJSON(STORAGE_KEYS.ownedBoostEntityIds, [] as string[]);
+    return readJSON(STORAGE_KEYS.ownedBoostEntityIds, [] as string[])
+      .filter((id) => !EXPLICITLY_REMOVED_ENTITY_IDS.has(id));
   });
   const [hasHydratedSharedFeed, setHasHydratedSharedFeed] = useState<boolean>(() => !isSharedFeedEnabled);
   const [favorites, setFavorites] = useState<FavoritesState>(() => {
@@ -153,25 +194,53 @@ export const AppStateProvider = ({ children }: AppStateProviderProps) => {
     return readJSON(STORAGE_KEYS.history, initialHistory);
   });
   const [userPrefs, setUserPrefs] = useState<UserPrefs>(() => {
-    return readJSON(STORAGE_KEYS.prefs, initialPrefs);
+    const persisted = readJSON(STORAGE_KEYS.prefs, initialPrefs);
+    return {
+      ...persisted,
+      categoryWeights: normalizeCategoryWeights(persisted.categoryWeights),
+    };
   });
   const [boosts, setBoosts] = useState<Record<string, BoostState>>(() => {
-    return readJSON(STORAGE_KEYS.boosts, {} as Record<string, BoostState>);
+    const raw = readJSON(STORAGE_KEYS.boosts, {} as Record<string, BoostState>);
+    return Object.fromEntries(
+      Object.entries(raw).filter(([targetId]) => !EXPLICITLY_REMOVED_ENTITY_IDS.has(targetId)),
+    );
   });
   const [boostEvents, setBoostEvents] = useState<BoostEvent[]>(() => {
-    return readJSON(STORAGE_KEYS.boostEvents, [] as BoostEvent[]);
+    return readJSON(STORAGE_KEYS.boostEvents, [] as BoostEvent[])
+      .filter((event) => !EXPLICITLY_REMOVED_ENTITY_IDS.has(event.entityId));
   });
   const [deletedEntityIds, setDeletedEntityIds] = useState<string[]>(() => {
-    return readJSON(STORAGE_KEYS.deletedEntityIds, [] as string[]);
+    return uniq([
+      ...readJSON(STORAGE_KEYS.deletedEntityIds, [] as string[]),
+      ...Array.from(EXPLICITLY_REMOVED_ENTITY_IDS),
+    ]);
+  });
+  const [deletedFeaturedIds, setDeletedFeaturedIds] = useState<string[]>(() => {
+    return readJSON(STORAGE_KEYS.deletedFeaturedIds, [] as string[]);
   });
 
   const entities = useMemo(() => {
     const byId = new Map<string, Entity>();
     [...seededEntities, ...sharedRegisteredEntities, ...registeredEntities].forEach((entity) => {
+      if (isExplicitlyRemovedEntity(entity)) {
+        return;
+      }
       byId.set(entity.id, entity);
     });
     return Array.from(byId.values()).filter((e) => !deletedEntityIds.includes(e.id));
   }, [registeredEntities, seededEntities, sharedRegisteredEntities, deletedEntityIds]);
+
+  const syncRegisteredEntities = useMemo(() => {
+    const byId = new Map<string, Entity>();
+    [...sharedRegisteredEntities, ...registeredEntities].forEach((entity) => {
+      if (deletedEntityIds.includes(entity.id) || isExplicitlyRemovedEntity(entity)) {
+        return;
+      }
+      byId.set(entity.id, entity);
+    });
+    return Array.from(byId.values());
+  }, [deletedEntityIds, registeredEntities, sharedRegisteredEntities]);
 
   const ownedEntityIds = useMemo(() => {
     return uniq([
@@ -185,28 +254,64 @@ export const AppStateProvider = ({ children }: AppStateProviderProps) => {
   }, [entities, ownedEntityIds]);
 
   const featuredContent = useMemo(() => {
-    const byEntity = new Map<string, FeaturedContent>();
-    [...seededFeaturedContent, ...featuredOverrides].forEach((item) => {
-      byEntity.set(item.entityId, item);
+    const byId = new Map<string, FeaturedContent>();
+    [...featuredOverrides, ...seededFeaturedContent].forEach((item) => {
+      if (EXPLICITLY_REMOVED_ENTITY_IDS.has(item.entityId)) {
+        return;
+      }
+      if (!byId.has(item.id)) {
+        byId.set(item.id, item);
+      }
     });
-    return Array.from(byEntity.values()).filter((fc) => !deletedEntityIds.includes(fc.entityId));
-  }, [featuredOverrides, deletedEntityIds]);
+    return Array.from(byId.values()).filter((fc) => {
+      return !deletedEntityIds.includes(fc.entityId) && !deletedFeaturedIds.includes(fc.id);
+    });
+  }, [featuredOverrides, deletedEntityIds, deletedFeaturedIds]);
 
   const mergeSharedFeaturedIntoLocal = useCallback((remoteFeatured: FeaturedContent[]) => {
     setFeaturedOverrides((previousState) => {
-      const remoteByEntity = new Map(remoteFeatured.map((item) => [item.entityId, item]));
-      const localNotInRemote = previousState.filter((item) => !remoteByEntity.has(item.entityId));
-      return [...remoteFeatured, ...localNotInRemote];
+      const remoteById = new Map(
+        remoteFeatured
+          .filter((item) => !deletedEntityIds.includes(item.entityId) && !deletedFeaturedIds.includes(item.id))
+          .map((item) => [item.id, item]),
+      );
+      const localNotInRemote = previousState.filter((item) => !remoteById.has(item.id));
+      return [...remoteById.values(), ...localNotInRemote];
     });
-  }, []);
+  }, [deletedEntityIds, deletedFeaturedIds]);
 
   const mergeSharedRegisteredIntoLocal = useCallback((remoteEntities: Entity[]) => {
     setSharedRegisteredEntities(() => {
       return remoteEntities.filter((remoteEntity) => {
+        if (deletedEntityIds.includes(remoteEntity.id) || isExplicitlyRemovedEntity(remoteEntity)) {
+          return false;
+        }
         return !registeredEntities.some((localEntity) => localEntity.id === remoteEntity.id);
       });
     });
-  }, [registeredEntities]);
+  }, [deletedEntityIds, registeredEntities]);
+
+  const mergeSharedBoostsIntoLocal = useCallback((remoteBoosts: Record<string, BoostState>) => {
+    const deletedEntityIdSet = new Set(deletedEntityIds);
+    const deletedFeaturedIdSet = new Set(deletedFeaturedIds);
+    setBoosts((previousState) => {
+      let hasChange = false;
+      const nextState = { ...previousState };
+
+      Object.entries(remoteBoosts).forEach(([entityId, remoteState]) => {
+        if (deletedEntityIdSet.has(entityId) || deletedFeaturedIdSet.has(entityId)) {
+          return;
+        }
+        const localState = previousState[entityId];
+        if (!localState || !isSameBoostState(localState, remoteState)) {
+          nextState[entityId] = remoteState;
+          hasChange = true;
+        }
+      });
+
+      return hasChange ? nextState : previousState;
+    });
+  }, [deletedEntityIds, deletedFeaturedIds]);
 
   const rankedEntities = useMemo(() => {
     return getRankedEntities(entities, userPrefs, boosts);
@@ -305,7 +410,7 @@ export const AppStateProvider = ({ children }: AppStateProviderProps) => {
       telegramUrl: payload.telegramUrl,
       contentType: payload.contentType,
       previewText: payload.previewText,
-      previewMediaUrl: payload.previewMediaUrl,
+      previewMediaUrl: normalizeMediaUrl(payload.previewMediaUrl),
       creatorWalletAddress: walletAddress?.toString(),
       editorialScore: 55,
       activityScore: 30,
@@ -321,11 +426,30 @@ export const AppStateProvider = ({ children }: AppStateProviderProps) => {
   }, []);
 
   const deleteEntity = useCallback((entityId: string) => {
+    const relatedPostIds = featuredContent
+      .filter((item) => item.entityId === entityId)
+      .map((item) => item.id);
+    const relatedPostIdsSet = new Set(relatedPostIds);
+
     setRegisteredEntities((previousState) => previousState.filter((e) => e.id !== entityId));
     setFeaturedOverrides((previousState) => previousState.filter((fc) => fc.entityId !== entityId));
     setOwnedBoostEntityIds((previousState) => previousState.filter((id) => id !== entityId));
     setDeletedEntityIds((previousState) => uniq([...previousState, entityId]));
-  }, []);
+    setDeletedFeaturedIds((previousState) => uniq([...previousState, ...relatedPostIds]));
+    setBoosts((previousState) => {
+      const nextState = { ...previousState };
+      delete nextState[entityId];
+      relatedPostIds.forEach((postId) => {
+        delete nextState[postId];
+      });
+      return nextState;
+    });
+    setBoostEvents((previousState) => {
+      return previousState.filter((event) => {
+        return event.entityId !== entityId && !relatedPostIdsSet.has(event.entityId);
+      });
+    });
+  }, [featuredContent]);
 
   const updateSavedEntity = useCallback((
     entityId: string,
@@ -339,38 +463,63 @@ export const AppStateProvider = ({ children }: AppStateProviderProps) => {
       return {
         ...entity,
         ...payload,
+        previewMediaUrl: normalizeMediaUrl(payload.previewMediaUrl ?? entity.previewMediaUrl),
       };
     }));
   }, []);
 
   const setFeaturedContent = useCallback((payload: FeaturedContentInput): FeaturedContent => {
+    const normalizedPostId = payload.id?.trim();
     const next: FeaturedContent = {
-      id: `featured-${payload.entityId}-${Date.now()}`,
+      id: normalizedPostId || `featured-${payload.entityId}-${Date.now()}`,
       entityId: payload.entityId,
       mode: payload.mode,
       contentType: payload.contentType,
       title: payload.title,
       text: payload.text,
-      mediaUrl: payload.mediaUrl,
+      mediaUrl: normalizeMediaUrl(payload.mediaUrl),
     };
 
     setFeaturedOverrides((previousState) => {
-      return [next, ...previousState.filter((item) => item.entityId !== payload.entityId)];
+      if (normalizedPostId) {
+        return [next, ...previousState.filter((item) => item.id !== normalizedPostId)];
+      }
+      return [next, ...previousState];
     });
+    if (normalizedPostId) {
+      setDeletedFeaturedIds((previousState) => previousState.filter((id) => id !== normalizedPostId));
+    }
     setOwnedBoostEntityIds((previousState) => uniq([payload.entityId, ...previousState]));
 
     return next;
   }, []);
 
-  const deleteFeaturedContent = useCallback((entityId: string) => {
-    setFeaturedOverrides((previousState) => previousState.filter((item) => item.entityId !== entityId));
+  const deleteFeaturedContent = useCallback((postId: string) => {
+    setFeaturedOverrides((previousState) => previousState.filter((item) => item.id !== postId));
+    setDeletedFeaturedIds((previousState) => uniq([...previousState, postId]));
+    setBoosts((previousState) => {
+      if (!Object.hasOwn(previousState, postId)) {
+        return previousState;
+      }
+      const nextState = { ...previousState };
+      delete nextState[postId];
+      return nextState;
+    });
+    setBoostEvents((previousState) => previousState.filter((event) => event.entityId !== postId));
   }, []);
 
   const setBoostState = useCallback((state: BoostState) => {
-    setBoosts((previousState) => ({
-      ...previousState,
-      [state.entityId]: state,
-    }));
+    setBoosts((previousState) => {
+      const previousEntityState = previousState[state.entityId];
+      if (previousEntityState && isSameBoostState(previousEntityState, state)) {
+        return previousState;
+      }
+
+      return {
+        ...previousState,
+        [state.entityId]: state,
+      };
+    });
   }, []);
 
   const getBoostState = useCallback((entityId: string): BoostState => {
@@ -382,28 +531,40 @@ export const AppStateProvider = ({ children }: AppStateProviderProps) => {
   }, [ownedEntityIds]);
 
   const resetProfile = useCallback(() => {
+    const ownedEntityIdsToDelete = registeredEntities.map((entity) => entity.id);
+    const ownedEntityIdsSet = new Set(ownedEntityIdsToDelete);
+    const relatedPostIdsToDelete = featuredContent
+      .filter((item) => ownedEntityIdsSet.has(item.entityId))
+      .map((item) => item.id);
+
     setRegisteredEntities([]);
     setSharedRegisteredEntities([]);
     setFeaturedOverrides([]);
     setOwnedBoostEntityIds([]);
-    setDeletedEntityIds([]);
+    setDeletedEntityIds((previousState) => uniq([...previousState, ...ownedEntityIdsToDelete]));
+    setDeletedFeaturedIds((previousState) => uniq([...previousState, ...relatedPostIdsToDelete]));
     setFavorites(initialFavorites);
     setHistory(initialHistory);
     setUserPrefs(initialPrefs);
     setBoosts({} as Record<string, BoostState>);
+    setBoostEvents([]);
 
     if (typeof window !== 'undefined') {
       const keysToRemove: string[] = [];
       for (let i = 0; i < window.localStorage.length; i += 1) {
         const key = window.localStorage.key(i);
-        if (key?.startsWith('tondiscover:')) {
+        if (
+          key?.startsWith('tondiscover:')
+          && key !== STORAGE_KEYS.deletedEntityIds
+          && key !== STORAGE_KEYS.deletedFeaturedIds
+        ) {
           keysToRemove.push(key);
         }
       }
 
       keysToRemove.forEach((key) => window.localStorage.removeItem(key));
     }
-  }, []);
+  }, [featuredContent, registeredEntities]);
 
   const search = useCallback((query: string): Entity[] => {
     if (!query.trim()) {
@@ -442,6 +603,58 @@ export const AppStateProvider = ({ children }: AppStateProviderProps) => {
   }, [deletedEntityIds]);
 
   useEffect(() => {
+    writeJSON(STORAGE_KEYS.deletedFeaturedIds, deletedFeaturedIds);
+  }, [deletedFeaturedIds]);
+
+  useEffect(() => {
+    const deletedTargetIds = new Set([...deletedEntityIds, ...deletedFeaturedIds]);
+    if (deletedTargetIds.size === 0) {
+      return;
+    }
+
+    setBoosts((previousState) => {
+      let hasChange = false;
+      const nextState = { ...previousState };
+      deletedTargetIds.forEach((targetId) => {
+        if (Object.hasOwn(nextState, targetId)) {
+          delete nextState[targetId];
+          hasChange = true;
+        }
+      });
+      return hasChange ? nextState : previousState;
+    });
+
+    setBoostEvents((previousState) => {
+      return previousState.filter((event) => !deletedTargetIds.has(event.entityId));
+    });
+  }, [deletedEntityIds, deletedFeaturedIds]);
+
+  useEffect(() => {
+    const validTargetIds = new Set([
+      ...entities.map((entity) => entity.id),
+      ...featuredContent.map((item) => item.id),
+    ]);
+
+    setBoosts((previousState) => {
+      let hasChange = false;
+      const nextState = { ...previousState };
+
+      Object.keys(nextState).forEach((targetId) => {
+        if (!validTargetIds.has(targetId)) {
+          delete nextState[targetId];
+          hasChange = true;
+        }
+      });
+
+      return hasChange ? nextState : previousState;
+    });
+
+    setBoostEvents((previousState) => {
+      return previousState.filter((event) => validTargetIds.has(event.entityId));
+    });
+  }, [entities, featuredContent]);
+
+  useEffect(() => {
     if (!isSharedFeedEnabled) {
       return;
     }
@@ -454,8 +667,34 @@ export const AppStateProvider = ({ children }: AppStateProviderProps) => {
       }
 
       if (snapshot) {
-        mergeSharedFeaturedIntoLocal(snapshot.featuredOverrides);
-        mergeSharedRegisteredIntoLocal(snapshot.registeredEntities);
+        const explicitlyRemovedRemoteEntityIds = snapshot.registeredEntities
+          .filter((entity) => isExplicitlyRemovedEntity(entity))
+          .map((entity) => entity.id);
+        const nextDeletedEntityIds = uniq([
+          ...snapshot.deletedEntityIds,
+          ...explicitlyRemovedRemoteEntityIds,
+          ...Array.from(EXPLICITLY_REMOVED_ENTITY_IDS),
+        ]);
+
+        setDeletedEntityIds((previousState) => uniq([...previousState, ...nextDeletedEntityIds]));
+        setDeletedFeaturedIds((previousState) => uniq([...previousState, ...snapshot.deletedFeaturedIds]));
+        const remoteDeletedEntityIdSet = new Set(nextDeletedEntityIds);
+        const remoteDeletedFeaturedIdSet = new Set(snapshot.deletedFeaturedIds);
+        const filteredRemoteFeatured = snapshot.featuredOverrides.filter((item) => {
+          return !remoteDeletedEntityIdSet.has(item.entityId) && !remoteDeletedFeaturedIdSet.has(item.id);
+        });
+        const filteredRemoteEntities = snapshot.registeredEntities.filter((entity) => {
+          return !remoteDeletedEntityIdSet.has(entity.id) && !isExplicitlyRemovedEntity(entity);
+        });
+        const filteredRemoteBoosts = Object.fromEntries(
+          Object.entries(snapshot.boosts).filter(([targetId]) => {
+            return !remoteDeletedEntityIdSet.has(targetId) && !remoteDeletedFeaturedIdSet.has(targetId);
+          }),
+        );
+
+        mergeSharedFeaturedIntoLocal(filteredRemoteFeatured);
+        mergeSharedRegisteredIntoLocal(filteredRemoteEntities);
+        mergeSharedBoostsIntoLocal(filteredRemoteBoosts);
       }
       setHasHydratedSharedFeed(true);
     };
@@ -472,25 +711,43 @@ export const AppStateProvider = ({ children }: AppStateProviderProps) => {
     void pullSharedFeed();
     const intervalId = window.setInterval(() => {
       void pullSharedFeed();
-    }, 10_000);
+    }, SHARED_FEED_POLL_INTERVAL_MS);
+    const unsubscribeSharedFeed = subscribeSharedFeedUpdates(() => {
+      void pullSharedFeed();
+    });
     window.addEventListener('focus', handleFocus);
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
     return () => {
       cancelled = true;
       window.clearInterval(intervalId);
+      unsubscribeSharedFeed?.();
       window.removeEventListener('focus', handleFocus);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
-  }, [mergeSharedFeaturedIntoLocal, mergeSharedRegisteredIntoLocal]);
+  }, [mergeSharedBoostsIntoLocal, mergeSharedFeaturedIntoLocal, mergeSharedRegisteredIntoLocal]);
 
   useEffect(() => {
     if (!isSharedFeedEnabled || !hasHydratedSharedFeed) {
       return;
     }
 
-    void writeSharedFeaturedOverrides(featuredOverrides, registeredEntities);
-  }, [featuredOverrides, hasHydratedSharedFeed, registeredEntities]);
+    void writeSharedFeaturedOverrides(
+      featuredOverrides,
+      syncRegisteredEntities,
+      undefined,
+      deletedFeaturedIds,
+      deletedEntityIds,
+    );
+  }, [deletedEntityIds, deletedFeaturedIds, featuredOverrides, hasHydratedSharedFeed, syncRegisteredEntities]);
+
+  useEffect(() => {
+    if (!isSharedFeedEnabled || !hasHydratedSharedFeed) {
+      return;
+    }
+
+    void writeSharedBoostStates(boosts);
+  }, [boosts, hasHydratedSharedFeed]);
 
   useEffect(() => {
     writeJSON(STORAGE_KEYS.favorites, favorites);

@@ -9,27 +9,74 @@ import { cx } from '@/helpers/class-name.ts';
 
 const inputClass = 'w-full h-12 px-4 bg-muted/60 text-foreground rounded-xl border border-border/50 outline-none text-sm placeholder:text-muted-foreground focus:border-primary/40 focus:ring-1 focus:ring-primary/20 transition-colors';
 
+type BoostTargetType = 'entity' | 'post';
+
+type BoostTarget = {
+  id: string;
+  type: BoostTargetType;
+  entityId: string;
+  label: string;
+  subtitle: string;
+};
+
 const BoostSettings = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { ownedEntities, isOwnedEntity } = useAppState();
-  const requestedEntityId = searchParams.get('entityId');
-  const initialEntityId = requestedEntityId && isOwnedEntity(requestedEntityId)
-    ? requestedEntityId
-    : ownedEntities[0]?.id ?? '';
-  const [entityId, setEntityId] = useState(initialEntityId);
+  const { ownedEntities, featuredContent, isOwnedEntity } = useAppState();
+  const requestedTargetId = searchParams.get('targetId') ?? searchParams.get('entityId') ?? '';
+  const requestedTargetType = (searchParams.get('targetType') ?? 'entity') as BoostTargetType;
+
+  const boostTargets = useMemo<BoostTarget[]>(() => {
+    const entityTargets: BoostTarget[] = ownedEntities.map((entity) => ({
+      id: entity.id,
+      type: 'entity',
+      entityId: entity.id,
+      label: entity.name,
+      subtitle: `Entity · ${entity.type}`,
+    }));
+
+    const postTargets: BoostTarget[] = featuredContent
+      .filter((post) => isOwnedEntity(post.entityId))
+      .map((post) => {
+        const parentEntity = ownedEntities.find((entity) => entity.id === post.entityId);
+        const parentName = parentEntity?.name ?? 'Unknown entity';
+        return {
+          id: post.id,
+          type: 'post',
+          entityId: post.entityId,
+          label: post.title?.trim() || `${parentName} post`,
+          subtitle: `Post from ${parentName}`,
+        };
+      });
+
+    return [...entityTargets, ...postTargets];
+  }, [featuredContent, isOwnedEntity, ownedEntities]);
+
+  const initialTarget = useMemo(() => {
+    const byTarget = boostTargets.find((target) => target.id === requestedTargetId && target.type === requestedTargetType);
+    if (byTarget) {
+      return byTarget;
+    }
+    const byId = boostTargets.find((target) => target.id === requestedTargetId);
+    if (byId) {
+      return byId;
+    }
+    return boostTargets[0];
+  }, [boostTargets, requestedTargetId, requestedTargetType]);
+
+  const [targetId, setTargetId] = useState(initialTarget?.id ?? '');
   const [optionId, setOptionId] = useState(boostOptions[0].id);
 
-  const entity = useMemo(
-    () => ownedEntities.find((item) => item.id === entityId),
-    [ownedEntities, entityId],
+  const target = useMemo(
+    () => boostTargets.find((item) => item.id === targetId),
+    [boostTargets, targetId],
   );
 
   const proceed = () => {
-    if (!entityId) {
+    if (!target) {
       return;
     }
-    navigate(`/create/boost/connect?entityId=${encodeURIComponent(entityId)}&optionId=${encodeURIComponent(optionId)}`);
+    navigate(`/create/boost/connect?targetId=${encodeURIComponent(target.id)}&targetType=${encodeURIComponent(target.type)}&optionId=${encodeURIComponent(optionId)}`);
   };
 
   return (
@@ -44,8 +91,8 @@ const BoostSettings = () => {
           <ArrowLeft className="h-4 w-4" />
         </Link>
         <div>
-          <h1 className="text-xl font-bold tracking-tight text-foreground">Boost Post</h1>
-          <p className="text-[12px] text-muted-foreground mt-0.5">Select duration and eligible entity</p>
+          <h1 className="text-xl font-bold tracking-tight text-foreground">Boost Visibility</h1>
+          <p className="text-[12px] text-muted-foreground mt-0.5">Select an entity or a post</p>
         </div>
       </header>
 
@@ -56,11 +103,11 @@ const BoostSettings = () => {
             <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-500/15 border border-amber-500/20">
               <Zap className="h-4 w-4 text-amber-400" />
             </div>
-            <span className="text-sm font-semibold text-foreground">Your Entity</span>
+            <span className="text-sm font-semibold text-foreground">Your Content</span>
           </div>
-          {ownedEntities.length === 0 ? (
+          {boostTargets.length === 0 ? (
             <>
-              <p className="text-sm text-muted-foreground mb-3">No eligible content yet. You can only boost entities you created.</p>
+              <p className="text-sm text-muted-foreground mb-3">No eligible content yet. You can only boost content you created.</p>
               <div className="flex flex-wrap gap-2">
                 <Link to="/create/post" className={buttonStyles({ variant: 'primary', size: 'md' })}>
                   Make Post
@@ -72,12 +119,14 @@ const BoostSettings = () => {
             </>
           ) : (
             <select
-              value={entityId}
-              onChange={(event) => setEntityId(event.target.value)}
+              value={targetId}
+              onChange={(event) => setTargetId(event.target.value)}
               className={inputClass}
             >
-              {ownedEntities.map((item) => (
-                <option key={item.id} value={item.id}>{item.name}</option>
+              {boostTargets.map((item) => (
+                <option key={`${item.type}:${item.id}`} value={item.id}>
+                  {item.type === 'post' ? `Post · ${item.label}` : `Entity · ${item.label}`}
+                </option>
               ))}
             </select>
           )}
@@ -118,15 +167,15 @@ const BoostSettings = () => {
           </div>
         </div>
 
-        {entity && (
-          <p className="text-xs text-muted-foreground text-center">Selected: {entity.name}</p>
+        {target && (
+          <p className="text-xs text-muted-foreground text-center">Selected: {target.label} ({target.subtitle})</p>
         )}
 
         {/* Submit */}
         <button
           type="button"
           onClick={proceed}
-          disabled={!entity}
+          disabled={!target}
           className="w-full flex items-center justify-center gap-2 h-[52px] rounded-2xl bg-amber-500 text-black font-bold text-[15px] transition-all active:scale-[0.97] disabled:opacity-40"
         >
           Continue to Connect Wallet

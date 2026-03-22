@@ -1,0 +1,32 @@
+[
+  {
+    "handle": "toncoin",
+    "type": "channel",
+    "category": "DeFi",
+    "tags": ["defi", "crypto", "ton"]
+  },
+  {
+    "handle": "tonblockchain",
+    "type": "channel",
+    "category": "DeFi",
+    "tags": ["defi", "crypto", "ton"]
+  },
+  {
+    "handle": "telegram",
+    "type": "channel",
+    "category": "News",
+    "tags": ["news", "updates"]
+  },
+  {
+    "handle": "wallet",
+    "type": "app",
+    "category": "Tools",
+    "tags": ["wallet", "miniapp", "ton"]
+  },
+  {
+    "handle": "gamee",
+    "type": "app",
+    "category": "Games",
+    "tags": ["games", "miniapp"]
+  }
+]

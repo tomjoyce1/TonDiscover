@@ -8,7 +8,6 @@ const CreateHub = () => {
   const [searchParams] = useSearchParams();
   const { savedEntities } = useAppState();
   const hasSavedEntities = savedEntities.length > 0;
-  const defaultOverviewEntityId = savedEntities[0]?.id ?? '';
   const savedEntityId = searchParams.get('saved');
   const savedEntity = savedEntities.find((entity) => entity.id === savedEntityId);
 

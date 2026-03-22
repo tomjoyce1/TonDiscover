@@ -5,8 +5,9 @@ import { EntitySheet } from '@/components/discovery/EntitySheet.tsx';
 import { useAppState } from '@/context/app-context.tsx';
 import { isBoostActive } from '@/domain/ranking.ts';
 import { cx } from '@/helpers/class-name.ts';
+import type { Entity, FeaturedContent } from '@/types/tondiscover.ts';
 
-/* ── Visual config ── */
+/* Visual config */
 const trendingTagColors = [
   'text-sky-400', 'text-emerald-400', 'text-amber-400', 'text-rose-400',
   'text-violet-400', 'text-cyan-400', 'text-lime-400', 'text-orange-400',
@@ -14,19 +15,69 @@ const trendingTagColors = [
 ];
 
 const CATEGORY_META: Record<string, { icon: string; color: string }> = {
-  DeFi:      { icon: '💱', color: 'from-sky-600/20 to-sky-500/5 border-sky-500/20' },
-  Games:     { icon: '🎮', color: 'from-violet-600/20 to-violet-500/5 border-violet-500/20' },
-  Tools:     { icon: '🔧', color: 'from-slate-600/20 to-slate-500/5 border-slate-500/20' },
-  Community: { icon: '🌐', color: 'from-emerald-600/20 to-emerald-500/5 border-emerald-500/20' },
-  Education: { icon: '⚡', color: 'from-amber-600/20 to-amber-500/5 border-amber-500/20' },
-  News:      { icon: '📰', color: 'from-rose-600/20 to-rose-500/5 border-rose-500/20' },
+  DeFi:      { icon: '\uD83D\uDCB1', color: 'from-sky-600/20 to-sky-500/5 border-sky-500/20' },
+  Games:     { icon: '\uD83C\uDFAE', color: 'from-violet-600/20 to-violet-500/5 border-violet-500/20' },
+  Tools:     { icon: '\uD83D\uDD27', color: 'from-slate-600/20 to-slate-500/5 border-slate-500/20' },
+  Community: { icon: '\uD83C\uDF10', color: 'from-emerald-600/20 to-emerald-500/5 border-emerald-500/20' },
+  Education: { icon: '\u26A1', color: 'from-amber-600/20 to-amber-500/5 border-amber-500/20' },
+  News:      { icon: '\uD83D\uDCF0', color: 'from-rose-600/20 to-rose-500/5 border-rose-500/20' },
 };
 
-const DEFAULT_CAT = { icon: '✨', color: 'from-slate-600/20 to-slate-500/5 border-slate-500/20' };
+const DEFAULT_CAT = { icon: '\u2728', color: 'from-slate-600/20 to-slate-500/5 border-slate-500/20' };
 
 const parseList = (v: string | null): string[] =>
   v ? v.split(',').map((s) => s.trim()).filter(Boolean) : [];
 const normalize = (v: string): string => v.trim().toLowerCase();
+
+const getFieldMatchScore = (field: string, query: string): number => {
+  const normalizedField = normalize(field);
+  if (!normalizedField || !query) {
+    return 0;
+  }
+  if (normalizedField === query) {
+    return 120;
+  }
+  if (normalizedField.startsWith(query)) {
+    return 90;
+  }
+  if (normalizedField.includes(query)) {
+    return 60;
+  }
+  return 0;
+};
+
+const getRelevanceScore = (fields: string[], query: string): number => {
+  return fields.reduce((bestScore, field) => Math.max(bestScore, getFieldMatchScore(field, query)), 0);
+};
+
+type SearchResultItem =
+  | { kind: 'entity'; entity: Entity }
+  | { kind: 'post'; entity: Entity; post: FeaturedContent };
+
+type ScoredSearchResult = {
+  result: SearchResultItem;
+  score: number;
+  boosted: boolean;
+  order: number;
+};
+
+type DiscoverFilterType = 'channel' | 'app' | 'post';
+
+const discoverFilterTypes: { value: DiscoverFilterType; label: string }[] = [
+  { value: 'channel', label: 'Channel' },
+  { value: 'app', label: 'App' },
+  { value: 'post', label: 'Post' },
+];
+
+const discoverFilterTypeLabel: Record<DiscoverFilterType, string> = {
+  channel: 'Channel',
+  app: 'App',
+  post: 'Post',
+};
+
+const isDiscoverFilterType = (value: string): value is DiscoverFilterType => {
+  return value === 'channel' || value === 'app' || value === 'post';
+};
 
 type ResultThumbProps = {
   name: string;
@@ -71,11 +122,18 @@ const SearchHome = () => {
   const { entities, categories, rankedEntities, featuredContent, getBoostState } = useAppState();
 
   const [query, setQuery] = useState(searchParams.get('q') ?? '');
+  const [selectedTypes, setSelectedTypes] = useState<DiscoverFilterType[]>(
+    parseList(searchParams.get('types')).filter(isDiscoverFilterType),
+  );
   const [selectedCategories, setSelectedCategories] = useState<string[]>(parseList(searchParams.get('categories')));
   const [selectedTags, setSelectedTags] = useState<string[]>(parseList(searchParams.get('tags')));
   /* Entity detail sheet */
   const [selectedEntityId, setSelectedEntityId] = useState<string | null>(null);
-  const closeEntitySheet = useCallback(() => setSelectedEntityId(null), []);
+  const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
+  const closeEntitySheet = useCallback(() => {
+    setSelectedEntityId(null);
+    setSelectedPostId(null);
+  }, []);
 
   /* Filter sheet with slide-up / slide-down animation */
   const [filtersMounted, setFiltersMounted] = useState(false);
@@ -96,11 +154,9 @@ const SearchHome = () => {
 
   useEffect(() => () => clearTimeout(filterTimerRef.current), []);
 
-  const featuredByEntityId = useMemo(() => {
-    const m = new Map<string, (typeof featuredContent)[number]>();
-    featuredContent.forEach((i) => m.set(i.entityId, i));
-    return m;
-  }, [featuredContent]);
+  const entityById = useMemo(() => {
+    return new Map(entities.map((entity) => [entity.id, entity]));
+  }, [entities]);
 
   const tags = useMemo(
     () => Array.from(new Set(entities.flatMap((e) => e.tags))).sort((a, b) => a.localeCompare(b)),
@@ -114,30 +170,112 @@ const SearchHome = () => {
     return c;
   }, [entities]);
 
-  const toggle = (items: string[], set: (n: string[]) => void, t: string) =>
+  const toggle = <T extends string>(items: T[], set: (n: T[]) => void, t: T) =>
     set(items.includes(t) ? items.filter((i) => i !== t) : [...items, t]);
 
-  const filtered = useMemo(() =>
+  const filteredEntities = useMemo(() =>
     rankedEntities.filter((e) => {
+      const byType = selectedTypes.length === 0 || selectedTypes.includes(e.type);
       const byCat = selectedCategories.length === 0 || selectedCategories.includes(e.category);
       const byTag = selectedTags.length === 0 || e.tags.some((t) => selectedTags.includes(t));
-      return byCat && byTag;
+      return byType && byCat && byTag;
     }),
-  [rankedEntities, selectedCategories, selectedTags]);
+  [rankedEntities, selectedCategories, selectedTags, selectedTypes]);
 
-  const results = useMemo(() => {
+  const filteredPosts = useMemo(() => {
+    return featuredContent
+      .map((post) => {
+        const entity = entityById.get(post.entityId);
+        if (!entity) {
+          return null;
+        }
+        return { entity, post };
+      })
+      .filter((item): item is { entity: Entity; post: FeaturedContent } => item !== null)
+      .filter(({ entity }) => {
+        const byType = selectedTypes.length === 0 || selectedTypes.includes('post');
+        const byCat = selectedCategories.length === 0 || selectedCategories.includes(entity.category);
+        const byTag = selectedTags.length === 0 || entity.tags.some((tag) => selectedTags.includes(tag));
+        return byType && byCat && byTag;
+      });
+  }, [entityById, featuredContent, selectedCategories, selectedTags, selectedTypes]);
+
+  const results = useMemo<SearchResultItem[]>(() => {
     const q = normalize(query);
-    if (!q) return filtered;
-    return filtered.filter((e) => {
-      const fc = featuredByEntityId.get(e.id);
-      return [e.name, e.shortDescription, e.longDescription ?? '', e.previewText ?? '', fc?.title ?? '', fc?.text ?? '']
-        .map(normalize).some((f) => f.includes(q));
+    const entityResults = filteredEntities.map((entity) => ({
+      kind: 'entity' as const,
+      entity,
+    }));
+    const postResults = filteredPosts.map(({ entity, post }) => ({
+      kind: 'post' as const,
+      entity,
+      post,
+    }));
+
+    if (!q) {
+      return [...entityResults, ...postResults];
+    }
+
+    const scoredEntities: ScoredSearchResult[] = entityResults.map((result, index) => {
+      const score = getRelevanceScore(
+        [
+          result.entity.name,
+          result.entity.shortDescription,
+          result.entity.longDescription ?? '',
+          result.entity.previewText ?? '',
+          result.entity.tags.join(' '),
+        ],
+        q,
+      );
+
+      return {
+        result,
+        score,
+        boosted: isBoostActive(getBoostState(result.entity.id)),
+        order: index,
+      };
     });
-  }, [featuredByEntityId, filtered, query]);
+
+    const scoredPosts: ScoredSearchResult[] = postResults.map((result, index) => {
+      const score = getRelevanceScore(
+        [
+          result.post.title ?? '',
+          result.post.text ?? '',
+          result.entity.name,
+          result.entity.shortDescription,
+          result.entity.longDescription ?? '',
+          result.entity.tags.join(' '),
+        ],
+        q,
+      );
+      const postBoosted = isBoostActive(getBoostState(result.post.id));
+      const entityBoosted = isBoostActive(getBoostState(result.entity.id));
+
+      return {
+        result,
+        score,
+        boosted: postBoosted || entityBoosted,
+        order: entityResults.length + index,
+      };
+    });
+
+    return [...scoredEntities, ...scoredPosts]
+      .filter((item) => item.score > 0)
+      .sort((left, right) => {
+        if (right.score !== left.score) {
+          return right.score - left.score;
+        }
+        if (left.boosted !== right.boosted) {
+          return right.boosted ? 1 : -1;
+        }
+        return left.order - right.order;
+      })
+      .map((item) => item.result);
+  }, [filteredEntities, filteredPosts, getBoostState, query]);
 
   const onOverlay = (ev: MouseEvent<HTMLDivElement>) => { if (ev.target === ev.currentTarget) closeFilters(); };
-  const resetFilters = () => { setSelectedCategories([]); setSelectedTags([]); };
-  const filterCount = selectedCategories.length + selectedTags.length;
+  const resetFilters = () => { setSelectedTypes([]); setSelectedCategories([]); setSelectedTags([]); };
+  const filterCount = selectedTypes.length + selectedCategories.length + selectedTags.length;
   const hasSearch = Boolean(query.trim()) || filterCount > 0;
 
   return (
@@ -158,7 +296,7 @@ const SearchHome = () => {
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Channels, apps, tags…"
+            placeholder="Channels, apps, tags..."
             autoFocus
             className="h-11 w-full rounded-xl border border-border bg-secondary pl-10 pr-10 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 [&::-webkit-search-cancel-button]:hidden"
           />
@@ -191,6 +329,12 @@ const SearchHome = () => {
       {/* Active filter pills */}
       {filterCount > 0 && (
         <div className="flex items-center gap-1.5 px-4 pb-2 overflow-x-auto no-scrollbar">
+          {selectedTypes.map((type) => (
+            <button key={type} type="button" onClick={() => toggle(selectedTypes, setSelectedTypes, type)}
+              className="inline-flex items-center gap-1 pl-2.5 pr-1.5 py-1 rounded-full border border-violet-500/30 bg-violet-500/10 text-[11px] font-medium text-violet-300 whitespace-nowrap">
+              {discoverFilterTypeLabel[type]}<X className="w-3 h-3" />
+            </button>
+          ))}
           {selectedCategories.map((c) => (
             <button key={c} type="button" onClick={() => toggle(selectedCategories, setSelectedCategories, c)}
               className="inline-flex items-center gap-1 pl-2.5 pr-1.5 py-1 rounded-full border border-primary/30 bg-primary/10 text-[11px] font-medium text-primary whitespace-nowrap">
@@ -227,33 +371,75 @@ const SearchHome = () => {
               <p className="text-xs text-muted-foreground">Try different keywords or adjust filters.</p>
             </div>
           ) : (
-            results.map((entity) => {
-              const boosted = isBoostActive(getBoostState(entity.id));
+            results.map((result) => {
+              if (result.kind === 'entity') {
+                const entity = result.entity;
+                const boosted = isBoostActive(getBoostState(entity.id));
+                const meta = CATEGORY_META[entity.category] ?? DEFAULT_CAT;
+                const thumbnailUrl = entity.previewMediaUrl;
+                return (
+                  <button
+                    key={`entity-${entity.id}`}
+                    type="button"
+                    onClick={() => {
+                      setSelectedPostId(null);
+                      setSelectedEntityId(entity.id);
+                    }}
+                    className="w-full flex items-center gap-3 rounded-2xl border border-border bg-card p-3.5 text-left transition-all active:scale-[0.98]"
+                  >
+                    <ResultThumb
+                      name={entity.name}
+                      mediaUrl={thumbnailUrl}
+                      fallbackIcon={meta.icon}
+                      fallbackColor={meta.color}
+                    />
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2">
+                        <h3 className="text-sm font-semibold text-foreground truncate">{entity.name}</h3>
+                        {boosted && (
+                          <span className="px-1.5 py-0.5 text-[9px] font-bold rounded-full border border-amber-500/30 bg-amber-500/10 text-amber-300 flex-shrink-0">Boosted</span>
+                        )}
+                      </div>
+                      <p className="text-[12px] text-muted-foreground line-clamp-1 mt-0.5">{entity.shortDescription}</p>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+                  </button>
+                );
+              }
+
+              const { post, entity } = result;
+              const postBoost = getBoostState(post.id);
+              const entityBoost = getBoostState(entity.id);
+              const boosted = isBoostActive(postBoost) || isBoostActive(entityBoost);
               const meta = CATEGORY_META[entity.category] ?? DEFAULT_CAT;
-              const featuredItem = featuredByEntityId.get(entity.id);
-              const thumbnailUrl = entity.previewMediaUrl
-                ?? (featuredItem?.contentType === 'image' ? featuredItem.mediaUrl : undefined);
+              const thumbnailUrl = post.mediaUrl ?? entity.previewMediaUrl;
+
               return (
                 <button
-                  key={entity.id}
+                  key={`post-${post.id}`}
                   type="button"
-                  onClick={() => setSelectedEntityId(entity.id)}
+                  onClick={() => {
+                    setSelectedPostId(post.id);
+                    setSelectedEntityId(entity.id);
+                  }}
                   className="w-full flex items-center gap-3 rounded-2xl border border-border bg-card p-3.5 text-left transition-all active:scale-[0.98]"
                 >
                   <ResultThumb
-                    name={entity.name}
+                    name={post.title || `${entity.name} post`}
                     mediaUrl={thumbnailUrl}
                     fallbackIcon={meta.icon}
                     fallbackColor={meta.color}
                   />
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                      <h3 className="text-sm font-semibold text-foreground truncate">{entity.name}</h3>
+                      <h3 className="text-sm font-semibold text-foreground truncate">{post.title || `${entity.name} post`}</h3>
+                      <span className="px-1.5 py-0.5 text-[9px] font-bold rounded-full border border-border text-muted-foreground flex-shrink-0">Post</span>
                       {boosted && (
                         <span className="px-1.5 py-0.5 text-[9px] font-bold rounded-full border border-amber-500/30 bg-amber-500/10 text-amber-300 flex-shrink-0">Boosted</span>
                       )}
                     </div>
-                    <p className="text-[12px] text-muted-foreground line-clamp-1 mt-0.5">{entity.shortDescription}</p>
+                    <p className="text-[11px] text-muted-foreground line-clamp-1 mt-0.5">From {entity.name}</p>
+                    {post.text && <p className="text-[12px] text-muted-foreground line-clamp-1 mt-0.5">{post.text}</p>}
                   </div>
                   <ChevronRight className="w-4 h-4 text-muted-foreground flex-shrink-0" />
                 </button>
@@ -342,6 +528,22 @@ const SearchHome = () => {
             </div>
             <div className="flex-1 overflow-y-auto px-4 pb-4">
               <div className="mb-8">
+                <h3 className="text-[11px] font-semibold text-muted-foreground uppercase tracking-widest">Type</h3>
+                <div className="flex flex-wrap gap-2.5 mt-4">
+                  {discoverFilterTypes.map((typeOption) => (
+                    <button key={typeOption.value} type="button" onClick={() => toggle(selectedTypes, setSelectedTypes, typeOption.value)}
+                      className={cx(
+                        'px-4 py-2.5 rounded-xl text-sm font-medium border transition-colors',
+                        selectedTypes.includes(typeOption.value)
+                          ? 'bg-violet-500/20 text-violet-300 border-violet-500/40'
+                          : 'bg-secondary text-muted-foreground border-border',
+                      )}>
+                      {typeOption.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div className="mb-8">
                 <h3 className="text-[11px] font-semibold text-muted-foreground uppercase tracking-widest">Categories</h3>
                 <div className="flex flex-wrap gap-2.5 mt-4">
                   {categories.map((c) => (
@@ -387,9 +589,10 @@ const SearchHome = () => {
       )}
 
       {/* Entity detail overlay */}
-      <EntitySheet entityId={selectedEntityId} onClose={closeEntitySheet} />
+      <EntitySheet entityId={selectedEntityId} postId={selectedPostId} onClose={closeEntitySheet} />
     </main>
   );
 };
 
 export default SearchHome;
+

@@ -97,8 +97,8 @@ const CreateOverview = () => {
     if (editingId === entityId) setEditingId(null);
   };
 
-  const handleDeletePost = (entityId: string) => {
-    deleteFeaturedContent(entityId);
+  const handleDeletePost = (postId: string) => {
+    deleteFeaturedContent(postId);
     setConfirmDeleteId(null);
   };
 
@@ -399,12 +399,17 @@ const CreateOverview = () => {
             ) : (
               ownedPosts.map((post) => {
                 const parentEntity = savedEntities.find((e) => e.id === post.entityId);
-                const isConfirming = confirmDeleteId === `post-${post.entityId}`;
+                const postBoostState = getBoostState(post.id);
+                const parentBoostState = getBoostState(post.entityId);
+                const hasActivePostBoost = isBoostActive(postBoostState);
+                const postBoosted = hasActivePostBoost || isBoostActive(parentBoostState);
+                const isConfirming = confirmDeleteId === `post-${post.id}`;
+                const editHref = `/create/post?postId=${encodeURIComponent(post.id)}&edit=1`;
 
                 return (
                   <div key={post.id} className="rounded-2xl border border-border bg-card p-4">
                     <div className="flex items-center gap-3">
-                      <div className="flex items-center gap-3 flex-1 min-w-0">
+                      <Link to={editHref} className="flex items-center gap-3 flex-1 min-w-0 text-left active:scale-[0.99]">
                         <div className="w-11 h-11 rounded-xl bg-violet-500/15 border border-violet-500/20 flex items-center justify-center flex-shrink-0">
                           <FileText className="w-5 h-5 text-violet-400" />
                         </div>
@@ -414,14 +419,15 @@ const CreateOverview = () => {
                           </h3>
                           <p className="text-[11px] text-muted-foreground mt-0.5 truncate">
                             {parentEntity?.name ?? 'Unknown entity'} · {post.mode}
+                            {postBoosted && <span className="text-amber-400 ml-1">· Boosted</span>}
                           </p>
                         </div>
-                      </div>
+                      </Link>
                       {isConfirming ? (
                         <div className="flex gap-1.5 flex-shrink-0">
                           <button
                             type="button"
-                            onClick={() => handleDeletePost(post.entityId)}
+                            onClick={() => handleDeletePost(post.id)}
                             className="h-9 px-3 rounded-lg bg-rose-500/15 text-rose-400 text-xs font-semibold active:scale-[0.95]"
                           >
                             Delete
@@ -437,8 +443,8 @@ const CreateOverview = () => {
                       ) : (
                         <button
                           type="button"
-                          onClick={() => setConfirmDeleteId(`post-${post.entityId}`)}
-                          className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground hover:text-rose-400 transition-colors flex-shrink-0"
+                          onClick={() => setConfirmDeleteId(`post-${post.id}`)}
+                          className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground hover:text-rose-400 transition-colors"
                           aria-label="Delete post"
                         >
                           <Trash2 className="w-4 h-4" />

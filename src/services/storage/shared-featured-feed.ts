@@ -1,35 +1,19 @@
-import type { Entity, FeaturedContent } from '@/types/tondiscover.ts';
+import type { BoostState, Entity, FeaturedContent } from '@/types/tondiscover.ts';
 
 type SharedFeedPayload = {
   featuredOverrides?: unknown;
   registeredEntities?: unknown;
+  boosts?: unknown;
+  deletedFeaturedIds?: unknown;
+  deletedEntityIds?: unknown;
 };
 
 export type SharedFeedSnapshot = {
   featuredOverrides: FeaturedContent[];
   registeredEntities: Entity[];
-};
-
-const mergeFeaturedOverrides = (preferred: FeaturedContent[], fallback: FeaturedContent[]): FeaturedContent[] => {
-  const byEntity = new Map<string, FeaturedContent>();
-  fallback.forEach((item) => {
-    byEntity.set(item.entityId, item);
-  });
-  preferred.forEach((item) => {
-    byEntity.set(item.entityId, item);
-  });
-  return Array.from(byEntity.values());
-};
-
-const mergeRegisteredEntities = (preferred: Entity[], fallback: Entity[]): Entity[] => {
-  const byId = new Map<string, Entity>();
-  fallback.forEach((entity) => {
-    byId.set(entity.id, entity);
-  });
-  preferred.forEach((entity) => {
-    byId.set(entity.id, entity);
-  });
-  return Array.from(byId.values());
+  boosts: Record<string, BoostState>;
+  deletedFeaturedIds: string[];
+  deletedEntityIds: string[];
 };
 
 const trim = (value: string | undefined): string => (value ?? '').trim();
@@ -37,6 +21,8 @@ const trim = (value: string | undefined): string => (value ?? '').trim();
 const sharedFeedUrl = trim(import.meta.env.VITE_SHARED_FEED_URL);
 const readUrl = trim(import.meta.env.VITE_SHARED_FEED_READ_URL) || sharedFeedUrl;
 const writeUrl = trim(import.meta.env.VITE_SHARED_FEED_WRITE_URL) || sharedFeedUrl;
+const defaultEventsUrl = readUrl ? `${readUrl.replace(/\/$/, '')}/events` : '';
+const eventsUrl = trim(import.meta.env.VITE_SHARED_FEED_EVENTS_URL) || defaultEventsUrl;
 const rawWriteMethod = trim(import.meta.env.VITE_SHARED_FEED_WRITE_METHOD).toUpperCase();
 const writeMethod = rawWriteMethod || 'PUT';
 const token = trim(import.meta.env.VITE_SHARED_FEED_TOKEN);
@@ -69,6 +55,14 @@ const isEntityType = (value: unknown): value is Entity['type'] => {
   return value === 'channel' || value === 'app';
 };
 
+const isBoostStatus = (value: unknown): value is BoostState['status'] => {
+  return value === 'inactive' || value === 'pending' || value === 'active' || value === 'failed';
+};
+
+const isBoostSource = (value: unknown): value is BoostState['source'] => {
+  return value === 'mock' || value === 'ton';
+};
+
 const toOptionalString = (value: unknown): string | undefined => {
   return typeof value === 'string' && value.trim() ? value : undefined;
 };
@@ -78,6 +72,16 @@ const toNumber = (value: unknown, fallback: number): number => {
 };
 
 const sanitizeTags = (value: unknown): string[] => {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+  return value
+    .filter((item): item is string => typeof item === 'string')
+    .map((item) => item.trim())
+    .filter(Boolean);
+};
+
+const sanitizeIdList = (value: unknown): string[] => {
   if (!Array.isArray(value)) {
     return [];
   }
@@ -149,6 +153,27 @@ const sanitizeEntity = (value: unknown): Entity | null => {
   };
 };
 
+const sanitizeBoostState = (entityId: string, value: unknown): BoostState | null => {
+  if (!value || typeof value !== 'object') {
+    return null;
+  }
+
+  const candidate = value as Partial<BoostState>;
+  if (!isBoostStatus(candidate.status)) {
+    return null;
+  }
+
+  return {
+    entityId: candidate.entityId && typeof candidate.entityId === 'string'
+      ? candidate.entityId
+      : entityId,
+    status: candidate.status,
+    startedAt: toOptionalString(candidate.startedAt),
+    expiresAt: toOptionalString(candidate.expiresAt),
+    source: isBoostSource(candidate.source) ? candidate.source : 'mock',
+  };
+};
+
 const parseFeaturedOverrides = (payload: unknown): FeaturedContent[] => {
   const source: unknown[] = Array.isArray(payload)
     ? payload
@@ -165,6 +190,27 @@ const parseRegisteredEntities = (payload: unknown): Entity[] => {
   return source
     .map(sanitizeEntity)
     .filter((entity): entity is Entity => entity !== null);
+};
+
+const parseBoosts = (payload: unknown): Record<string, BoostState> => {
+  const source = (payload as SharedFeedPayload | null)?.boosts;
+  if (!source || typeof source !== 'object' || Array.isArray(source)) {
+    return {};
+  }
+
+  const entries = Object.entries(source as Record<string, unknown>)
+    .map(([entityId, value]) => [entityId, sanitizeBoostState(entityId, value)] as const)
+    .filter((entry): entry is [string, BoostState] => entry[1] !== null);
+
+  return Object.fromEntries(entries);
+};
+
+const parseDeletedFeaturedIds = (payload: unknown): string[] => {
+  return sanitizeIdList((payload as SharedFeedPayload | null)?.deletedFeaturedIds);
+};
+
+const parseDeletedEntityIds = (payload: unknown): string[] => {
+  return sanitizeIdList((payload as SharedFeedPayload | null)?.deletedEntityIds);
 };
 
 const readSharedPayload = async (): Promise<unknown | null> => {
@@ -191,6 +237,30 @@ const readSharedPayload = async (): Promise<unknown | null> => {
 
 export const isSharedFeedEnabled = Boolean(readUrl && writeUrl);
 
+export const subscribeSharedFeedUpdates = (onUpdate: () => void): (() => void) | null => {
+  if (!eventsUrl || typeof window === 'undefined' || typeof window.EventSource === 'undefined') {
+    return null;
+  }
+
+  const eventUrl = token
+    ? `${eventsUrl}${eventsUrl.includes('?') ? '&' : '?'}token=${encodeURIComponent(token)}`
+    : eventsUrl;
+  const stream = new EventSource(eventUrl);
+
+  const handleMessage = () => {
+    onUpdate();
+  };
+
+  stream.addEventListener('shared-feed-updated', handleMessage);
+  stream.addEventListener('message', handleMessage);
+
+  return () => {
+    stream.removeEventListener('shared-feed-updated', handleMessage);
+    stream.removeEventListener('message', handleMessage);
+    stream.close();
+  };
+};
+
 export const readSharedFeedSnapshot = async (): Promise<SharedFeedSnapshot | null> => {
   const payload = await readSharedPayload();
   if (!payload) {
@@ -200,6 +270,9 @@ export const readSharedFeedSnapshot = async (): Promise<SharedFeedSnapshot | nul
   return {
     featuredOverrides: parseFeaturedOverrides(payload),
     registeredEntities: parseRegisteredEntities(payload),
+    boosts: parseBoosts(payload),
+    deletedFeaturedIds: parseDeletedFeaturedIds(payload),
+    deletedEntityIds: parseDeletedEntityIds(payload),
   };
 };
 
@@ -222,28 +295,48 @@ export const readSharedRegisteredEntities = async (): Promise<Entity[] | null> =
 export const writeSharedFeaturedOverrides = async (
   featuredOverrides: FeaturedContent[],
   registeredEntities: Entity[] = [],
+  boosts?: Record<string, BoostState>,
+  deletedFeaturedIds: string[] = [],
+  deletedEntityIds: string[] = [],
 ): Promise<boolean> => {
   if (!isSharedFeedEnabled) {
     return false;
   }
 
   const method = isAllowedWriteMethod(writeMethod) ? writeMethod : 'PUT';
-  let nextFeaturedOverrides = featuredOverrides;
-  let nextRegisteredEntities = registeredEntities;
-
-  const remotePayload = await readSharedPayload();
-  if (remotePayload) {
-    nextFeaturedOverrides = mergeFeaturedOverrides(featuredOverrides, parseFeaturedOverrides(remotePayload));
-    nextRegisteredEntities = mergeRegisteredEntities(registeredEntities, parseRegisteredEntities(remotePayload));
-  }
 
   try {
     const response = await fetch(writeUrl, {
       method,
       headers: buildHeaders(true),
       body: JSON.stringify({
-        featuredOverrides: nextFeaturedOverrides,
-        registeredEntities: nextRegisteredEntities,
+        featuredOverrides,
+        registeredEntities,
+        boosts,
+        deletedFeaturedIds,
+        deletedEntityIds,
+      }),
+    });
+
+    return response.ok;
+  } catch {
+    return false;
+  }
+};
+
+export const writeSharedBoostStates = async (boosts: Record<string, BoostState>): Promise<boolean> => {
+  if (!isSharedFeedEnabled) {
+    return false;
+  }
+
+  const method = isAllowedWriteMethod(writeMethod) ? writeMethod : 'PUT';
+
+  try {
+    const response = await fetch(writeUrl, {
+      method,
+      headers: buildHeaders(true),
+      body: JSON.stringify({
+        boosts,
       }),
     });
 

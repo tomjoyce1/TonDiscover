@@ -1,9 +1,11 @@
 import { useMemo, useState } from 'react';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { toNano } from '@ton/core';
-import { ArrowLeft, Check, FileText, Wallet } from 'lucide-react';
+import { Check, FileText, Wallet } from 'lucide-react';
 import { useTonConnectModal } from '@tonconnect/ui-react';
-import { BottomNav } from '@/components/layout/BottomNav.tsx';
+import { PageShell } from '@/components/layout/PageShell.tsx';
+import { Button } from '@/components/ui/Button.tsx';
+import { Card } from '@/components/ui/Card.tsx';
 import { boostOptions } from '@/constants/boost-options.ts';
 import { useAppState } from '@/context/app-context.tsx';
 import { useTonConnect } from '@/hooks/useTonConnect.ts';
@@ -14,14 +16,28 @@ const BoostConfirmation = () => {
   const [searchParams] = useSearchParams();
   const { open } = useTonConnectModal();
   const { sender, connected, walletAddress, tonConnectUI } = useTonConnect();
-  const { entities, setBoostState, addBoostEvent, isOwnedEntity } = useAppState();
+  const { entities, featuredContent, setBoostState, addBoostEvent, isOwnedEntity } = useAppState();
   const [status, setStatus] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
-  const entityId = searchParams.get('entityId') ?? '';
+  const targetId = searchParams.get('targetId') ?? searchParams.get('entityId') ?? '';
+  const requestedTargetType = searchParams.get('targetType');
   const optionId = searchParams.get('optionId') ?? '';
   const option = boostOptions.find((item) => item.id === optionId) ?? boostOptions[0];
-  const entity = isOwnedEntity(entityId) ? entities.find((item) => item.id === entityId) : undefined;
+  const postTarget = featuredContent.find((post) => post.id === targetId);
+  const targetType = requestedTargetType === 'post'
+    || (requestedTargetType !== 'entity' && Boolean(postTarget))
+    ? 'post'
+    : 'entity';
+  const targetEntityId = targetType === 'post' ? (postTarget?.entityId ?? '') : targetId;
+  const targetEntity = entities.find((item) => item.id === targetEntityId);
+  const targetName = targetType === 'post'
+    ? (postTarget?.title?.trim() || `${targetEntity?.name ?? 'Unknown'} post`)
+    : (targetEntity?.name ?? 'Unknown');
+  const isAllowedTarget = targetType === 'post'
+    ? Boolean(postTarget && isOwnedEntity(postTarget.entityId))
+    : isOwnedEntity(targetId);
+  const backTo = `/create/boost/connect?targetId=${encodeURIComponent(targetId)}&targetType=${encodeURIComponent(targetType)}&optionId=${encodeURIComponent(optionId)}`;
 
   const service = useMemo(() => {
     return createBoostService({
@@ -33,19 +49,20 @@ const BoostConfirmation = () => {
   }, [connected, open, sender, tonConnectUI]);
 
   const confirm = async () => {
-    if (!entity) {
+    if (!targetId || !isAllowedTarget) {
       return;
     }
 
     setSubmitting(true);
     setStatus('Processing payment...');
-    const state = await service.activateBoost(entity.id, option);
+    const boostTargetId = targetType === 'post' ? targetId : (targetEntityId || targetId);
+    const state = await service.activateBoost(boostTargetId, option);
     setBoostState(state);
 
     if (state.source === 'ton') {
       addBoostEvent({
-        id: `boost-${entity.id}-${Date.now()}`,
-        entityId: entity.id,
+        id: `boost-${targetId}-${Date.now()}`,
+        entityId: boostTargetId,
         walletAddress: walletAddress?.toString(),
         amountTon: option.amountTon,
         amountNano: toNano(option.amountTon).toString(),
@@ -55,77 +72,79 @@ const BoostConfirmation = () => {
     }
 
     setStatus(state.source === 'ton' ? 'TON payment confirmed.' : 'Fallback mock confirmation applied.');
-    navigate(`/create/boost/success?entityId=${encodeURIComponent(entity.id)}&source=${encodeURIComponent(state.source)}`);
+    navigate(`/create/boost/success?targetId=${encodeURIComponent(targetId)}&targetType=${encodeURIComponent(targetType)}&source=${encodeURIComponent(state.source)}`);
   };
 
   return (
-    <main className="flex min-h-screen flex-col bg-background pb-24 pt-6">
-      <header className="flex items-center gap-3 px-5 pb-6">
-        <Link
-          to={`/create/boost/connect?entityId=${encodeURIComponent(entityId)}&optionId=${encodeURIComponent(optionId)}`}
-          className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl border border-border bg-muted text-muted-foreground"
-          aria-label="Go back"
-        >
-          <ArrowLeft className="h-4 w-4" />
-        </Link>
-        <div>
-          <h1 className="text-xl font-bold tracking-tight text-foreground">Confirm Payment</h1>
-          <p className="mt-0.5 text-[12px] text-muted-foreground">Review and confirm your boost</p>
+    <PageShell
+      title="Confirm Boost"
+      subtitle="Review details before activating visibility boost."
+      backTo={backTo}
+    >
+      <Card variant="boost" className="space-y-4">
+        <div className="flex items-center gap-2">
+          <FileText className="h-4 w-4 text-tg-boost" />
+          <p className="text-sm font-semibold text-tg-primary">Boost Summary</p>
         </div>
-      </header>
-
-      <div className="space-y-4 px-4">
-        <div className="rounded-2xl border border-border bg-card p-5">
-          <div className="mb-4 flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-amber-500/20 bg-amber-500/15">
-              <FileText className="h-4 w-4 text-amber-400" />
-            </div>
-            <span className="text-sm font-semibold text-foreground">Summary</span>
+        <div className="space-y-3 text-sm">
+          <div className="flex items-start justify-between gap-3">
+            <span className="text-tg-muted">Target</span>
+            <span className="text-right font-medium text-tg-primary">{targetName}</span>
           </div>
-          <div className="space-y-3 text-sm">
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">Entity</span>
-              <span className="font-medium text-foreground">{entity?.name ?? 'Unknown'}</span>
+          {targetType === 'post' && (
+            <div className="flex items-start justify-between gap-3">
+              <span className="text-tg-muted">Parent entity</span>
+              <span className="text-right font-medium text-tg-primary">{targetEntity?.name ?? 'Unknown'}</span>
             </div>
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">Option</span>
-              <span className="font-medium text-foreground">{option.label}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">Receiver</span>
-              <span className="max-w-[55%] truncate text-right text-xs font-medium text-foreground" title={BOOST_RECEIVER_RAW}>
-                {BOOST_RECEIVER_RAW.slice(0, 8)}...{BOOST_RECEIVER_RAW.slice(-6)}
-              </span>
-            </div>
+          )}
+          <div className="flex items-start justify-between gap-3">
+            <span className="text-tg-muted">Type</span>
+            <span className="font-medium capitalize text-tg-primary">{targetType}</span>
+          </div>
+          <div className="flex items-start justify-between gap-3">
+            <span className="text-tg-muted">Boost option</span>
+            <span className="font-medium text-tg-primary">{option.label}</span>
+          </div>
+          <div className="flex items-start justify-between gap-3">
+            <span className="text-tg-muted">Receiver</span>
+            <span className="max-w-[58%] truncate text-right font-mono text-xs text-tg-primary" title={BOOST_RECEIVER_RAW}>
+              {BOOST_RECEIVER_RAW}
+            </span>
           </div>
         </div>
+      </Card>
 
-        <div className="rounded-2xl border border-border bg-card p-5">
-          <div className="mb-4 flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-emerald-500/20 bg-emerald-500/15">
-              <Wallet className="h-4 w-4 text-emerald-400" />
-            </div>
-            <span className="text-sm font-semibold text-foreground">Payment</span>
-          </div>
-          <p className="text-sm text-muted-foreground">
-            {status || 'Confirm to activate boost and update feed ranking.'}
-          </p>
-          {!entity && <p className="mt-2 text-sm text-rose-400">Only your own entities can be boosted.</p>}
+      <Card variant="muted" className="space-y-3">
+        <div className="flex items-center gap-2">
+          <Wallet className="h-4 w-4 text-tg-accent" />
+          <p className="text-sm font-semibold text-tg-primary">Payment Status</p>
         </div>
+        <p className="text-sm text-tg-muted">
+          {status || 'Confirm to activate boost and update feed ranking for all users.'}
+        </p>
+        {!isAllowedTarget && (
+          <p className="text-sm text-rose-300">Only your own entities or posts can be boosted.</p>
+        )}
+      </Card>
 
-        <button
-          type="button"
-          disabled={!entity || submitting}
-          onClick={confirm}
-          className="flex h-[52px] w-full items-center justify-center gap-2 rounded-2xl bg-amber-500 text-[15px] font-bold text-black transition-all active:scale-[0.97] disabled:opacity-40"
-        >
+      <Button
+        type="button"
+        variant="boost"
+        size="lg"
+        fullWidth
+        disabled={!isAllowedTarget || submitting}
+        onClick={confirm}
+      >
+        {submitting ? <Wallet className="w-4 h-4" /> : <Check className="w-4 h-4" />}
+        {submitting ? 'Processing...' : 'Confirm Boost'}
+      </Button>
+      {!isAllowedTarget && (
+        <Button type="button" variant="secondary" size="lg" fullWidth onClick={() => navigate('/create/boost')}>
           <Check className="h-4 w-4" />
-          Confirm Payment
-        </button>
-      </div>
-
-      <BottomNav />
-    </main>
+          Back to Boost Setup
+        </Button>
+      )}
+    </PageShell>
   );
 };
 

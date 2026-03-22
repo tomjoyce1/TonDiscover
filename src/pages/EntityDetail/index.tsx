@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { ExternalLink, Star, Trash2, Zap } from 'lucide-react';
+import { ExternalLink, Pencil, Star, Trash2, Zap } from 'lucide-react';
 import { BoostBadge } from '@/components/common/BoostBadge.tsx';
 import { PageShell } from '@/components/layout/PageShell.tsx';
 import { MediaPreview } from '@/components/discovery/MediaPreview.tsx';
@@ -81,14 +81,14 @@ const EntityDetail = () => {
         <div className="flex items-center justify-between gap-3 mb-3">
           <div>
             <div className="flex items-center gap-2">
-              <h2 className="text-lg font-semibold text-tg-primary">{entity.name}</h2>
+              <h2 className="text-lg font-semibold text-tg-primary break-words [overflow-wrap:anywhere]">{entity.name}</h2>
               {boosted && <BoostBadge active={boosted} source={boost.source} />}
             </div>
             <p className="text-xs text-tg-muted mt-1 capitalize">{entity.type} • {entity.category}</p>
           </div>
         </div>
 
-        <p className="text-sm text-tg-muted leading-relaxed mb-4">
+        <p className="mb-4 line-clamp-4 break-words text-sm leading-relaxed text-tg-muted [overflow-wrap:anywhere]">
           {entity.longDescription ?? entity.shortDescription}
         </p>
 
@@ -100,7 +100,7 @@ const EntityDetail = () => {
           ))}
         </div>
 
-        <div className="flex gap-3">
+        <div className="flex gap-3 pt-1">
           <Button variant="primary" size="lg" className="flex-1" onClick={onPrimaryAction}>
             <ExternalLink className="w-4 h-4" />
             {entity.type === 'app' ? 'Launch App' : 'Join Channel'}
@@ -121,7 +121,16 @@ const EntityDetail = () => {
 
       <Card>
         {isOwnedEntity(entity.id) ? (
-          <div className="space-y-3">
+          <div className="space-y-3.5 p-1">
+            <Button
+              variant="secondary"
+              size="lg"
+              fullWidth
+              onClick={() => navigate(`/create/post?entityId=${encodeURIComponent(entity.id)}&edit=1`)}
+            >
+              <Pencil className="w-4 h-4" />
+              Edit post
+            </Button>
             <Button
               variant="boost"
               size="lg"
@@ -137,7 +146,7 @@ const EntityDetail = () => {
               className="w-full flex items-center justify-center gap-2 h-11 rounded-xl border border-rose-500/30 bg-rose-500/10 text-rose-400 font-semibold text-sm transition-all active:scale-[0.97]"
             >
               <Trash2 className="w-4 h-4" />
-              Delete post
+              Delete entity
             </button>
           </div>
         ) : (

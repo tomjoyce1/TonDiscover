@@ -1,9 +1,10 @@
-import { FormEvent, useMemo, useState } from 'react';
+import { FormEvent, useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, FileText, Image, Layers, MessageCircle, Sparkles, Type, Video } from 'lucide-react';
 import { BottomNav } from '@/components/layout/BottomNav.tsx';
 import { useAppState } from '@/context/app-context.tsx';
 import { cx } from '@/helpers/class-name.ts';
+import { getVideoLinkStatus, isRenderableMediaUrl, normalizeMediaUrl } from '@/helpers/media-url.ts';
 import type { ContentType } from '@/types/tondiscover.ts';
 
 const DRAFT_KEY = 'tondiscover:create-post-draft';
@@ -20,8 +21,10 @@ const contentTypes: { value: ContentType; label: string; icon: typeof FileText }
 const CreatePost = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { savedEntities } = useAppState();
+  const { savedEntities, featuredContent } = useAppState();
   const requestedEntityId = searchParams.get('entityId');
+  const requestedPostId = searchParams.get('postId');
+  const isEditMode = searchParams.get('edit') === '1';
   const initialEntityId = requestedEntityId && savedEntities.some((e) => e.id === requestedEntityId)
     ? requestedEntityId : savedEntities[0]?.id ?? '';
 
@@ -32,12 +35,38 @@ const CreatePost = () => {
   const [mediaUrl, setMediaUrl] = useState('');
 
   const selectedEntity = useMemo(() => savedEntities.find((e) => e.id === entityId), [savedEntities, entityId]);
+  const normalizedMediaUrl = normalizeMediaUrl(mediaUrl) ?? '';
+  const isRenderableMediaInput = isRenderableMediaUrl(normalizedMediaUrl);
+  const videoLinkStatus = getVideoLinkStatus(normalizedMediaUrl);
+  const editablePost = useMemo(
+    () => featuredContent.find((item) => item.id === requestedPostId),
+    [featuredContent, requestedPostId],
+  );
+
+  useEffect(() => {
+    if (!isEditMode) {
+      return;
+    }
+
+    if (editablePost) {
+      setEntityId(editablePost.entityId);
+    }
+    setContentType(editablePost?.contentType ?? 'text');
+    setTitle(editablePost?.title ?? '');
+    setText(editablePost?.text ?? '');
+    setMediaUrl(editablePost?.mediaUrl ?? '');
+  }, [editablePost, isEditMode]);
 
   const submit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!entityId || !selectedEntity || !title.trim()) return;
     window.localStorage.setItem(DRAFT_KEY, JSON.stringify({
-      entityId, contentType, title: title.trim(), text: text.trim(), mediaUrl: mediaUrl.trim(),
+      postId: isEditMode ? editablePost?.id : undefined,
+      entityId,
+      contentType,
+      title: title.trim(),
+      text: text.trim(),
+      mediaUrl: normalizedMediaUrl,
     }));
     navigate('/create/review');
   };
@@ -73,8 +102,10 @@ const CreatePost = () => {
           <ArrowLeft className="h-4 w-4" />
         </Link>
         <div>
-          <h1 className="text-xl font-bold tracking-tight text-foreground">Create Post</h1>
-          <p className="text-[12px] text-muted-foreground mt-0.5">Publish featured content</p>
+          <h1 className="text-xl font-bold tracking-tight text-foreground">{isEditMode ? 'Edit Post' : 'Create Post'}</h1>
+          <p className="text-[12px] text-muted-foreground mt-0.5">
+            {isEditMode ? 'Update featured content' : 'Publish featured content'}
+          </p>
         </div>
       </header>
 
@@ -154,12 +185,29 @@ const CreatePost = () => {
               <label htmlFor="post-media" className="text-sm font-semibold text-foreground">Media URL</label>
             </div>
             <input id="post-media" className={inputClass} value={mediaUrl} onChange={(e) => setMediaUrl(e.target.value)} placeholder="https://example.com/image.jpg" />
+            {contentType === 'video' ? (
+              <div className="mt-2 space-y-1">
+                <p className="text-[12px] text-muted-foreground">
+                  Use direct video file links (`.mp4`, `.webm`, `.ogg`, `.mov`). Page links won't play.
+                </p>
+                {mediaUrl.trim() && !isRenderableMediaInput ? (
+                  <p className="text-[12px] text-amber-300">
+                    This is not a valid media URL. Use `https://...` (or a `/...` local asset path).
+                  </p>
+                ) : null}
+                {mediaUrl.trim() && videoLinkStatus === 'page' ? (
+                  <p className="text-[12px] text-amber-300">
+                    This looks like a page URL (YouTube/TikTok/etc). Paste a direct file URL instead.
+                  </p>
+                ) : null}
+              </div>
+            ) : null}
           </div>
         )}
 
         <button type="submit" disabled={!entityId || !selectedEntity || !title.trim()}
           className="w-full flex items-center justify-center gap-2 h-[52px] rounded-2xl bg-primary text-primary-foreground font-bold text-[15px] transition-all active:scale-[0.97] disabled:opacity-40">
-          Review Post
+          {isEditMode ? 'Review Changes' : 'Review Post'}
         </button>
       </form>
 
@@ -169,3 +217,4 @@ const CreatePost = () => {
 };
 
 export default CreatePost;
+

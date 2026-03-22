@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "shared-feed": "node server/shared-feed-server.mjs",
+    "scrape:telegram": "node scripts/scrape-telegram-feed.mjs",
     "public-app": "ngrok http 5173",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",

@@ -5,13 +5,13 @@ type BoostBadgeProps = {
   source?: 'mock' | 'ton';
 };
 
-export const BoostBadge = ({ active, source }: BoostBadgeProps) => {
+export const BoostBadge = ({ active }: BoostBadgeProps) => {
   if (!active) {
     return null;
   }
 
   return (
-    <Chip variant="boost" size="sm" className="font-semibold text-[10px]">
+    <Chip variant="boost" size="sm" className="pointer-events-none font-semibold text-[10px]">
       Boosted
     </Chip>
   );

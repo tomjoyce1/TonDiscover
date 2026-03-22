@@ -10,14 +10,23 @@ const BoostConnect = () => {
   const [searchParams] = useSearchParams();
   const { open } = useTonConnectModal();
   const { connected, walletAddress } = useTonConnect();
-  const { isOwnedEntity } = useAppState();
-  const entityId = searchParams.get('entityId') ?? '';
+  const { featuredContent, isOwnedEntity } = useAppState();
+  const targetId = searchParams.get('targetId') ?? searchParams.get('entityId') ?? '';
+  const requestedTargetType = searchParams.get('targetType');
   const optionId = searchParams.get('optionId') ?? '';
-  const isAllowedEntity = isOwnedEntity(entityId);
-  const canContinue = Boolean(entityId && optionId && isAllowedEntity);
+  const postTarget = featuredContent.find((post) => post.id === targetId);
+  const targetType = requestedTargetType === 'post'
+    || (requestedTargetType !== 'entity' && Boolean(postTarget))
+    ? 'post'
+    : 'entity';
+
+  const isAllowedTarget = targetType === 'post'
+    ? Boolean(postTarget && isOwnedEntity(postTarget.entityId))
+    : isOwnedEntity(targetId);
+  const canContinue = Boolean(targetId && optionId && isAllowedTarget);
 
   const next = () => {
-    navigate(`/create/boost/confirmation?entityId=${encodeURIComponent(entityId)}&optionId=${encodeURIComponent(optionId)}`);
+    navigate(`/create/boost/confirmation?targetId=${encodeURIComponent(targetId)}&targetType=${encodeURIComponent(targetType)}&optionId=${encodeURIComponent(optionId)}`);
   };
 
   return (
@@ -25,7 +34,7 @@ const BoostConnect = () => {
       {/* Header */}
       <header className="flex items-center gap-3 px-5 pb-6">
         <Link
-          to="/create/boost"
+          to={`/create/boost?targetId=${encodeURIComponent(targetId)}&targetType=${encodeURIComponent(targetType)}`}
           className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl border border-border bg-muted text-muted-foreground"
           aria-label="Go back"
         >
@@ -56,8 +65,8 @@ const BoostConnect = () => {
           )}
         </div>
 
-        {!isAllowedEntity && (
-          <p className="text-xs text-muted-foreground text-center">Only your own entities can be boosted.</p>
+        {!isAllowedTarget && (
+          <p className="text-xs text-muted-foreground text-center">Only your own entities/posts can be boosted.</p>
         )}
 
         {/* Actions */}
