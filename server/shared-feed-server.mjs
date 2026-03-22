@@ -27,6 +27,7 @@ const EXPLICITLY_REMOVED_ENTITY_IDS = new Set([
   'custom-1774173646049',
   'custom-1774175241878',
 ]);
+const TEST_LIKE_PATTERN = /\b(test\w*|demo\w*|placeholder)\b/i;
 
 const isRecord = (value) => Boolean(value) && typeof value === 'object' && !Array.isArray(value);
 
@@ -56,6 +57,10 @@ const sanitizeIdList = (value) => {
     .filter((item) => typeof item === 'string')
     .map((item) => item.trim())
     .filter(Boolean);
+};
+
+const hasTestLikeText = (value) => {
+  return typeof value === 'string' && TEST_LIKE_PATTERN.test(value);
 };
 
 const sanitizeFeaturedItem = (value) => {
@@ -142,6 +147,39 @@ const isExplicitlyRemovedEntity = (entity) => {
   return EXPLICITLY_REMOVED_ENTITY_IDS.has(entity.id);
 };
 
+const isTestLikeEntity = (entity) => {
+  if (!isRecord(entity) || typeof entity.id !== 'string') {
+    return false;
+  }
+
+  return hasTestLikeText(entity.name)
+    || hasTestLikeText(entity.shortDescription)
+    || hasTestLikeText(entity.longDescription)
+    || hasTestLikeText(entity.telegramUrl)
+    || hasTestLikeText(entity.previewText)
+    || hasTestLikeText(entity.previewMediaUrl)
+    || sanitizeTags(entity.tags).some((tag) => hasTestLikeText(tag));
+};
+
+const isTestLikeFeatured = (item, removedEntityIdSet) => {
+  if (!isRecord(item) || typeof item.entityId !== 'string') {
+    return false;
+  }
+
+  if (removedEntityIdSet.has(item.entityId)) {
+    return true;
+  }
+
+  // Keep imported Telegram feed items intact; only strip custom test/demo content.
+  if (!item.entityId.startsWith('custom-')) {
+    return false;
+  }
+
+  return hasTestLikeText(item.title)
+    || hasTestLikeText(item.text)
+    || hasTestLikeText(item.mediaUrl);
+};
+
 const sanitizeState = (value) => {
   if (!isRecord(value)) {
     return defaultState;
@@ -164,16 +202,25 @@ const sanitizeState = (value) => {
   const explicitlyRemovedEntityIds = registeredEntities
     .filter((entity) => isExplicitlyRemovedEntity(entity))
     .map((entity) => entity.id);
+  const testLikeEntityIds = registeredEntities
+    .filter((entity) => isTestLikeEntity(entity))
+    .map((entity) => entity.id);
 
   const deletedEntityIds = Array.from(new Set([
     ...sanitizeIdList(value.deletedEntityIds),
     ...explicitlyRemovedEntityIds,
+    ...testLikeEntityIds,
     ...Array.from(EXPLICITLY_REMOVED_ENTITY_IDS),
   ]));
   const deletedEntityIdSet = new Set(deletedEntityIds);
 
+  const testLikeFeaturedIds = featuredOverrides
+    .filter((item) => isTestLikeFeatured(item, deletedEntityIdSet))
+    .map((item) => item.id);
+
   const deletedFeaturedIds = Array.from(new Set([
     ...sanitizeIdList(value.deletedFeaturedIds),
+    ...testLikeFeaturedIds,
     ...featuredOverrides
       .filter((item) => deletedEntityIdSet.has(item.entityId))
       .map((item) => item.id),
@@ -181,10 +228,14 @@ const sanitizeState = (value) => {
   const deletedFeaturedIdSet = new Set(deletedFeaturedIds);
 
   const nextFeaturedOverrides = featuredOverrides.filter((item) => {
-    return !deletedEntityIdSet.has(item.entityId) && !deletedFeaturedIdSet.has(item.id);
+    return !deletedEntityIdSet.has(item.entityId)
+      && !deletedFeaturedIdSet.has(item.id)
+      && !isTestLikeFeatured(item, deletedEntityIdSet);
   });
   const nextRegisteredEntities = registeredEntities.filter((entity) => {
-    return !deletedEntityIdSet.has(entity.id) && !isExplicitlyRemovedEntity(entity);
+    return !deletedEntityIdSet.has(entity.id)
+      && !isExplicitlyRemovedEntity(entity)
+      && !isTestLikeEntity(entity);
   });
   const validTargetIds = new Set([
     ...nextRegisteredEntities.map((entity) => entity.id),

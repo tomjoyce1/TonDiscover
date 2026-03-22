@@ -19,23 +19,6 @@
       "mediaUrl": "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4"
     },
     {
-      "id": "featured-custom-1774171210553-1774171225559",
-      "entityId": "custom-1774171210553",
-      "mode": "manual",
-      "contentType": "video",
-      "title": "ddjhd",
-      "text": "testpost",
-      "mediaUrl": "https://samplelib.com/lib/preview/mp4/sample-10s.mp4"
-    },
-    {
-      "id": "featured-custom-1774169402859-1774170027620",
-      "entityId": "custom-1774169402859",
-      "mode": "manual",
-      "contentType": "text",
-      "title": "placeholder",
-      "text": "test in image test in image test in image test in image test in image test in image test in image test in image test in image test in image test in image test in image test in image test in image test in image test in image test in image test in image test in image test in image"
-    },
-    {
       "id": "featured-custom-1774169239210-1774169333557",
       "entityId": "custom-1774169239210",
       "mode": "manual",
@@ -43,14 +26,6 @@
       "title": "Champions League",
       "text": "Channel about UEFA Champions League",
       "mediaUrl": "https://youtu.be/2rHRrHzQcXA"
-    },
-    {
-      "id": "featured-custom-1774108323120-1774108343099",
-      "entityId": "custom-1774108323120",
-      "mode": "manual",
-      "contentType": "text",
-      "title": "test title",
-      "text": "test text"
     },
     {
       "id": "featured-custom-1774104415584-1774108183452",
@@ -68,14 +43,6 @@
       "title": "ffggdfgffgfg",
       "text": "fdggggggggg",
       "mediaUrl": "youtube.com"
-    },
-    {
-      "id": "featured-custom-1774104764956-1774104821948",
-      "entityId": "custom-1774104764956",
-      "mode": "manual",
-      "contentType": "text",
-      "title": "TestingS",
-      "text": "Join this link"
     },
     {
       "id": "featured-custom-1774119364577-1774119376436",
@@ -109,14 +76,6 @@
       "title": "Ttttt",
       "text": "AAAAAAAAAAA",
       "mediaUrl": "F.bi"
-    },
-    {
-      "id": "featured-custom-1774164818432-1774164831117",
-      "entityId": "custom-1774164818432",
-      "mode": "manual",
-      "contentType": "text",
-      "title": "testpost",
-      "text": "test"
     },
     {
       "id": "featured-tg-channel-toncoin",
@@ -159,14 +118,6 @@
       "mediaUrl": "https://cdn4.telesco.pe/file/Z4UNIcIpc6XfZLks6MwhvQ0H2BpYQcFdEfxr8oPDaKXbBem9uaVY8wu3tZqhjT7b1EmEm5rDPhKPWP6I7q2X-YkwU-CWbRnIy6_9nkYt82lLZQxNqSen7wdvQJSggSd39oO2R_Rs2hCaWQidgjIpPaRPFD4NUpZ433xvaGAUjFSB8YPXE-d6TsO0QFOCwRrSmSXLi62svU9c92ZKtyJTerElXcY5_dCQJs8PA9PMzHwZV2Qf_iHcgmcmtnQQK7ACZYwl_7RV5o8X9ztFzujE6xdASZu1aXsj6pHxdi8t3styn5EIfA4oOa5SgdPUTiTGGhO1yridoymvV3OZB-mMzw.jpg"
     },
     {
-      "id": "featured-custom-1774169871651-1774171029959",
-      "entityId": "custom-1774169871651",
-      "mode": "manual",
-      "contentType": "video",
-      "title": "Testing Garage",
-      "mediaUrl": "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4"
-    },
-    {
       "id": "featured-custom-1774169871651-1774170930705",
       "entityId": "custom-1774169871651",
       "mode": "manual",
@@ -191,67 +142,10 @@
       "title": "UEFA Champions League Post",
       "text": "New post about Champions League",
       "mediaUrl": "https://upload.wikimedia.org/wikipedia/commons/transcoded/d/d1/Arsenal-Tottenham_Carling_Cup_Second_Leg_End.ogv/Arsenal-Tottenham_Carling_Cup_Second_Leg_End.ogv.480p.vp9.webm"
-    },
-    {
-      "id": "featured-custom-1774175931950-1774175995765",
-      "entityId": "custom-1774175931950",
-      "mode": "manual",
-      "contentType": "text",
-      "title": "test",
-      "text": "test"
-    },
-    {
-      "id": "featured-custom-1774175931950-1774176183814",
-      "entityId": "custom-1774175931950",
-      "mode": "manual",
-      "contentType": "text",
-      "title": "testtest",
-      "text": "testtest"
     }
   ],
-  "registeredEntities": [
-    {
-      "id": "custom-1774175931950",
-      "type": "channel",
-      "name": "test",
-      "category": "DeFi",
-      "tags": [
-        "test"
-      ],
-      "shortDescription": "tes",
-      "telegramUrl": "test",
-      "contentType": "image",
-      "previewMediaUrl": "test",
-      "editorialScore": 55,
-      "activityScore": 30,
-      "engagementScore": 25
-    },
-    {
-      "id": "custom-1774176173192",
-      "type": "channel",
-      "name": "test test",
-      "category": "DeFi",
-      "tags": [
-        "test"
-      ],
-      "shortDescription": "test",
-      "telegramUrl": "test",
-      "contentType": "image",
-      "previewMediaUrl": "test",
-      "editorialScore": 55,
-      "activityScore": 30,
-      "engagementScore": 25
-    }
-  ],
-  "boosts": {
-    "custom-1774175931950": {
-      "entityId": "custom-1774175931950",
-      "status": "active",
-      "startedAt": "2026-03-22T10:43:19.630Z",
-      "expiresAt": "2026-03-22T16:43:19.630Z",
-      "source": "mock"
-    }
-  },
+  "registeredEntities": [],
+  "boosts": {},
   "deletedFeaturedIds": [
     "featured-custom-1774174257475-1774174383370",
     "featured-custom-1774175241878-1774175328803"
