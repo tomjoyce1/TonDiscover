@@ -1,171 +1,79 @@
-# TonDiscover (Hackathon Build)
+# TonDiscover
 
-TonDiscover is a Telegram Mini App for visual discovery of channels and apps.
+TonDiscover is a visual discovery Telegram Mini App for finding channels and apps in one feed, then joining or launching them in one tap.
 
-## Demo priorities
+## Problem and User
 
-1. Stable app start (no crash/white screen)
-2. Happy path: onboarding → explore → detail → join/launch → visible boost
-3. Minimal readable UI first
-4. Favorites/history + utility search
-5. UI polish only after core stability
+- User: Telegram users who want to discover useful channels and mini apps quickly.
+- Problem: discovery is fragmented and search-first; users miss quality content.
+- Solution: a browse-first visual feed mixing channels + apps, with simple boost visibility.
 
-## Branches
+## What Works in the Demo
 
-- `master`: stable demo/integration
-- `core`: product logic and demo path
-- `ui`: visual polish lane
+- Onboarding -> Explore -> Detail -> Join/Launch
+- Mixed feed with channel and app cards
+- Card content types: text, image, video (with safe fallback for invalid media links)
+- Create and edit entities/posts
+- Favorites and history
+- Boost flow (TON-first with safe mock fallback)
 
-## Current MVP scope
+## Quick Local Run
 
-- onboarding interests
-- explore feed with channels + apps
-- entity detail with Join/Launch
-- favorites and launch history (localStorage)
-- creator register + featured content
-- boost visibility flow with TON-first payment and safe mock fallback
+Requirements:
 
-## Tech notes
+- Node.js 18+ (npm included)
 
-- React + TypeScript + Vite
-- Telegram Mini App SDK
-- TonConnect for wallet flow
-- local seeded data first (no required backend)
-- optional shared feed sync endpoint for cross-user post visibility
-
-## TonConnect in Telegram Mini App
-
-For official Telegram Wallet compatibility:
-
-- Use a root manifest URL (`https://<public-host>/tonconnect-manifest.json`)
-- Set a TMA return URL (`VITE_TWA_RETURN_URL=https://t.me/<your_bot_or_app>`)
-- Avoid free tunnel interstitial pages (they can return warning HTML instead of manifest JSON)
-
-Optional env variables:
-
-```bash
-VITE_TONCONNECT_MANIFEST_URL=https://<public-host>/tonconnect-manifest.json
-VITE_TWA_RETURN_URL=https://t.me/tondiscover
-VITE_CREATOR_REPUTATION_CONTRACT_ADDRESS=<deployed-ton-contract-address>
-```
-
-## Creator reputation contract
-
-This repo now includes a TON contract workspace in `ton-contracts/reputation`.
-
-It tracks:
-
-- submissions per wallet
-- boosts per wallet
-- total TON spent per wallet
-
-Quick flow:
-
-1. Build and deploy the contract from `ton-contracts/reputation`
-2. Set `VITE_CREATOR_REPUTATION_CONTRACT_ADDRESS`
-3. Restart the app
-4. Open `My Profile -> Identity` to see on-chain metrics
-
-## Shared post visibility (optional, for multi-user demo)
-
-By default, published featured posts are stored in browser `localStorage`, which means only the current user/device sees them.
-
-Default setup uses same-origin shared API (recommended for hackathon):
-
-```bash
-VITE_SHARED_FEED_URL=/shared-feed
-```
-
-Optional variables:
-
-```bash
-VITE_SHARED_FEED_READ_URL=/shared-feed
-VITE_SHARED_FEED_WRITE_URL=/shared-feed
-VITE_SHARED_FEED_WRITE_METHOD=PUT
-VITE_SHARED_FEED_TOKEN=your_bearer_token
-```
-
-When configured, each app instance also auto-refreshes shared featured posts (focus + periodic pull) so friend posts appear without manual patching.
-
-Read endpoint response format:
-
-```json
-{
-  "featuredOverrides": [],
-  "registeredEntities": []
-}
-```
-
-Write request body format:
-
-```json
-{
-  "featuredOverrides": [],
-  "registeredEntities": []
-}
-```
-
-Quick start shared mode:
-
-```bash
-# Terminal 1: shared feed backend
-npm run shared-feed
-
-# Terminal 2: mini app
-npm run dev
-
-# Terminal 3: public tunnel for app + shared API
-npm run public-app
-```
-
-Share the ngrok app URL with your friend. Because `VITE_SHARED_FEED_URL=/shared-feed`, both users hit the same public app host and the same shared backend data.
-
-## Telegram scraper (demo data pull)
-
-Use a lightweight scraper to pull public Telegram metadata/posts and map them into `server/shared-feed.json`.
-
-Default run (uses `server/telegram-targets.json`):
-
-```bash
-npm run scrape:telegram
-```
-
-Custom handles:
-
-```bash
-npm run scrape:telegram -- toncoin telegram wallet
-```
-
-Useful flags:
-
-```bash
-npm run scrape:telegram -- --replace
-npm run scrape:telegram -- --targets server/telegram-targets.json --out server/shared-feed.json
-```
-
-## Local run
-
-Install dependencies:
+Commands:
 
 ```bash
 npm install
-```
-
-Start dev server:
-
-```bash
 npm run dev
 ```
 
-Build:
+Open:
+
+- `http://localhost:5173`
+
+Build check:
 
 ```bash
 npm run build
 ```
 
-## Control files
+## Optional Shared Feed Mode (multi-device demo)
 
-- `AGENTS.md` — execution guardrails
-- `STATUS.md` — current project status
-- `SKILLS.md` — team implementation skills/playbook
-- `OPERATING_PLAN.md` — milestone-by-milestone operating plan
+Run shared feed server:
+
+```bash
+npm run shared-feed
+```
+
+Then run app:
+
+```bash
+npm run dev
+```
+
+## Main Tech Stack
+
+- React + TypeScript + Vite
+- Telegram Mini App SDK
+- TON Connect
+- Local storage + optional lightweight shared feed server
+
+## How Boost Works on TON
+
+When a user boosts an entity or post:
+
+1. The app requests wallet confirmation through TON Connect.
+2. A TON transfer is sent to the boost receiver wallet.
+3. If `VITE_CREATOR_REPUTATION_CONTRACT_ADDRESS` is set, the same action also sends a contract message to the Creator Reputation Registry contract in `ton-contracts/reputation`.
+4. On successful confirmation, the app stores an active boost state for that target and updates visibility in the feed/manage views.
+
+The smart contract records creator reputation metrics (submissions, boosts, total TON spent), so creator activity can be verifiable on-chain.
+
+
+## Notes
+
+- Prioritized demo reliability and happy-path completion over heavy backend complexity.
+- Boost visibility is intentionally simple and visible in UI.
