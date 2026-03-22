@@ -56,66 +56,29 @@
       "contentType": "text",
       "title": "meme2",
       "text": "d"
+    },
+    {
+      "id": "featured-ch-ton-news-1774109667204",
+      "entityId": "ch-ton-news",
+      "mode": "manual",
+      "contentType": "text",
+      "title": "Ttttt",
+      "text": "AAAAAAAAAAA",
+      "mediaUrl": "F.bi"
     }
   ],
   "registeredEntities": [
     {
-      "id": "custom-1774132237138",
+      "id": "custom-1774122152747",
       "type": "channel",
-      "name": "EPFL Community Test",
-      "category": "Community",
-      "tags": [
-        "epfl",
-        "study"
-      ],
-      "shortDescription": "EPFL Channel",
-      "telegramUrl": "https://t.me/ch_EPFL2",
-      "contentType": "image",
-      "previewMediaUrl": "https://tse3.mm.bing.net/th/id/OIP.kJe_6voU37LNFJ92qDclVQHaEK?rs=1&pid=ImgDetMain&o=7&rm=3",
-      "editorialScore": 55,
-      "activityScore": 30,
-      "engagementScore": 25
-    },
-    {
-      "id": "custom-1774123671187",
-      "type": "channel",
-      "name": "Bitcoin",
+      "name": "Tom's Channel Hack",
       "category": "DeFi",
       "tags": [
-        "DVD"
+        "toncoin"
       ],
-      "shortDescription": "Bitcoin",
-      "telegramUrl": "T.me/bitcoin",
+      "shortDescription": "Toncoin channel to learn, share info and have fun.",
+      "telegramUrl": "https://t.me/toncoin",
       "contentType": "text",
-      "editorialScore": 55,
-      "activityScore": 30,
-      "engagementScore": 25
-    },
-    {
-      "id": "custom-1774132875832",
-      "type": "channel",
-      "name": "FLEPosting",
-      "category": "Community",
-      "tags": [
-        "epfl"
-      ],
-      "shortDescription": "Postez ce que vous voulez (1 image par post) tant que c’est légal (optionnellement que c’est drole)",
-      "telegramUrl": "https://www.epfl.ch/about/facts/wp-content/uploads/2022/12/Fond_Facts.jpg",
-      "contentType": "image",
-      "previewMediaUrl": "https://www.epfl.ch/about/facts/wp-content/uploads/2022/12/Fond_Facts.jpg",
-      "editorialScore": 55,
-      "activityScore": 30,
-      "engagementScore": 25
-    },
-    {
-      "id": "custom-1774133523446",
-      "type": "channel",
-      "name": "Pavel",
-      "category": "DeFi",
-      "tags": [],
-      "shortDescription": "Pavel official channel",
-      "telegramUrl": "https://t.me/durov",
-      "contentType": "image",
       "editorialScore": 55,
       "activityScore": 30,
       "engagementScore": 25

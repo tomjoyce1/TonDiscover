@@ -3,7 +3,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Globe, Image, Link2, MessageCircle, Tag, Type } from 'lucide-react';
 import { BottomNav } from '@/components/layout/BottomNav.tsx';
 import { useAppState } from '@/context/app-context.tsx';
+import { useTonConnect } from '@/hooks/useTonConnect.ts';
 import { cx } from '@/helpers/class-name.ts';
+import {
+  getReputationContractAddress,
+  sendSubmissionReputationTransaction,
+} from '@/services/reputation/reputation-contract.ts';
 import type { EntityType } from '@/types/tondiscover.ts';
 
 const CATEGORY_META: Record<string, { icon: string; color: string }> = {
@@ -21,6 +26,7 @@ const textareaClass = 'w-full p-4 bg-muted/60 text-foreground rounded-xl border 
 const CreateRegister = () => {
   const navigate = useNavigate();
   const { categories, registerEntity } = useAppState();
+  const { connected, tonConnectUI } = useTonConnect();
 
   const [type, setType] = useState<EntityType>('channel');
   const [name, setName] = useState('');
@@ -30,7 +36,7 @@ const CreateRegister = () => {
   const [tags, setTags] = useState('');
   const [previewMediaUrl, setPreviewMediaUrl] = useState('');
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const created = registerEntity({
       type,
@@ -42,6 +48,16 @@ const CreateRegister = () => {
       contentType: 'image',
       previewMediaUrl: previewMediaUrl.trim(),
     });
+
+    const reputationContract = getReputationContractAddress();
+    if (connected && reputationContract) {
+      try {
+        await sendSubmissionReputationTransaction(tonConnectUI, reputationContract);
+      } catch {
+        // Submission stays local if the user rejects the optional reputation sync.
+      }
+    }
+
     navigate(`/create?saved=${encodeURIComponent(created.id)}`);
   };
 

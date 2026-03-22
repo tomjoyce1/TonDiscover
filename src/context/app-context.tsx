@@ -3,6 +3,7 @@ import { categories } from '@/data/seeds/categories.ts';
 import { getEntities, searchEntities } from '@/data/repositories/entities-repository.ts';
 import { seededFeaturedContent } from '@/data/seeds/featured-content.ts';
 import { getRankedEntities } from '@/domain/ranking.ts';
+import { useTonConnect } from '@/hooks/useTonConnect.ts';
 import { readJSON, STORAGE_KEYS, writeJSON } from '@/services/storage/local-storage.ts';
 import {
   isSharedFeedEnabled,
@@ -10,6 +11,7 @@ import {
   writeSharedFeaturedOverrides,
 } from '@/services/storage/shared-featured-feed.ts';
 import type {
+  BoostEvent,
   BoostState,
   Entity,
   FavoritesState,
@@ -31,6 +33,7 @@ type AppStateContextProviderValue = {
   history: HistoryState;
   userPrefs: UserPrefs;
   boosts: Record<string, BoostState>;
+  boostEvents: BoostEvent[];
   hasCompletedOnboarding: boolean;
   completeOnboarding: (selectedCategories: string[]) => void;
   toggleFavorite: (entityId: string) => void;
@@ -38,6 +41,7 @@ type AppStateContextProviderValue = {
   recordOpen: (entityId: string) => void;
   recordLaunch: (entityId: string) => void;
   registerEntity: (payload: RegisterEntityInput) => Entity;
+  addBoostEvent: (event: BoostEvent) => void;
   deleteEntity: (entityId: string) => void;
   updateSavedEntity: (
     entityId: string,
@@ -97,6 +101,7 @@ const initialContext: AppStateContextProviderValue = {
   history: initialHistory,
   userPrefs: initialPrefs,
   boosts: {},
+  boostEvents: [],
   hasCompletedOnboarding: false,
   completeOnboarding: () => undefined,
   toggleFavorite: () => undefined,
@@ -106,6 +111,7 @@ const initialContext: AppStateContextProviderValue = {
   registerEntity: () => {
     throw new Error('AppStateProvider not mounted');
   },
+  addBoostEvent: () => undefined,
   deleteEntity: () => undefined,
   updateSavedEntity: () => undefined,
   setFeaturedContent: () => {
@@ -128,6 +134,7 @@ type AppStateProviderProps = {
 
 export const AppStateProvider = ({ children }: AppStateProviderProps) => {
   const seededEntities = useMemo(() => getEntities(), []);
+  const { walletAddress } = useTonConnect();
   const [registeredEntities, setRegisteredEntities] = useState<Entity[]>(() => {
     return readJSON(STORAGE_KEYS.registeredEntities, [] as Entity[]);
   });
@@ -150,6 +157,9 @@ export const AppStateProvider = ({ children }: AppStateProviderProps) => {
   });
   const [boosts, setBoosts] = useState<Record<string, BoostState>>(() => {
     return readJSON(STORAGE_KEYS.boosts, {} as Record<string, BoostState>);
+  });
+  const [boostEvents, setBoostEvents] = useState<BoostEvent[]>(() => {
+    return readJSON(STORAGE_KEYS.boostEvents, [] as BoostEvent[]);
   });
 
   const entities = useMemo(() => {
@@ -293,6 +303,7 @@ export const AppStateProvider = ({ children }: AppStateProviderProps) => {
       contentType: payload.contentType,
       previewText: payload.previewText,
       previewMediaUrl: payload.previewMediaUrl,
+      creatorWalletAddress: walletAddress?.toString(),
       editorialScore: 55,
       activityScore: 30,
       engagementScore: 25,
@@ -300,6 +311,10 @@ export const AppStateProvider = ({ children }: AppStateProviderProps) => {
 
     setRegisteredEntities((previousState) => [entity, ...previousState]);
     return entity;
+  }, [walletAddress]);
+
+  const addBoostEvent = useCallback((event: BoostEvent) => {
+    setBoostEvents((previousState) => [event, ...previousState]);
   }, []);
 
   const deleteEntity = useCallback((entityId: string) => {
@@ -483,6 +498,10 @@ export const AppStateProvider = ({ children }: AppStateProviderProps) => {
     writeJSON(STORAGE_KEYS.boosts, boosts);
   }, [boosts]);
 
+  useEffect(() => {
+    writeJSON(STORAGE_KEYS.boostEvents, boostEvents);
+  }, [boostEvents]);
+
   const contextValue = useMemo<AppStateContextProviderValue>(() => {
     return {
       categories,
@@ -495,6 +514,7 @@ export const AppStateProvider = ({ children }: AppStateProviderProps) => {
       history,
       userPrefs,
       boosts,
+      boostEvents,
       hasCompletedOnboarding: userPrefs.onboardingCompleted,
       completeOnboarding,
       toggleFavorite,
@@ -502,6 +522,7 @@ export const AppStateProvider = ({ children }: AppStateProviderProps) => {
       recordOpen,
       recordLaunch,
       registerEntity,
+      addBoostEvent,
       deleteEntity,
       updateSavedEntity,
       setFeaturedContent,
@@ -515,6 +536,7 @@ export const AppStateProvider = ({ children }: AppStateProviderProps) => {
     };
   }, [
     boosts,
+    boostEvents,
     completeOnboarding,
     entities,
     favorites,
@@ -530,6 +552,7 @@ export const AppStateProvider = ({ children }: AppStateProviderProps) => {
     recordLaunch,
     recordOpen,
     registerEntity,
+    addBoostEvent,
     deleteEntity,
     updateSavedEntity,
     search,

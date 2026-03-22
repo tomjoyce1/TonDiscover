@@ -5,6 +5,7 @@ export const STORAGE_KEYS = {
   favorites: 'tondiscover:favorites',
   history: 'tondiscover:history',
   boosts: 'tondiscover:boosts',
+  boostEvents: 'tondiscover:boostEvents',
   registeredEntities: 'tondiscover:registeredEntities',
   featuredOverrides: 'tondiscover:featuredOverrides',
   ownedBoostEntityIds: 'tondiscover:ownedBoostEntityIds',

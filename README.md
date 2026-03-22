@@ -46,7 +46,25 @@ Optional env variables:
 ```bash
 VITE_TONCONNECT_MANIFEST_URL=https://<public-host>/tonconnect-manifest.json
 VITE_TWA_RETURN_URL=https://t.me/tondiscover
+VITE_CREATOR_REPUTATION_CONTRACT_ADDRESS=<deployed-ton-contract-address>
 ```
+
+## Creator reputation contract
+
+This repo now includes a TON contract workspace in `ton-contracts/reputation`.
+
+It tracks:
+
+- submissions per wallet
+- boosts per wallet
+- total TON spent per wallet
+
+Quick flow:
+
+1. Build and deploy the contract from `ton-contracts/reputation`
+2. Set `VITE_CREATOR_REPUTATION_CONTRACT_ADDRESS`
+3. Restart the app
+4. Open `My Profile -> Identity` to see on-chain metrics
 
 ## Shared post visibility (optional, for multi-user demo)
 
