@@ -144,7 +144,26 @@
       "mediaUrl": "https://upload.wikimedia.org/wikipedia/commons/transcoded/d/d1/Arsenal-Tottenham_Carling_Cup_Second_Leg_End.ogv/Arsenal-Tottenham_Carling_Cup_Second_Leg_End.ogv.480p.vp9.webm"
     }
   ],
-  "registeredEntities": [],
+  "registeredEntities": [
+    {
+      "id": "custom-1774178972437",
+      "type": "channel",
+      "name": "UEFA Champions League",
+      "category": "Community",
+      "tags": [
+        "football",
+        "sport",
+        "competition"
+      ],
+      "shortDescription": "Come tall about the Champions League",
+      "telegramUrl": "https://t.me/Champions_League_Frce",
+      "contentType": "image",
+      "previewMediaUrl": "https://cdn.pixabay.com/photo/2016/11/29/02/05/audience-1866738_1280.jpg",
+      "editorialScore": 55,
+      "activityScore": 30,
+      "engagementScore": 25
+    }
+  ],
   "boosts": {},
   "deletedFeaturedIds": [
     "featured-custom-1774174257475-1774174383370",
