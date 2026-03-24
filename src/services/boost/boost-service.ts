@@ -3,7 +3,6 @@ import type { TonConnectUI } from '@tonconnect/ui';
 import { getReputationContractAddress, sendBoostWithReputationTransaction } from '@/services/reputation/reputation-contract.ts';
 import type { BoostOption, BoostState } from '@/types/tondiscover.ts';
 
-
 export const BOOST_RECEIVER_RAW =
   "0QBegGpGDQL88FDGNHn9fy0heTWuiv35cNfKlvfHnm2ucW2p";
 const BOOST_RECEIVER = Address.parse(BOOST_RECEIVER_RAW);
